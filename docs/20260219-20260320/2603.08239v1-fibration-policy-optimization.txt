@@ -1,0 +1,5775 @@
+Title: Fibration Policy Optimization
+
+URL Source: https://arxiv.org/pdf/2603.08239v1
+
+Published Time: Tue, 10 Mar 2026 02:08:32 GMT
+
+Number of Pages: 51
+
+Markdown Content:
+# FIBRATION POLICY OPTIMIZATION 
+
+Chang Li 1 Tshihao Tsu 2 Yaren Zhang 2 Chao Xue 1 Xiaodong He 11JD Explore Academy 2Carleton University 
+
+{lichang93, xuechao19, xiaodong.he}@jd.com {zhihaoxu, yarenzhang}@cmail.carleton.ca 
+
+## ABSTRACT 
+
+Large language models are increasingly trained as heterogeneous systems spanning multiple domains, expert partitions, and agentic pipelines, yet prevalent proximal objectives operate at a single scale and lack a principled mechanism for coupling token-level, trajectory-level, and higher-level hierarchical stability control. To bridge this gap, we derive the Aggregational Policy Censoring Objective 
+
+(APC-Obj), the first exact unconstrained reformulation of sample-based TV-TRPO, establishing that clipping-based surrogate design and trust-region optimization are dual formulations of the same problem. Building on this foundation, we develop Fiber Bundle Gating (FBG), an algebraic framework that organizes sampled RL data as a fiber bundle and decomposes ratio gating into a base-level gate on trajectory aggregates and a fiber-level gate on per-token residuals, with provable first-order agreement with the true RL objective near on-policy. From APC-Obj and FBG we derive Fibration Policy Optimization (or simply, FiberPO), a concrete objective whose Jacobian is block-diagonal over trajectories, reduces to identity at on-policy, and provides better update direction thus improving token efficiency. The compositional nature of the framework extends beyond the trajectory-token case: fibrations compose algebraically into a Fibration Gating Hierarchy (FGH) that scales the same gating mechanism to arbitrary hierarchical depth without new primitives, as demonstrated by FiberPO-Domain , a four-level instantiation with independent trust-region budgets at the domain, prompt group, trajectory, and token levels. Together, these results connect the trust-region theory, a compositional algebraic structure, and practical multi-scale stability control into a unified framework for LLM policy optimization. 
+
+## 1 Introduction 
+
+Large language models are no longer single, monolithic policies: they are increasingly deployed and trained as heterogeneous systems—agentic pipelines spanning domains and tools, mixture-of-experts (MoE) architectures with conditional routing, and distributed/asynchronous training stacks where optimization noise and data nonstationarity are structural rather than incidental. In this regime, alignment via RLHF [ 1] must simultaneously handle multi-scale instability: token-level stochasticity, trajectory-level drift, and system-level heterogeneity (domains/experts/agents) interacting in the same update. Existing PPO-style “proximal” objectives [ 2 , 3, 4] provide only coarse local controls (mostly per-token clipping) and limited diagnostics when failures arise from global structure (e.g., a drifting subset of trajectories, an expert partition, or a domain slice). This motivates importing more expressive mathematical structure, beyond new loss heuristics, to build controllers that can allocate stability budgets across the relevant global contexts, composably across arbitrarily many hierarchical levels (tokens, trajectories, prompt groups, domains etc). In this work, we develop Fiber Bundle Gating (FBG), an algebraic framework grounded in fiber bundle theory, and derive FiberPO-Trajectory (or simply, FiberPO) from it, a concrete policy optimization objective that decomposes trust-region maintenance into compositional global and local components, providing multi-scale stability control with first-order fidelity to the true RL objective near on-policy and a restorative gradient structure rarely explored in existing methods (see also [5]). The development proceeds through four stages. We begin from TRPO [ 6 ], whose trust-region radius depends on the discount factor γ. LLM RL effectively requires γ = 1 (rewards are sparse and determined only at completion), and we prove that both TV- and KL-based TRPO trust regions then collapse to the reference policy, permitting only trivial 
+
+> arXiv:2603.08239v1 [cs.LG] 9 Mar 2026
+
+updates (Theorem 2.1). This does not preclude trust-region-style stabilization in the γ = 1 setting, but it shows that the classical radius from TRPO cannot be used as-is, and a useful trust-region design must decouple the trust-region maintaining mechanism from the particular radius prescribed by the monotonic improvement guarantee. To make this decoupling precise, we observe that a more fundamental gap must first be addressed. Clipping-based surrogates such as PPO [ 2] were originally motivated as tractable approximations to TRPO’s constraint, yet the precise relationship between ratio clipping and trust-region maintenance remains insufficiently understood, leaving open whether clipping merely imitates a trust region or can exactly reproduce one. We attempt to close this gap by deriving Aggregational Policy Censoring Objective (APC-Obj), an unconstrained clipping-based surrogate whose per-action clip bound Bs,a decomposes the TV trust-region constraint into an explicit, cross-action-coupled form. We prove a formal equivalence (Theorem D.10): under standard function approximation assumptions, maximizing APC-Obj yields the same policy update as sample-based TV-TRPO, establishing that clipping-based surrogate design and trust-region policy optimization are dual formulations of the same optimization problem. Although APC-Obj itself yields trivial updates at 
+
+γ=1 (the same vanishing as TRPO), its contribution is structural rather than algorithmic: it separates the trust-region maintenance mechanism (cross-action-coupled clipping) from the specific radius prescribed by the classical bound, so that the mechanism remains well-defined at any δ > 0. This separation provides a reliable analytical anchor from which PPO [ 2], GRPO [ 3 ], and GSPO [ 7] can each be formally derived via identified relaxation steps, using a shared Ratio Gating Formalism (RGF), making each method’s departure from the trust-region optimum explicit and traceable. The APC-Obj-based taxonomy reveals a structural gap shared by all existing methods: token-wise objectives (PPO, GRPO) gate each ratio independently without directly bounding trajectory-level drift, while sequence-wise objectives (GSPO) collapse each trajectory to a single aggregate, suppressing within-trajectory variation. The relevant stability criterion, trajectory-level TV divergence, is inherently global, yet gradient information is inherently local. Few existing methods couple the two scales. To close this gap, we propose Fiber Bundle Gating (FBG), an algebraic framework that organizes sampled RLHF data as a fiber bundle, with tokens as the total space and global contexts (trajectories, partitioned into positive and negative drift channels) as the base space. FBG decomposes ratio gating into several operations: pushing token-level information to the base to form global aggregates, applying a base-level gate to maintain a trust-region budget at the context level, reflecting the gated signal back to tokens via a Markov kernel, and gating fiber-level residuals to preserve token-level gradients. We prove that this decomposition preserves first-order agreement with the true RL objective near on-policy whenever the atomic gates reduce to identity at the reference point (Theorem 4.5). We note that the fibration structure here is not an external import but is inherent in the data: methods that aggregate per-token quantities into context-level statistics implicitly invokes a pushforward πE∗, and methods that distribute a context-level signal back to individual tokens implicitly constructs a Markov kernel K. Making these operations explicit exposes the reflecting condition πE∗ ◦ K = id B, a structural constraint ensuring that global and local gates operate on orthogonal components without double-counting (Appendix E.3). Any gating map that avoids this double-counting while preserving first-order agreement necessarily satisfies the reflecting condition, and therefore implicitly re-derives the fibration decomposition. Building on APC-Obj and FBG, we derive FiberPO by starting from a δ-relaxed APC-Obj formulation and decomposing its coupled clipping constraint into two FBG components: a base-level aggregate gate gagg that allocates a global trust-region budget δ across trajectory-level drift, and a fiber-level logclip that bounds each token’s residual deviation by ε. This decomposition inherits the trust-region mechanism of APC-Obj while providing independent control at two scales, an explicit budget separation is rarely explored in prior methods. The resulting Jacobian is block-diagonal over trajectories, reduces to identity at on-policy, and exhibits a restorative gradient in the rollback regime that actively corrects trajectory drift. This restorative property is absent in PPO, GRPO, and GSPO, which either zero the gradient (PPO/GRPO clipping) or suppress it uniformly (GSPO gating) when a trajectory drifts beyond the clipping boundary. The hierarchy of domains, prompt groups, trajectories, and tokens motivates a framework that scales beyond two levels. The fiber bundle formalism naturally supports this extension. Because fibrations compose algebraically, the same FBG gating mechanism extends to deeper hierarchies by chaining fibrations into a Fibration Gating Hierarchy (FGH). We demonstrate this by deriving FiberPO-Domain, a four-level instantiation (domain, prompt group, trajectory, token) that applies gagg independently at each level of the hierarchy, with the gated residual at each level capturing only the deviation from the next-coarser aggregate. This construction requires no new gating primitives: the same algebraic decomposition that produces FiberPO at two levels produces FiberPO-Domain at four, providing per-domain and per-prompt-group trust-region control that is absent in all existing methods. The compositionality of fibrations is what allows the framework to scale to the hierarchical, multi-domain training regimes that modern LLM systems increasingly demand. In summary, this paper contributes: • Aggregational Policy Censoring Objective (APC-Obj), the first exact unconstrained reformulation of sample-based TV-TRPO, with a formal equivalence proof (Theorem D.10). APC-Obj establishes clipping-based 2surrogate design and trust-region policy optimization as dual formulations of the same problem, and provides a reliable analytical anchor from which PPO, GRPO, and GSPO are each derived via identified relaxations. • Fiber Bundle Gating (FBG) and its hierarchical generalization, Fibration Gating Hierarchy (FGH), a composi-tional algebraic framework that couples global (base) and local (fiber) stability control through density-based gating on a fiber bundle, with a first-order agreement guarantee near on-policy (Theorem 4.5). The algebraic compositionality of fibrations allows the same construction to extend to arbitrary hierarchical depth without introducing new gating primitives. • FiberPO-Trajectory, a concrete FBG instantiation (trajectory, token) derived from APC-Obj that decomposes trust-region control into a base-level aggregate gate (budget δ) and a fiber-level residual gate (budget ε), with a block-diagonal, restorative Jacobian structure. • FiberPO-Domain, a four-level FGH instantiation (domain, prompt group, trajectory, token) that extends FiberPO-Trajectory to multi-domain training, providing independent trust-region budgets at each hierarchical level. 
+
+## 2 TRPO and the Discount Factor Obstruction 
+
+The monotonic-improvement framework of Kakade and Langford [ 8], refined by TRPO [ 6], remains the primary theoretical foundation for trust-region policy optimization. TRPO guarantees monotonic improvement by constraining each policy update to a trust region defined via TV or KL divergence, with a trust-region radius governed by the discount factor γ through a surrogate-gap bound. In this section, we show that this γ-dependence creates a fundamental obstruction for episodic LLM RL, where the effective discount factor is γ = 1 . The classical surrogate-gap bound (Appendix B.1) shows that the gap between the true RL objective J(θ) and its linear surrogate J(1) (θ | θold ) satisfies 
+
+J(θ) − J(1) (θ | θold ) ≥ − 4γ ∥A(θold ) 
+
+> •
+
+∥∞
+
+(1 − γ)2 Dmax TV (θ ∥ θold )2, (1) which confines TRPO updates to a trust region of radius δ(TRPO) = (1 −γ)/(8 γ) (Lemma B.2). In LLM RL, later tokens must not be discounted, since the correctness of a response is often determined only at completion, so the training objective effectively requires γ = 1 . Inspecting the bound (1) , the penalty coefficient γ/ (1 − γ)2 diverges as 
+
+γ → 1, forcing δ(TRPO) → 0 to maintain the guarantee. We formalize this observation as a vanishing theorem: 
+
+Theorem 2.1 (TRPO vanishing theorem) . When γ = 1 , both the TV-based and KL-based TRPO trust regions collapse to the reference policy (Definition B.1): 
+
+BTV -TR  
+
+> δ(TRPO)
+
+(θold ) = BKL -TR  
+
+> δ(TRPO)
+
+(θold ) = { πθold }.
+
+Consequently, the only policy update permitted by TV-based TRPO’s trust region at γ = 1 is the trivial one: πθnew =
+
+πθold .
+
+Proof: see Appendix B.2. Theorem 2.1 does not imply that trust-region-style stabilization is impossible in the γ = 1 setting. It shows that the specific radius from TRPO’s discounted analysis cannot be used as-is. A natural workaround, annealing γ < 1 toward 1
+
+during training [ 9 ], is impractical for LLMs, whose rewards are typically sparse and all-or-nothing, making discounted reward estimation unstable (see Appendix B.3 for discussion). Importantly, δ(TRPO) = 0 at γ = 1 does not preclude the existence of a useful TV bound δ > 0 that controls update stability in the γ = 1 case. In Section 3, we provide both theoretical and empirical evidence for such a bound through the lens of GSPO [ 7]. The vanishing theorem thus motivates relaxing δ into a tunable hyperparameter while retaining the trust-region structure as a design guide for objective functions. This relaxed formulation is the common starting point for PPO [ 2 ], GRPO [ 3], GSPO [ 7], and our FiberPO, as we shall show. To make the connection between TRPO’s trust-region mechanism and these practical methods precise, we seek an unconstrained reformulation of sample-based TV-TRPO (Appendix B.1) that admits an explicit Ratio Gating Formalism (RGF, Section 3.1). Because PPO, GRPO, and GSPO each also admit RGF representations, casting TRPO into the same language will let us identify the exact relaxation steps that transform a trust-region-enforced source objective into each practical method. 
+
+## 3 Ratio Gating Formalism and APC-Obj 
+
+The vanishing theorem (Theorem 2.1) shows that TRPO’s trust-region radius collapses at γ = 1 , but the trust-region structure itself remains a valuable design guide. To retain this structure, we first introduce the Ratio Gating Formalism 3(RGF), a unified framework that captures a broad family of proximal objectives by concentrating algorithmic choices into a single ratio gating map. We then use RGF to reformulate sample-based TV-TRPO (Appendix B.1) as an unconstrained clipping-based surrogate, Aggregational Censoring Policy Optimization (APC-Obj), which enforces the same policy update as the sample-based TV-TRPO objective (Theorem D.10; see Appendix D for the full proof). The motivation for casting this TRPO-equivalent objective specifically in RGF form is that PPO, GRPO, and GSPO each also admit explicit RGF representations (Appendix C.4). Expressing all methods in this shared language makes the relationship between the trust-region-enforced source (APC-Obj) and each practical method more transparent. Starting from this trust-region-enforced source objective, we show that PPO, GRPO, and GSPO each arise through identifiable relaxations that preserve the clipping structure and thereby inherit (partially) APC-Obj’s TV-penalty mechanism. We further establish that GSPO’s clipping implicitly maintains a TV-like trust region, providing empirical evidence that a useful bound of TV distance exists even at γ = 1 .
+
+3.1 The Ratio Gating Formalism Definition 3.1 (Ratio Gating Formalism (RGF)) . An RGF surrogate objective takes the form 
+
+ˆJ(θ | θold ) = X 
+
+> (s,a, I)∈ E
+
+μs,a, I G r•(θ | θold ) 
+
+> s,a, I
+
+ˆAθold  
+
+> s,a
+
+, (2) where: • E is the sampled index set of state–action pairs augmented with extra information I (e.g., trajectory member-ship, timestep); • μs,a, I are predetermined aggregation weights; • r•(θ | θold ) = {rs,a } with rs,a := πθ (a | s) / π θold (a | s) are the importance-sampling ratios; • G : RE 
+
+> >0
+
+→ RE 
+
+> >0
+
+is the ratio gating map , the central design object that transforms ratio tuples into gated ratio tuples; • ˆAθold  
+
+> s,a
+
+is an estimate of the advantage function under πθold .RGF organizes a wide family of surrogate objectives, including PPO [ 2], GRPO [ 3 ], GSPO [ 7 ], APC-Obj, and FiberPO. Because all these methods share the RGF form, the differences between them reduce entirely to their choice of (E, μ, G).In particular, deriving a trust-region-equivalent surrogate (APC-Obj) in RGF form lets us identify, for each practical method, the precise relaxation steps that transform the trust-region-enforced APC-Obj gating into the method’s own gating map. Appendix C.4 gives the explicit (E, μ, G) specifications for each method. 
+
+3.2 Aggregational Policy Censoring Objective (APC-Obj) 
+
+We now construct a concrete RGF instance that is provably equivalent to sample-based TV-TRPO (Appendix B.1). Aggregational Policy Censoring Objective (APC-Obj) is obtained by solving the sample-based surrogate-gap objec-tive (1) in closed form, yielding an unconstrained clipping-based surrogate whose clip bounds explicitly allocate the TV trust-region budget Tsδ(APC -Obj) in a cross-action-coupled form. 
+
+Definition 3.2 (Aggregational Policy Censoring Objective, APC-Obj policy iteration 1). The APC-Obj update selects 
+
+θnew = arg max θ ˆJAPC -Obj (θ|θold ), where 
+
+ˆJAPC -Obj (θ|θold ) = 1
+
+T
+
+X 
+
+> (s,a,τ,t )∈¯X
+
+clip 
+
+
+
+rs,a − 1, T sδ(APC -Obj) − X   
+
+> (s,a ′,τ ′,t ′)∈¯Xs
+> (a′,τ ′,t ′)̸=( a,τ,t )
+
+|rs,a ′ − 1|
+
+ ˆAθold  
+
+> s,a
+
++ ˆAθold 
+
+> s,a
+
+ . (3) 
+
+X denotes the set of all state–action pairs in the sampled trajectories, with ns,a the sample multiplicity of pair (s, a ).For each state s ∈ S [X ], let Xs := {a ∈ A | (s, a ) ∈ X } be the set of actions co-occurring with s. Define 
+
+T := P 
+
+> (s,a )∈X
+
+ns,a (total sample count) and Ts := P 
+
+> a∈X s
+
+ns,a (per-state count). We also denote by ¯X the augmented space {(s, a, τ, t )} of all sampled state–action pairs augmented with trajectory membership τ and time step t. Each element of ¯X is a distinct sampled token, so | ¯X | = T and | ¯Xs| = Ts. ¯X is an example of an augmented index set 
+
+> 1The APC-Obj objective can equivalently be written in the RGF form; see Appendix C.1.
+
+4E used in Definition 3.1. δ(APC -Obj) := (1 −γ)2      
+
+> 8γ∥ˆAθold
+> •∥∞
+> M( ˆAθold
+> •)
+> T
+
+(the argument ˆAθold  
+
+> •
+
+makes the dependence on the advantage explicit), the per-entry clip bound is Bs,a,τ,t := Tsδ(APC -Obj) − P     
+
+> (s,a ′,τ ′,t ′)∈¯Xs,(a′,τ ′,t ′)̸=( a,τ,t )
+
+|rs,a ′ − 1|,and clip( a, B ) := clip( a, −B+, B +) with B+ := max( B, 0) . M depends on ˆAθold and is bounded by ∥ ˆAθold  
+
+> •
+
+∥∞, see Lemma D.2. See Appendix C.1 and Appendix D for more details. The per-entry clip bound Bs,a,τ,t can be interpreted as: the per-state trust-region budget Tsδ(APC -Obj) minus the TV contribution already consumed by all other entries at the same state. This cross-entry coupling is what enforces a per-state TV constraint in aggregate, rather than merely bounding each token independently. When the remaining budget is exhausted (i.e. Bs,a,τ,t ≤ 0), the deviation rs,a − 1 is clipped to zero, censoring that entry’s contribution to the surrogate. Despite their superficially different structures (APC-Obj applies per-token clipping with cross-action coupling, while sample-based TV-TRPO maximizes a globally penalized objective), the two algorithms produce the same policy update. 
+
+Theorem 3.3 (Sample-based TV-TRPO and APC-Obj equivalence; restatement of Theorem D.10) . Suppose θ satisfies standard function approximation assumptions, APC-Obj and sample-based TV-TRPO (Definition D.1) produce the same policy update: 
+
+πθ(APC -Obj) new 
+
+= πθ(TV -TRPO) new 
+
+.
+
+The proof (Appendix D) proceeds in three stages: (i) we derive the maximizer of sample-based TV-TRPO (Theorem D.3), showing that the optimal ratio deviation is a scalar multiple of the per-state unit-TV maximizer, (ii) we establish a retraction property (Lemma D.9), showing that APC-Obj’s clipping mechanism projects any trust-region violation strictly back inside the feasible set, and (iii) we combine these to show that the APC-Obj maximizer must lie inside the trust region, at which point its objective reduces to the same linear program solved by sample-based TV-TRPO. 
+
+Remark 3.4 (APC-Obj as the structural bridge for δ-relaxation) . The vanishing theorem (Theorem 2.1) establishes that 
+
+δ(TRPO) = δ(APC -Obj) = 0 at γ = 1 , rendering both TRPO and APC-Obj trivial as deployed algorithms. However, APC-Obj’s significance is structural rather than algorithmic: its RGF form cleanly separates the clipping mechanism (cross-action-coupled clipping, which remains well-defined for any δ > 0) from the specific trust-region enforcing 
+
+radius δ(APC -Obj) inherited from the TRPO’s strict stability requirement. This separation is what makes δ-relaxation— replacing the vanishing δ(APC -Obj) with a positive tunable hyperparameter—a precise, traceable operation rather than an ad hoc modification. The GSPO analysis below (Claim 3.5, Remark 3.6) then provides the evidence that a specific positive δ controls policy drift at γ = 1 , supporting the motivation for relaxation. APC-Obj therefore serves as a design guide for surrogate construction: PPO [ 2 ], GRPO [ 3], and GSPO [ 7 ] can each be recovered from APC-Obj through identifiable relaxation steps (Appendix C.5). Among these relaxations, GSPO is of particular interest because it directly addresses the open question raised by the vanishing theorem: does a positive TV trust-region radius δ > 0 effectively maintain stability in training at γ = 1 ?
+
+GSPO replaces δ(APC −Obj) with a positive tunable hyperparameter ϵ(GSPO) and introduces a direct connection between its clipping threshold and the TV trust-region radius, providing both theoretical and empirical evidence for an affirmative answer. 
+
+Claim 3.5 . GSPO (without minimization function) maintains approximately an average total-variation distance bound at the trajectory level with ¯D(tj) TV ≤ δ ∼ pϵ(GSPO) /2. For definition of ¯D(tj) TV see Appendix A.3. Proof: see Appendix C.6. 
+
+Remark 3.6 . In practice, GSPO uses ϵ(GSPO) ≈ 4 × 10 −4 [7 ], which translates to δ ≈ √2 × 10 −4 ≈ 0.014 . GSPO runs stably at this scale, providing empirical evidence that a TV trust region with δ ∼ 10 −2 remains effective for maintaining stability in LLM RL at γ = 1 . This confirms that BTV -TR  
+
+> δ
+
+is a meaningful design criterion even when TRPO’s own radius has vanished: the vanishing theorem (Theorem 2.1) shows that relaxation is necessary to have nontrivial policy improvement, while in practice the relaxation is totally reasonable. However, all methods derived from APC-Obj via these relaxations operate at a single scale: token-wise objectives (PPO, GRPO) gate each ratio independently without directly bounding trajectory-level drift, while sequence-wise objectives (GSPO) collapse each trajectory to a single aggregate and suppress within-trajectory variation. The relevant stability criterion, the trajectory-level average TV divergence ¯D(tj) TV (Appendix A.3), is defined by aggregating per-token ratios over a single trajectory, so neither independent token-wise clipping nor trajectory-level gating alone provides a principled coupling between the two scales. Because APC-Obj supplies a trust-region-enforced source objective, it can be composed with more structured gating mechanisms that operate across scales while retaining the underlying TV-based stability guarantee. In the next section, we introduce Fiber Bundle Gating (FBG) to address this gap. 54 Fiber Bundle Gating Framework 
+
+The APC-Obj derivations in Section 3 provide a trust-region-enforced source objective and reveal that, token-wise proximal objectives (PPO, GRPO) gate each token’s importance ratio independently without directly bounding trajectory-level drift, while trajectory-wise objectives (GSPO, Claim 3.5) collapse each trajectory to a single aggregate ratio, reducing trajectory-level variation. Neither paradigm offers a direct coupling between these two scales. In this section, we introduce an algebraic framework that addresses this limitation by exploiting the natural two-level structure of sampled RLHF data. We first organize sampled token data as a fiber bundle (Section 4.1), and then define Fiber Bundle Gating (FBG), a density-based gating operator that decomposes stability control into explicit global and local components while preserving first-order agreement with the true RL objective near on-policy. (Section 4.2). 
+
+4.1 Fiber Bundle Model 
+
+Sampled RLHF data has a natural two-level structure: every token belongs to a trajectory or global domain context. Global information arises by aggregating local quantities over a chosen domain or context; for example, the trajectory-level average total variation distance ¯D(tj) TV (Appendix A.3) aggregates per-token ratios within each trajectory. The notions of “local information” (per-token ratios) and “global information” (trajectory-level aggregates) are intuitive but imprecise; to formalize them and, crucially, to describe how they interact under gating, we represent both as densities on a manifold . Fiber bundle theory is an expressive mathematical language for this type of hierarchical decomposition. A fiber bundle πE : E → B separates a total space E of local data points from a base space B of global contexts; for each context b ∈ B, the fiber π−1 
+
+> E
+
+[{b}] collects exactly the local data belonging to b. We organize sampled RLHF data as a fiber bundle of this form: policy ratios are first converted to densities on the total space E via a fibration decomposition map F; all gating operations (global and local) are performed directly on these densities; and a recovery map R converts the gated densities back to policy ratios for use in the surrogate objective. (see Appendix E.1, E.2, and E.3 for a formal definition). To this end, we first define the augmented sampled space (Appendix A.2): 
+
+¯X := {(st(τ ), a t(τ ), τ, t )} ⊆ X × Tj θold × N.
+
+Each element of ¯X is a sampled state-action pair together with its trajectory membership and timestep. The space ¯X
+
+serves as the index set E in the RGF form (Definition 3.1). 
+
+Remark 4.1 . For mathematical completeness, even if a trajectory terminates at a finite step, we include a null state-action pair (∅, ∅, τ, t ) after termination. The fiber bundle in our work consists of the following objects: 
+
+Base space ( B). The base space collects all classes or contexts. In this work, we define 
+
+B := Tj θold × {− 1, +1 },
+
+so a typical element of the base is a tuple (τ, +1) or (τ, −1) .
+
+Total space ( E). The total (bundle) space consists of all individual token-level data points together with a sign label. We define 
+
+E := ¯X × {− 1, +1 }.
+
+The sign channel {− 1, +1 } means positive and negative log-ratio contributions. 
+
+Bundle projection ( πE ). The projection πE : E → B maps each augmented token to its corresponding context: 
+
+πE : ¯X × {− 1, +1 } → Tj θold × {− 1, +1 } πE (s, a, τ, t ; l) := ( τ, l )
+
+sending an augmented state-action pair to its trajectory while preserving the sign channel, which means a point in the base B (e.g., (τ, 1) ) will either correspond to the tokens sampled in τ with positive log-ratio contribution or the tokens sampled in τ with negative log-ratio contribution, depending on the sign label l (l is either +1 or −1). 
+
+Fiber. For a given (trajectory, sign) tuple b ∈ B, the fiber Eb := π−1 
+
+> E
+
+[{b}] contains all the local points belonging to the class/context b. In our instantiation, π−1 
+
+> E
+
+[{(τ, l )}] collects all sampled tokens from the trajectory τ with sign label l.6Remark 4.2 (Choice of base space and extensibility) . The choice of base space B determines the granularity of global control. Here we instantiate FBG on a topologically trivial (product) fiber bundle with B = Tj θold × {− 1, +1 }, where the base gate controls trajectory-level drift. The framework extends to richer global structure by composing fibrations into a hierarchy: enriching B with domain and prompt group indices produces per-domain and per-group aggregates, as realized concretely in FiberPO-Domain (Section 6.2). In each case, the fiber π−1 
+
+> E
+
+[{b}] collects exactly those tokens belonging to class b, and the local-global decomposition separates class-level drift from within-class variation. See Remark E.2 for further discussion. 
+
+Figure 1: Fiber bundle model for sampled RLHF data. The base space B = Tj θold ×{− 1, +1 } consists of two separate lines indexed by the sign label l ∈ {− 1, +1 }, encoding trajectory-level global information as densities on B. Each fiber π−1 
+
+> E
+
+[{(τ, l )}] collects the per-token data points belonging to trajectory τ with sign l, encoding local information as densities on the total space E. The maps F and R convert between policy ratios and densities. Figure 1 illustrates this fiber bundle structure: the projection πE maps each token to its trajectory context. The densities on the base space B and bundle space E will be introduced in the next section, where we define the FBG operator that performs stability control by gating these densities. 
+
+4.2 Fiber Bundle Gating 
+
+Building on the fiber bundle model (Section 4.1) and the RGF language (Section 3.1), we now introduce Fiber Bundle Gating (FBG), a framework that formally couples global and local information by operating on densities over the bundle and base space. The FBG operator acts in four stages: it pushes the token-level density forward to the base to form the trajectory-level base density; applies a base-level atomic gate to enforce a trust-region budget at the trajectory level; reflects the gated global signal back to the total space via a Markov kernel K; and gates the residual density on each fiber, capturing each token’s deviation from the trajectory aggregate, to prevent individual token spikes. The reflecting condition on K ensures the two components decouple cleanly: the residual carries no base-level information, so global and local gating operate independently and compositionally. Once an FBG instance is specified, it induces a surrogate objective in RGF form (Definition 3.1), with the ratio gating map G = R ◦ G ◦ F determined by the bundle and gating functions (Definition 4.4). All four constituent objects are defined relative to the chosen base space B and therefore extend naturally to richer global structures such as domain or temporal groupings (see Appendix E.3 for detailed exposition). 
+
+Definition 4.3 (Fiber Bundle Gating) . A Fiber Bundle Gating instance is specified by the tuple 
+
+(E, B, π E , K, g Base , g Fiber ,−; F, R), where πE : E → B is a fiber bundle. Let E and B denote the spaces of 7densities on E and B, respectively. The FBG gating function G(πE ,K,g Base ,g Fiber ,−) : E → E is defined as: 
+
+G(σ) := K
+
+M 
+
+> b∈B
+
+gBase ,b 
+
+
+
+(πE∗σ)
+
+!
+
++
+
+M 
+
+> i∈E
+
+gFiber ,i,π E∗(σ)
+
+ σ − K(πE∗σ)!
+
+, (4) where the constituent objects are: 1. Fiber bundle and density spaces. πE : E → B is a fiber bundle. Associated to E and B are their density spaces E and B, consisting of all densities on the total space E and the base space B, respectively (see Appendix E.2 for the formal definition of densities on manifolds). 2. Fibration decomposition and recovery maps. The fibration decomposition map F : RE 
+
+> >0
+
+→ E converts policy ratios to densities on the total space, and the recovery map R : E → RE 
+
+> >0
+
+is a left-inverse of F that converts densities back to policy ratios. 3. Reflecting Markov kernel. K : B → E is a Markov kernel satisfying the reflecting condition πE∗ ◦ K = id B.The subtraction σ − K(πE∗σ) decouples the global information encoded in the base density πE∗σ from σ,through the Markov kernel K. We need to ensure that, after decoupling, the residual density should no longer contribute to any global information, so we must have πE∗(σ − K(πE∗σ)) = 0 , which directly implies our requirement for K: πE∗ ◦ K = id B.4. Atomic gating functions. gBase ,b : D1 
+
+> b
+
+B → D 1 
+
+> b
+
+B and gFiber ,i,p B : D1 
+
+> i
+
+E → D 1 
+
+> i
+
+E are pointwise gating functions on the localized base and fiber densities, respectively, where b ∈ B, i ∈ E, and pB ∈ B. The fiber gating function gFiber ,i,p B depends on the base density pB , reflecting the fact that local gating may be conditioned on global context. The FBG gating function (4) operates in two steps. First, the base component: the density σ is pushed forward to the base via πE∗ to form a base density, gated by gBase , and reflected back to the total space via the Markov kernel K.Second, the fiber component: the residual σ − K(πE∗σ), which captures local information after removing the global contribution, is gated by gFiber . The reflecting condition on K ensures that these two components are orthogonal in the sense that the residual carries no base-level information. 
+
+Definition 4.4 (FBG gating form) . Given an FBG instance (E, B, π E , K, g Base , g Fiber ,−; F, R), the associated surro-gate objective takes the RGF form: 
+
+ˆJ(G;F,R)(θ|θold ) := X 
+
+> τ∈Tj πθold
+
+"Tτ −1X
+
+> t=0
+
+1
+
+Tτ
+
+R ◦ G ◦ F (r•)st,a t
+
+ˆAst,a t
+
+#
+
+, (5) where the induced ratio gating map is the composition G = R ◦ G ◦ F : R ¯X 
+
+> >0
+
+→ R ¯X
+
+> >0
+
+.Fiber Bundle Gating guarantees the first order approximation to the true RL objective near on-policy: 
+
+Theorem 4.5 (First-order agreement of FBG) . Suppose the atomic gating functions satisfy the identity conditions at the on-policy density, i.e., for all i ∈ E and b ∈ B:
+
+gFiber ,i,p B (F(1)i − K(πE∗F(1)) i) = F(1)i − K(πE∗F(1)) i
+
+g′ 
+
+> Fiber ,i,p B
+
+(F(1)i − K(πE∗F(1)) i) = 1 , gBase ,b (πE∗F(1)) = πE∗F(1), g′
+
+> Base ,b
+
+(πE∗F(1)) = 1 .
+
+Then the associated FBG objective agrees with the true RL objective to first order at θ = θold :
+
+ˆJ(G;F,R)(θold |θold ) = J(θold ), ∇θ ˆJ(G;F,R)(θ|θold ) θ=θold 
+
+= ∇θ J(θ) θ=θold 
+
+.
+
+Proof See Appendix E.4. 
+
+Remark 4.6 (Global-to-local information exchange) . Beyond first-order agreement, FBG’s decoupling mechanism is essential for exchanging global gating effects with individual token ratios control. General RGF gating maps only operate on ratio tuples r•, without the structured decomposition, naively combining global and local gating. This may produce undesirable gradients, or entangle the two scales so that neither gate operates at its intended granularity. FBG resolves this: gBase gates the trajectory-level base density in isolation, while gFiber gates local residual σ − K(πE∗σ)—the per-token variation from which all global influence has been removed. The reflecting condition guarantees that these two operations are orthogonal and non-interfering (see Appendix E.3 for a detailed discussion). 8Remark 4.7 (Extensibility via the base space) . All four constituent objects of FBG are defined relative to the chosen base space B. Extending B to include additional classifying factors (e.g., domain, temporal grouping) naturally extends the FBG instance: the pushforward πE∗ produces finer aggregates, the Markov kernel K reflects finer base densities back to the bundle, and the atomic gates gBase , gFiber operate per class and locally, respectively. Theorem 4.5 guarantees first-order agreement for any such extension, provided the atomic gates satisfy the identity conditions at the on-policy point. The FiberPO-Trajectory objective derived in Section 5 is the simplest nontrivial instantiation of this framework. In Section 6, we generalize FBG to the Fibration Gating Hierarchy (FGH) and derive FiberPO-Domain, a four-level instantiation that incorporates domain and prompt group structure (see also Remark E.2). 
+
+## 5 FiberPO 
+
+Starting from the APC-Obj objective (Section 3.2), we derive the FiberPO surrogate by applying a sequence of controlled transformations yielding a Fiber Bundle Gating form (Definition 4.3). The derivation proceeds through four derivation steps (detailed in Appendix E.5): 1. δ-relaxation: replace the vanishing TRPO/APC-Obj threshold δ(APC -Obj) with a positive tunable hyperpa-rameter δ. This step is necessitated by the vanishing theorem (Theorem 2.1), which shows the classical radius is zero at γ=1 , and justified by the GSPO analysis (Claim 3.5), which demonstrates that a positive δ ∼ 10 −2
+
+effectively controls policy drift in the undiscounted setting. The clipping mechanism in APC-Obj’s RGF form remains well-defined at the relaxed radius (Remark 3.4). 2. Logarithmic approximation: move to log-ratio coordinates via log r ≈ r − 1 and 1 + clip( · · · ) ≈
+
+exp(clip( · · · )) . Working in log r ∈ R and exponentiating the result guarantees r > 0, so all gating op-erations (clipping, piecewise-linear gates) can be designed with unconstrained linear algebra on R rather than constrained to preserve positivity. 3. Sequence-level aggregation: restrict the cross-token coupling to tokens within the same trajectory (replacing the all-token sum with a per-trajectory sum) and replace the per-state budget Tsδ with a per-trajectory budget 
+
+Tτ δ.4. Clipping decomposition: decompose the coupled clipping term into an explicit base-level gate gagg on the trajectory aggregate ratios s+ 
+
+> τ
+
+, s − 
+
+> τ
+
+and a fiber-level logclip on per-token residuals, with per-channel trust-region budgets C+, C − (C+ + C− = δ) that accommodate the intrinsic asymmetry log s− 
+
+> τ
+
+≥ log s+ 
+
+> τ
+
+.Derivation 4 is the central and distinctive step: it transforms a single coupled clipping bound into two explicit, complementary gating components that map directly onto the FBG architecture (base gate + fiber gate). The resulting objective takes the following form. 
+
+Definition 5.1 (Fiber-Aware Clipping Policy Optimization (FiberPO)) . The FiberPO objective in RGF form is: 
+
+ˆJFiberPO (θ|θold ) = X 
+
+> (s,a,τ,t )∈¯X
+
+1
+
+|Tj θold |
+
+1
+
+Tτ
+
+· G (r•)s,a,τ,t · ˆAs,a , (6) where E = ¯X := {(st(τ ), a t(τ ), τ, t )} ⊆ X × Tj πθold × N is the augmented state-action pair space 2, Tτ is the length of trajectory τ , and the ratio gating map G = R ◦ G ◦ F (Definition 4.4) acts on the full tuple of importance ratios r•
+
+and produces a gated ratio for each augmented token (s, a, τ, t ) ∈ ¯X . The fully expanded objective and its equivalent expression in LLM notation (g, j, i ) are given in Definition E.9 and Appendix E.6, respectively. The FBG gating map G for each token i ≡ (s, a, τ, t ) is a multiplicative decomposition into a trajectory-level base weight and a token-level gated residual :
+
+G(r•)i = exp ◦ gagg (log s+ 
+
+> τ
+
+, C +, T τ )exp ◦ gagg (log s− 
+
+> τ
+
+, C −, T τ )
+
+| {z }  
+
+> wbase
+> τ:base weight (after base gating)
+
+·
+
+logclip 
+
+
+
+(s(li) 
+
+> τ
+
+)−li ri, ϵ 
+
+
+
+logclip 
+
+
+
+(s(−li) 
+
+> τ
+
+)−li , ϵ 
+
+| {z }  
+
+> ˜rfiber
+> i:gated residual (after fiber gating)
+
+, (7) Each term will be explained carefully in the subsections below. Overall, we call wbase  
+
+> τ
+
+the base weight and ˜rfiber  
+
+> i
+
+the 
+
+gated residual . This decomposition directly reflects the FBG architecture (Definition 4.3): the base gate gBase operates         
+
+> 2In the RGF (Definition 3.1), each index i∈ E carries extra information I; here the extra information is the trajectory–timestep pair (τ, t ), so each element of Eis an augmented state-action pair (s, a, τ, t ). See Appendix A.2 for details.
+
+9on pushed-forward densities on B, and the fiber gate gFiber operates on the residual after reflecting back to E via the Markov kernel K. The base weight wbase  
+
+> τ
+
+depends only on trajectory-level aggregates and is shared by all tokens in trajectory τ ; it controls how much gradient signal the trajectory as a whole is permitted to contribute. The gated residual 
+
+˜rfiber  
+
+> i
+
+captures each token’s deviation from the trajectory aggregate on its respective sign channel, gated by logclip to prevent individual token spikes. The constituents of each component are defined in the following two subsections. 
+
+5.1 Base Weight (Base Gate) 
+
+The base weight is 
+
+wbase  
+
+> τ
+
+:= exp ◦ gagg (log s+ 
+
+> τ
+
+, C +, T τ )exp ◦ gagg (log s− 
+
+> τ
+
+, C −, T τ ) , (8) where the constituent quantities are: 
+
+Trajectory aggregate ratios. The positive and negative aggregate ratios decompose the trajectory-level drift by sign: 
+
+log s+ 
+
+> τ
+
+:= 1
+
+TτTτ −1X
+
+> t=0
+
+max(log rst(τ ),a t(τ ), 0) , log s− 
+
+> τ
+
+:= 1
+
+TτTτ −1X
+
+> t=0
+
+max( − log rst(τ ),a t(τ ), 0) . (9) Here log s+ 
+
+> τ
+
+averages the positive log-ratio contributions (tokens whose likelihood increased under πθ ) and log s−
+
+> τ
+
+averages the negative ones (tokens whose likelihood decreased). We refer to log s+ 
+
+> τ
+
+and log s− 
+
+> τ
+
+as the positive and negative channels’ drift, or the signed-trajectory mean, respectively. One of the merits of splitting by sign (for more theoretical reasoning, see Appendix E.5.4) rather than averaging all log-ratios is that the total trajectory drift log rτ = log s+ − log s− can be small even when both log s+ and log s− are individually large. In this case, the trajectory contains many token-ratios that have shifted substantially in both positive and negative directions. (i) If one simply performs log rτ mean-subtraction, the mean-subtracted individual token will be large and easily clipped by token-level logclip (for details, see ratio decomposition in 5.2), and (ii) in this case, the trajectory TV distance ˆ¯D(τ )TV ≈ (1 /T τ ) P 
+
+> t
+
+| log rst,a t | is large and may need control, however keeping only log rτ would mask this need for control. By tracking each sign channel independently, gagg detects high total variation (in ii) in the importance weights even when the signed average nearly cancels, can apply rollback on the offending channel’s aggregate ratio without suppressing the well-behaved aggregate ratio, while also retaining many well-behaved local tokens that are located near the possibly large log s± unclipped (from i), providing more nuanced control over the optimization process. 
+
+Aggregate gating function gagg . The function gagg is a piecewise-linear gate that transforms the aggregate log-ratio on each sign channel: 
+
+gagg (x, C, T τ ) := 
+
+
+
+x if |x| ≤ C
+
+sign( x)( Tτ + 1) C − Tτ x if C < |x| < (1 + T −1 
+
+> τ
+
+)C
+
+0 otherwise (10) where Tτ is the sequence length and C ∈ { C+, C −} is the per-channel trust-region budget. The three regimes correspond directly to the three APC-Obj clipping regimes (P), (R), (Z) (Appendix C.2), lifted to the aggregate level via the clipping decomposition (Appendix E.5, Eq. 77): • Pass-through (P) (|x| ≤ C): the aggregate drift is within the trust-region budget. The gate outputs x
+
+unchanged, preserving the full importance-sampling correction on this channel. This corresponds to the aggregate-level counterpart of APC-Obj regime (P) where ˆDTV (s) ≤ δ(APC -Obj) (Eq. 61): the total budget consumption (C1) + (C2) does not exceed the budget (B), and the clipping is inactive. • Rollback (R) (C < |x| < C ∗ := (1 + T −1 
+
+> τ
+
+)C): the aggregate drift has exceeded the budget. The gate reverses slope to −Tτ , producing a restorative gradient that actively opposes the drift direction and pushes the aggregate back toward on-policy. The term “rollback” follows the terminology of [ 5], who introduced a similar slope-reversing mechanism at the per-token level. This is the aggregate-level counterpart of APC-Obj regime (R) (Eq. 62), where ˆDTV (s) > δ (APC -Obj) but the current token’s deviation (C2) has not individually exhausted the 10 Figure 2: Base weight visualization. Panel (a) shows the aggregate gate gagg (Eq. 10) with three regimes: pass-through (|x| ≤ C, slope 1), rollback ( C < |x| < C ∗, slope −k), and zeroed ( |x| ≥ C∗, output 0). As k = Tτ increases, the rollback regime narrows (width C/T τ ) and gagg approaches a hard clip at ±C. Panel (b) shows the base weight 
+
+log wbase  
+
+> τ
+
+(Eq. 8) in (log s+, log s−)-space with asymmetric thresholds C+ = 0 .20 , C− = 0 .1 (k = 2 ). Dashed lines mark the budget boundaries C± (onset of rollback); dotted lines mark the full-gating thresholds C∗± (onset of zeroing). The five global regimes (G-I through G-III) follow a non-monotonic pattern: | log w| rises through the rollback onset (G-II,r), peaks when one channel is fully gated (G-II), declines under mutual rollback (G-III,r), and collapses to zero when both channels are fully gated (G-III, wbase  
+
+> τ
+
+= 1 ). budget overshoot, so the clip suppresses |rs,a − 1| without zeroing it 3. The remaining budget induces a linear penalty whose gradient opposes further drift. The rollback regime is the unique continuous piecewise-linear interpolation between pass-through and zeroing, with slope fixed by the APC-Obj decomposition structure. • Zeroed (Z) (|x| ≥ C∗): the budget is fully consumed. The gate outputs 0, completely blocking gradient signal for this channel. This is the aggregate-level counterpart of APC-Obj regime (Z) (Eq. 63), where the cross-token consumption (C1) alone exceeds the total budget (B), making the residual clip bound nonpositive and forcing the clip output to zero. The rollback regime has width C/T τ and shrinks for longer trajectories, so gagg approaches a hard clip at ±C as 
+
+Tτ → ∞ .
+
+Per-channel budgets. C+ and C− are the per-channel trust-region budgets satisfying C+ + C− = δ, with the recommendation C− < C + to compensate for the intrinsic KL bias log s− 
+
+> τ
+
+≥ log s+ 
+
+> τ
+
+(Appendix E.5). The symmetric case C+ = C− = δ/ 2 is a special case. 
+
+Regime analysis of the base weight. Figure 2 visualizes gagg and the resulting base weight. Since wbase  
+
+> τ
+
+is a ratio of two independently gated channels (Eq. 8), the combined behavior depends on which regime each channel occupies. The key structural feature is that wbase  
+
+> τ
+
+depends on log s+ 
+
+> τ
+
+and log s− 
+
+> τ
+
+independently : two trajectories with identical mean log-ratio 1
+
+> Tτ
+
+P log rt = log s+ − log s− but different ˆ¯D(τ )TV may produce same base weights, depending on whether 
+
+(log s+, log s−) lies in the G-I region or not. A trajectory with large positive and negative shifts falls outside G-I, triggering rollback on both channels even when the shifts nearly cancel; this produces a gated base weight. In contrast, a trajectory in G-I has base weight exactly exp(log s+ − log s−), since gagg acts as the identity. 
+
+> 3
+
+In the per-state APC-Obj objective (Eq. 60), regime (R) requires |rs,a − 1|/T s > ˆDTV (s) − δ, equivalently 0 < | clip( rs,a −
+
+1, (B) − (C1) )| < |rs,a − 1|. After trajectory-level aggregation (Appendix E.5.3), logarithmic approximation (Appendix E.5.2), and clipping decomposition (Eq. 77), this per-token condition on |rs,a − 1| lifts to a condition on the aggregate log-ratio log s(l)
+
+> τ
+
+that still depends on individual log ri (i.e., | log ri|/T τ > log s(li) 
+
+> τ
+
+− δ). Since Tτ is typically large in LLM settings, the per-token dependence becomes negligible and the condition reduces to the uniform cross-token condition C(l) < log s(l) 
+
+> τ
+
+< C ∗(l) on the aggregate ratio alone. 
+
+11 The five global regimes are: • G-I (both pass-through): wbase  
+
+> τ
+
+= exp(log s+ − log s−), the unmodified importance-sampling ratio. The base gate is transparent. • G-II,r (one channel rolling back): the active rollback produces a restorative gradient that opposes the drifting channel; | log wbase  
+
+> τ
+
+| is rising. • G-II (one channel fully gated): | log wbase  
+
+> τ
+
+| peaks at approximately C(l) (the surviving channel l’s budget), delivering maximum one-sided correction. • G-III,r (mutual rollback): both channels are past their thresholds; | log wbase  
+
+> τ
+
+| is declining. • G-III (both fully gated): wbase  
+
+> τ
+
+= 1 and the trajectory-level gradient contribution vanishes entirely. 
+
+5.2 Gated Residual (Fiber Gate) 
+
+The gated residual captures each token’s deviation from the trajectory aggregate, gated to prevent individual token spikes: 
+
+˜rfiber  
+
+> i
+
+:= logclip 
+
+
+
+(s(li) 
+
+> τ
+
+)−li ri, ϵ 
+
+
+
+logclip 
+
+
+
+(s(−li) 
+
+> τ
+
+)−li , ϵ 
+
+ . (11) We now define its constituent elements. 
+
+Log-clipping function. The log-clipping function is: 
+
+logclip( x, ϵ ) := exp  clip(log x, ±ϵ). (12) We explain the specific choice of log space and thus log clip in Appendix E.5.2. Intuitively, in non-log space, this is equivalently clip( x, e −ϵ, e +ϵ): the argument is clamped to the interval [e−ϵ, e +ϵ]. The asymmetry is inherent: the upper bound e+ϵ ≈ 1 + ϵ + ϵ2/2 is further from 1 than the lower bound e−ϵ ≈ 1 − ϵ + ϵ2/2, so a symmetric ϵ in log-space naturally produces an asymmetric clip in ratio space. This subsumes the effect of asymmetric clip bounds 
+
+ϵ+/ϵ − used in PPO/GRPO without introducing an additional hyperparameter. 
+
+Sign label and channel decomposition. For each token i, the sign assignment 
+
+li := sign(log ri) ∈ { +1 , −1} (13) indicates whether the new policy has increased ( li = +1 ) or decreased ( li = −1) the likelihood of token i relative to the reference policy. A parenthesized sign-label superscript selects the sign channel: s(li) 
+
+> τ
+
+= s+ 
+
+> τ
+
+when li = +1 and s−
+
+> τ
+
+when li = −1; the negated form s(−li) 
+
+> τ
+
+selects the opposite channel (see Appendix A.4 for notation conventions). This sign partitions the tokens within each trajectory into two channels (positive-ratio and negative-ratio, reflecting the FBG fiber bundle structure of Section 4.1, see Appendix E.5.4 for the instantiation with signed channels). The gated residual (11) decomposes into two sign-channel cases: 
+
+˜rfiber  
+
+> i
+
+=
+
+
+
+logclip  (s+ 
+
+> τ
+
+)−1 ri, ϵ 
+
+logclip  (s− 
+
+> τ
+
+)−1, ϵ  if li = +1 ,
+
+logclip  (s− 
+
+> τ
+
+)+1 ri, ϵ 
+
+logclip  (s+ 
+
+> τ
+
+)+1 , ϵ  if li = −1.
+
+In each case, the numerator involves only the same-sign aggregate s(li) 
+
+> τ
+
+, while the denominator involves the opposite-sign aggregate s(−li) 
+
+> τ
+
+.
+
+Fiber residual and the gated residual in log-space. Define the fiber residual 
+
+ui := li log ri − log s(li) 
+
+> τ
+
+(14) and the opposite-sign aggregate 
+
+vi := − log s(−li) 
+
+> τ
+
+. (15) 12 The gated residual (11) can be written equivalently in terms of ui and vi as: 
+
+˜rfiber  
+
+> i
+
+= logclip  eli ui , ϵ 
+
+logclip  eli vi , ϵ  = exp(clip  li ui, ϵ  − clip  li vi, ϵ ). (16) The fiber residual ui (14) subtracts the same-sign trajectory mean ( log s(li) 
+
+> τ
+
+) from each token’s log-ratio. The numerator’s 
+
+logclip acts on eliui , which involves only the same-sign channel aggregate s(li) 
+
+> τ
+
+; this prevents the opposite channel’s aggregate ratio from directly entering the numerator clip, avoiding opposite-channel contamination. The denominator’s 
+
+logclip acts on elivi , incorporating the opposite-sign aggregate s(−li) 
+
+> τ
+
+to complete the subtraction by trajectory-mean log-ratio ( log rτ := (1 /T τ ) P 
+
+> t
+
+log rst,a t ). 
+
+Ratio decoupling. When neither the numerator nor denominator logclip is saturated (i.e., the internal clip is inactive: 
+
+|ui| ≤ ϵ and |vi| ≤ ϵ), the exp and log cancel and we obtain: 
+
+log ˜ rfiber  
+
+> i
+
+= li(ui − vi) = log ri − log rτ ,
+
+where, recalling the log-aggregate ratio log sτ := 1
+
+> Tτ
+
+PTτ −1 
+
+> t=0
+
+log rst(τ ),a t(τ ) (see also Appendix C.6 for definition), 
+
+log rτ := log sτ = 1
+
+TτTτ −1X
+
+> t=0
+
+log rst(τ ),a t(τ )
+
+is the trajectory mean log-ratio. Thus the gated residual is a trajectory-mean-centered quantity: it measures each token’s deviation from the trajectory average, with the same-sign/opposite-sign channel split ensuring that the ϵ-clipping acts within each sign channel independently. First, the total mean-centering log rτ has the advantage of recovering the true linear surrogate and thus true RL objective near on-policy, when combined with the base weight’s pass-through behavior in G-I. Second, the signed-trajectory-mean centering quantity liui = log ri − li log s(li) 
+
+> τ
+
+(from the sign channel decomposition also (13) ) that passed into the numerator (equivalently may be expressed as exp ◦ clip( liui, ϵ )) provides the following additional advantages: 
+
+Fiber residual clip isolates signed trajectory-level drift : even when the trajectory aggregate log s(li) 
+
+> τ
+
+is large (indicating substantial overall policy shift), individual tokens are regulated only by how much they deviate from the trajectory norm. Tokens that move relatively closely with the same-sign trajectory-mean (trajectory-level drift) always pass through the FiberPO gating function ( G of FiberPO) unattenuated, thus preserving well-behaved tokens their full gradient signal, allowing them to provide finer update direction , leading to higher token-efficiency , even when (signed-)trajectory-level drift are large ( log s± 
+
+> τ
+
+> ϵ ). And in this case, methods like PPO/GRPO etc. that clip log ri directly would have more than half tokens to exceed the clip bound simultaneously and destroy token-level discriminated signal. 
+
+Fiber residual isolates inter-trajectory and intra-trajectory drift : To demonstrate this point, consider two trajectories answering “Name a famous landmark”: 
+
+“I love Paris and the Eiffel Tower” vs. “I love Rome and the Colosseum.” 
+
+Globally, the policy may strongly prefer the Paris response, perhaps it scores higher overall, so the aggregate ratio s+
+
+> τ
+
+for that trajectory is large. Without decoupling, this global preference bias leaks into every token’s gradient: the token 
+
+Colosseum in the Rome trajectory receives a weaker learning signal not because the token-level association “Rome 
+
+→ Colosseum” is poor, but simply because its trajectory is globally less preferred. The residual decomposition in Eq. 7 prevents this contamination. By subtracting the trajectory aggregate from each token’s log-ratio, the fiber gate 
+
+˜rfiber  
+
+> i
+
+isolates the pure local association, how much “Colosseum” co-varies with “Rome” relative to what the trajectory drift alone would predict, and gates it independently via logclip . Within each trajectory, token-level learning thus operates at a uniform, unbiased scale: P (Colosseum | Rome ) and P (Eiffel Tower | Paris ) are each refined on their own statistical merits, free from the global preference P (Paris trajectory ) ≫ P (Rome trajectory ). The base weight 
+
+wbase  
+
+> τ
+
+then re-couples the trajectory-level preference when the two scales are composed, so that global significance is preserved without polluting local precision. This is the orthogonal, non-interfering decomposition guaranteed by the reflecting condition πE∗ ◦ K = id B (Appendix E.3). 
+
+Regime analysis of the gated residual. To make the behavior of the ϵ-clip explicit, we partition trajectories into three local regimes according to how many tokens’ fiber residuals exceed the clip threshold: 13 L-II         
+
+> L-III
+> L-I / L-II boundary
+> L-II / L-III boundary
+> N=C−= 0.09
+> P=C+= 0.15
+
+L-I                  
+
+> 0.075
+> 0.050
+> 0.025
+> 0.000
+> 0.025
+> 0.050
+> 0.075
+> ∆ˆJFiberPO
+> r1=3 r2=3
+> r3=3
+> G-III,r
+> G-III G-III
+> N=C−= 0.09
+> P=C+= 0.15
+> N=C∗ −
+> P=C∗+
+
+G-I 
+
+> G-II,r
+> G-II
+> 0.075
+> 0.050
+> 0.025
+> 0.000
+> 0.025
+> 0.050
+> 0.075
+> ∆ˆJFiberPO
+
+(a) Local: L-I/II/III on ∆ˆJFiberPO (zoomed) (b) Global: G-I/II,r/II/III,r/III on ∆ˆJFiberPO Figure 3: Regime map on the probability simplex given by all possible configurations of a trajectory’s policy ratios (subject to probabilistic constraint ( 1
+
+> Ttrajectory
+
+PTtrajectory −1 
+
+> t=0
+
+rt = 1 ) where T =3 , ε=0 .025 , C+=0 .15 , C−=0 .09 , K=3 ,
+
+C∗± =(1+1 /K ) C±). (a) Local branch (zoomed ±0.18 around centroid): L-I (no clip, central polytope inside teal boundary), L-II (partial clip, between teal solid and purple solid boundaries), and L-III (full clip, outside purple boundary). Red and blue dashed contours show the rollback thresholds N =C− and P =C+. (b) Global branch (full simplex): five concentric regimes—G-I (inside red solid N =C−), G-II,r (rollback transition, between red solid 
+
+N =C− and red dotted N =C∗− ), G-II (between red dotted N =C∗− and blue solid P =C+), G-III,r (rollback transition, between blue solid P =C+ and blue dotted P =C∗+), and G-III (outside blue dotted P =C∗+). • L-I (unclipped): max i |ui| < ϵ . Every token retains its full per-token self-gating; the fiber gate(gated residual 
+
+˜rfiber  
+
+> i
+
+) imposes no restriction and faithfully tracks each token’s deviation from the trajectory mean log-ratio. • L-II (selective clipping): 0 < n ϵ < T τ , where nϵ counts tokens with |ui| ≥ ϵ. Outlier tokens lose their direct per-token gradient while well-behaved tokens retain full signal—the regime where most of the meaningful per-token signals are retained. • L-III (all logclip ’s saturated): min i |ui| ≥ ϵ. Individual token identity is lost; the Jacobian (20) reduces to  
+
+> G(r)j
+> rj
+> 1
+> Tτ
+
+γ(lj ) 
+
+> τ
+
+, the gradient is governed entirely by the trajectory-level controlled base weight wbase  
+
+> τ
+
+.Figure 3 visualizes the joint local–global regime map on the probability simplex. It also shows that many parts of L-I/II/III regime cascade fits inside G-I. This is the outcome of encouraged parameter choice: That local token-level regulation engages before global trajectory-level regulation, allowing the fiber gate to preserve the most meaningful(non-outlier) per-token gradient signal for as long as possible, while the base gate remains transparent until the trajectory as a whole has drifted substantially where regulation on global quantities becomes necessary. 
+
+5.3 Per-Token and Total Objective 
+
+Substituting the gated ratio decomposition (7) into the FiberPO objective (6), the per-token objective contribution is: 
+
+1
+
+|Tj θold |
+
+1
+
+Tτ
+
+wbase  
+
+> τ
+
+· ˜rfiber  
+
+> i
+
+· ˆAi, (17) and the total objective is 
+
+ˆJFiberPO (θ|θold ) = X 
+
+> (s,a,τ,t )∈¯X
+
+1
+
+|Tj θold |
+
+1
+
+Tτ
+
+wbase  
+
+> τ
+
+· ˜rfiber  
+
+> i
+
+· ˆAs,a . (18) In terms of the fiber residual ui, opposite-sign aggregate vi, and aggregate ratios log s± 
+
+> τ
+
+, this can be expressed as: 
+
+ˆJFiberPO = X 
+
+> i∈¯X
+
+1
+
+|Tj θold |
+
+1
+
+Tτ
+
+exp ◦ gagg (log s+ 
+
+> τ
+
+, C +, T τ )exp ◦ gagg (log s− 
+
+> τ
+
+, C −, T τ ) · logclip( eliui , ϵ )logclip( elivi , ϵ ) · ˆAi.
+
+14 Figure 4: Per-token and total FiberPO objective under parameterized drift ri = 1 + t ˆ∆i (T =10 , k=32 , ϵ=0 .04 ,
+
+C+=0 .12 , C−=0 .05 ), with sign( ˆ∆i) = sign( ˆAi), reflecting the typical policy update in which tokens with positive advantage increase their probability ( ˆ∆i > 0) and tokens with negative advantage decrease their probability ( ˆ∆i < 0). GRPO in the graph uses the same ϵ-clip as FiberPO. 
+
+(a) Trajectory in (log s+, log s−)-space overlaid on the log w heatmap; as drift increases, the trajectory moves through the global regimes of Figure 2(b). (b) Per-token fiber correction at t=1 : fiber residual (red) and base-weight contribution (orange) stack to form the full gated log-ratio. (c) Per-token objective for two representative tokens. (d) Total objective: FiberPO’s gagg and logclip saturate, causing the objective to return to baseline. Vertical markers: ϵ-clip transitions (gray, L-I →L-II), C− rollback (red, G-II,r onset), C+ rollback (blue, G-II,r onset). Figure 4 traces the per-token and total objective under varying policy drift. The key features are: • Local regulation engages first (gray vertical lines, panels c, d): individual tokens hit the ϵ-clip boundary (|ui| = ϵ, L-I →L-II transition) well before the trajectory-level aggregates reach the budget threshold. At this stage wbase is in G-I, so only per-token spikes are capped while the trajectory-level importance-sampling correction remains intact. • Rollback activates on aggregate drift (between solid and dotted red/blue vertical lines): once log s− 
+
+> τ
+
+exceeds 
+
+C− (or log s+ 
+
+> τ
+
+exceeds C+), gagg enters rollback regime. The base weight wbase  
+
+> τ
+
+begins to oppose the drift direction, producing a restorative gradient (G-II,r). 15 • Non-monotonic pattern (panel d): the total objective rises, peaks as | log wbase  
+
+> τ
+
+| reaches its maximum (G-II,r), then declines through mutual rollback (G-III,r) and collapses to the no-reweighting baseline when both channels are fully gated (G-III, wbase  
+
+> τ
+
+= 1 ). 
+
+5.4 Theoretical Analysis 
+
+Having defined the FiberPO objective and its two-scale gating structure, we now analyze the gradient-level properties that distinguish it from existing proximal methods. 
+
+Gradient Decomposition via the Ratio Gating Jacobian. The gradient of a generic RGF objective (Definition 3.1), and thus of FiberPO, with respect to the model parameters θ admits the decomposition: 
+
+∂ ˆJ(θ|θold )
+
+∂θ = X
+
+> k∈E
+
+∂z k
+
+∂θ ∂ ˆJ∂z k
+
+= X
+
+> i,j,k ∈E
+
+∂z k
+
+∂θ μi
+
+| {z } 
+
+> parametrization-related prior weights
+
+∂G(r•)i
+
+∂r j
+
+| {z }
+
+> J(G)ij
+
+(rj (δjk − (πθ )k)) 
+
+| {z }  
+
+> Πjk =∂r j∂z k
+
+| {z }
+
+> ratio gating factor
+
+ˆAψ(i)
+
+| {z } 
+
+> advantage force
+
+, (19) where zi is the logit parameter of the policy, i.e., πθ (·| s) = softmax( z(θ, s )) (see Appendix A.4), δjk is the Kronecker delta, (πθ )k ≡ πθ (ak|sk) is the policy probability at the state-action pair indexed by k ∈ E , and ψ(i) maps an augmented index i ∈ E to its underlying state-action pair (s, a ).The gradient decomposes into three factors: the parametrization-related prior weights ∂z k 
+
+> ∂θ
+
+μi, which are fixed a priori; the advantage force ˆAψ(i), which comes from the reward model and is also given; and the ratio gating factor, which is the only component determined by the choice of surrogate objective. Within the ratio gating factor, the matrix 
+
+Π ≡ rj (δjk − (πθ )k) 
+
+> j,k ∈E
+
+is simply the transformation matrix from logit space to ratio space [ ∂r j 
+
+> ∂z k
+
+]. Therefore, the Jacobian of the ratio gating map, J(G)ij ≡ ∂G(r•)i 
+
+> ∂r j
+
+, is the central object that determines how different surrogate objectives shape the policy update. 
+
+The FiberPO Ratio Gating Jacobian. To characterize how this two-scale gating shapes gradient flow, we compute the Jacobian of the ratio transform G. Since Gi = exp(log Gi), the Jacobian J(G)ij := ∂G(r•)i 
+
+> ∂r j
+
+factors as Gi 
+
+> rj
+
+· ∂ log Gi   
+
+> ∂log rj
+
+.Using the gating decomposition (7) and differentiating through gagg , logclip , and the aggregate ratios s± 
+
+> τ
+
+, one obtains: 
+
+Proposition 5.2 (Jacobian of FiberPO ratio transform) . The Jacobian of the FiberPO ratio gating map is: 
+
+J(G)ij = G(r•)i
+
+rj
+
+Itj i=tj j
+
+ I|ui|≤ ϵ Ii=j
+
+| {z }
+
+> (a) local self-gating
+
++ 1
+
+Ttj i
+
+
+
+γ(lj )tj i − I|ui|≤ ϵ Ili=lj − I|vi|≤ ϵ (1 − Ili=lj )
+
+| {z }
+
+> (b) trajectory-mediated coupling
+
+ , (20) 
+
+where: 
+
+• tj i represents the trajectory which state-action pair in i belongs to, 
+
+• ui := li log ri − log s(li)tj i is the fiber residual of token i (Eq. 14), 
+
+• vi := − log s(−li)tj i is the opposite-sign aggregate (Eq. 15), 
+
+• γ(l) 
+
+> τ
+
+:= ( gagg )′(log s(l) 
+
+> τ
+
+, C(l), Tτ ) is the derivative of the base gate (Eq. 10), taking the value 1 in the pass-through regime ( | log s(l) 
+
+> τ
+
+| ≤ C(l)), −Tτ in the rollback regime ( C(l) < | log s(l) 
+
+> τ
+
+| < (1 + T −1 
+
+> τ
+
+)C(l)), and 
+
+0 in the zeroed regime ( | log s(l) 
+
+> τ
+
+| ≥ (1 + T −1 
+
+> τ
+
+)C(l)). 
+
+Three structural properties follow from this expression. 
+
+Property 5.3 (Trajectory independence) . The factor Itj i=tj j ensures that tokens in different trajectories are fully decoupled: J(G)ij = 0 whenever tj i̸ = tj j . Equivalently, the Jacobian is block-diagonal over trajectories, so each trajectory’s gradient is self-contained. 4
+
+> 4
+
+It is still worth mention that there might still be cross-trajectory coupling via the parametrization-related prior weights ∂z k 
+
+> ∂θ
+
+in the full gradient decomposition (Eq. 19), however, (i) a canonical choice of parametrization should have different parameters controlling 
+
+16 Property 5.4 (First-order agreement) . At the on-policy point ( r• = 1), the Jacobian reduces to J(G)ij = Ii=j /r j , the identity gating. The FiberPO surrogate therefore recovers the linear surrogate J(1) (θ|θold ) and the true RL objective to first order near on-policy (Theorem 4.5). 
+
+Property 5.5 (Scale separation) . The local self-gating term (a) in Eq. 20 has O(1) magnitude. The coupling term (b) is weighted by 1/T τ , so trajectory-mediated effects scale inversely with sequence length. In the near-on-policy regime, the local gradient dominates; trajectory-level corrections become significant only as aggregate drift grows. 
+
+## 6 Fibration Hierarchy and FiberPO-Domain 
+
+The fiber bundle model of Section 4.1 captures a single level of abstraction: tokens are grouped into trajectories, and Fiber Bundle Gating decomposes stability control into a base gate (trajectory level) and a fiber gate (token level). In practice, however, dependency and classification in LLM RL training are inherently hierarchical. Tokens belong to trajectories, trajectories belong to prompt groups, and prompt groups belong to domains such as mathematics, code generation, and instruction following. There is no reason to restrict the fibration to a single level, and the algebraic structure of FBG extends naturally to a chain of fibrations. This generalization is not merely a matter of symbolic generality. Different levels of the hierarchy demand different trust-region radii for substantive reasons. First, different domains may be trained at different stages and therefore have different proximity to the optimum, requiring appropriately sized per-domain trust regions (a radius that is too large causes instability, while one that is too small leads to premature convergence to a local optimum). Second, parameters associated with each hierarchical level carry different degrees of importance in the network architecture and should accordingly be given different amounts of flexibility. Third, even the positive and negative drift channels within each level demand different budgets, to avoid overly optimistic updates from accidental rewards or excessive punishment of exploratory behavior. Existing methods provide only coarse control over these demands: GRPO applies a uniform per-token clip, GSPO operates at a single trajectory level, and APC-Obj and TRPO enforce a global aggregate trust region that does not discriminate across finer structures. FiberPO-Trajectory (Section 5) improves on these by coupling trajectory-level and token-level control, but it operates at only two levels of the hierarchy. In this section, we show that the fibration formalism generalizes naturally to arbitrarily many hierarchical levels, providing a principled compositional framework for multi-scale trust-region control. We formalize this generalization as the Uniform Fibration Hierarchy and its associated Fibration Gating Hierarchy, and demonstrate its utility by deriving FiberPO-Domain, a concrete four-level instantiation (domain, prompt group, trajectory, token). The same construction extends readily to any level of hierarchical complexity that a given training setup requires. 
+
+6.1 Uniform Fibration Hierarchy and Fibration Gating Hierarchy 
+
+We begin by extending the fiber bundle model to a chain of fibrations, each representing one level of abstraction. 
+
+Definition 6.1 (Uniform Fibration Hierarchy) . A uniform fibration hierarchy of depth n is a chain of spaces 
+
+{Bk}k∈{ 0,...,n } (called strata ) together with fibrations {πk}k∈{ 1,...,n }, where each πk : Bk → Bk−1 is a fibration projection: 
+
+B0
+
+> π1
+
+←− B1
+
+> π2
+
+←− B2
+
+> π3
+
+←− · · · πn
+
+←− Bn ≡ E. (21) The chain of fibrations naturally induces a chain of pushforward maps on density spaces: 
+
+B0
+
+> π1∗
+
+←− B1
+
+> π2∗
+
+←− B2
+
+> π3∗
+
+←− · · · πn∗
+
+←− Bn ≡ E, (22) where Bk denotes the space of densities on Bk.Building on the uniform fibration hierarchy, we equip each stratum with gating infrastructure analogous to Fiber Bundle Gating (Definition 4.3). 
+
+Definition 6.2 (Fibration Gating Hierarchy (FGH)) . A Fibration Gating Hierarchy consists of the following objects: 
+
+Object 1. Uniform fibration hierarchy {Bk, π k} (Definition 6.1). 
+
+Object 2. Reflecting Markov kernels {Kk}k∈{ 0,...,n −1}, Kk : Bk → Bk+1 :
+
+B0
+
+> K0
+
+−→ B1
+
+> K1
+
+−→ B2
+
+> K2
+
+−→ · · · Kn−1
+
+−→ Bn ≡ E.    
+
+> for unrelated trajectories, thus typically leading to sparse ∂z k
+> ∂θ and thus minimal unrelated cross-trajectory coupling. In contrast, the related trajectory-level coupling of parametrization is in fact desirable, as it allows more stable and robust gradient direction provided by correlated gradients of related trajectories. (ii) The parametrization-related prior weights ∂z k
+> ∂θ are independent of the choice of surrogate objective and thus is not possible to further control with surrogate formulations. The block-diagonal Jacobian already provides maximal decoupling that can be achieved at the surrogate level.
+
+17 Object 3. Atomic gating functions on each stratum, {gk,p <k }k∈{ 0,...,n }:
+
+gk,p <k : Bk → Bk,
+
+where gk,p <k may depend on the densities on all lower strata p<k ≡ (p0, p 1, . . . , p k−1).
+
+Object 4. Fibration decomposition and recovery maps , the same as in FBG (Definition 4.3): F : RE → E, R :
+
+E → RE .These objects are subject to the following conditions: (i) Reflecting condition: πk∗ ◦ Kk−1 = id Bk−1 for 0 < k ≤ n, equivalently πk∗(σ − Kk−1(πk∗σ)) = 0 ,ensuring that the residual at each level carries no lower-stratum information. (ii) Recovery condition: R ◦ F = id RE .(iii) Locality condition: gk,p <k = L 
+
+> b∈Bk
+
+gk,p <k ,b , i.e., gk,p <k (σk)b = gk,p <k ,b (( σk)b) for all σk ∈ Bk and 
+
+b ∈ Bk. Each atomic gating function acts pointwise over the elements of its stratum. For notational convenience, we define sequential compositions of the fibration and kernel maps. Let 
+
+Km←k := Km−1 ◦ Km−2 ◦ · · · ◦ Kk+1 ◦ Kk for k < m, Kk←k := id Bk , (23) 
+
+πk←m := πk+1 ◦ πk+2 ◦ · · · ◦ πm−1 ◦ πm for k < m, πk←k := id Bk , (24) 
+
+πk←m ∗ := πk+1 ∗ ◦ πk+2 ∗ ◦ · · · ◦ πm−1 ∗ ◦ πm∗ for k < m, πk←k ∗ := id Bk . (25) We also write π<k ∗σ ≡ (π0←n ∗σ, π 1←n ∗σ, . . . , π k−1←n ∗σ) for σ ∈ E ≡ Bn, collecting the pushed-forward densities on all strata below level k.The FGH gating function generalizes the FBG operator (4) by gating the residual at each stratum and reflecting all contributions back to the total space: 
+
+G(σ) := Kn←0 ◦ g0 ◦ π0←n ∗(σ) + X
+
+> 0<k ≤n
+
+Kn←k ◦ gk,π <k ∗σ (πk←n ∗σ − Kk−1(πk−1←n ∗σ)) , (26) which admits the compact form 
+
+G(σ) = X
+
+> 0≤k≤n
+
+Kn←k ◦ Gk ◦ πk←n ∗(σ), (27) where the per-stratum operator Gk is defined by 
+
+Gk(σk) := 
+
+(g0(σk) if k = 0 ,gk,π <k ∗σ (σk − Kk−1 ◦ πk∗(σk)) otherwise. (28) The structure mirrors that of Fiber Bundle Gating: the density σ is pushed forward to each stratum Bk via πk←n ∗, the contribution already accounted for at stratum k−1 is subtracted through σk − Kk−1 ◦ πk∗(σk), the residual is gated by 
+
+gk,π <k ∗σ , and all gated components are reflected back to E via Kn←k and summed. The associated FGH surrogate objective is defined analogously to the FBG gating form (5): 
+
+ˆJFGH (θ|θold ) = X
+
+> i∈E
+
+μi R ◦ G ◦ F (r•(θ|θold )) i ˆAi. (29) 
+
+Remark 6.3 (Recovery of Fiber Bundle Gating) . When n = 1 , the fibration hierarchy reduces to a single fiber bundle 
+
+π1 : B1 ≡ E → B0 ≡ B, and the FGH definitions recover exactly the FBG framework of Definition 4.3. In this case, the gating function (26) reduces to G(σ) = K0(g0(π1∗σ)) + g1,π 1∗σ (σ − K0(π1∗σ)) , which is precisely (4) . The FiberPO objective (Definition 5.1), which operates at the trajectory and token levels, corresponds to n = 1 .
+
+6.2 FiberPO-Domain 
+
+We now instantiate the Fibration Gating Hierarchy with n = 3 to obtain FiberPO-Domain, which extends FiberPO’s two-level gating (trajectory, token) to a four-level hierarchy: domain, prompt group, trajectory, and token. We first introduce the relevant notation. Let D ∈ Domain denote a domain index (e.g., mathematics, code, instruction following), and let Dg denote the domain of prompt group g. For simplicity, we assume that training prompts are not 18 composite domain tasks, so that we may also write Dτ for the domain of trajectory τ and Di := Dτ for the domain of an augmented state-action pair i ≡ (s, a, τ, t ) ∈ ¯X . The prompt group index of trajectory τ is denoted gτ , and 
+
+gi denotes the prompt group of augmented pair i. Let τi denote the trajectory to which i belongs, Tτ the length of trajectory τ , TD := P  
+
+> τ∈D
+
+Tτ the total number of state-action pairs classified to domain D, and Tg := P  
+
+> τ∈g
+
+Tτ the total number of state-action pairs within prompt group g. We write Tj θold (D) for the set of trajectories in domain D
+
+and Tj θold (g) for those in prompt group g.
+
+Definition 6.4 (FiberPO-Domain) . The FiberPO-Domain objective is: 
+
+ˆJFiberPO-Domain (θ|θold ) = X 
+
+> i∈¯X
+
+1
+
+|Tj θold |
+
+1
+
+Tτ
+
+wBase  
+
+> i
+
+· ˜rFiber  
+
+> i
+
+· ˆAi. (30) The base weight decomposes into six gated aggregate terms, three per sign channel, corresponding to the domain, prompt group, and trajectory levels: 
+
+wBase  
+
+> i
+
+:= exp gagg (log s+ 
+
+> Di
+
+, C +, T Di ) + gagg (log s+ 
+
+> gi
+
+− log s+ 
+
+> Di
+
+, C +, T gi ) + gagg (log s+ 
+
+> τi
+
+− log s+ 
+
+> gi
+
+, C +, T τi )
+
+− gagg (log s− 
+
+> Di
+
+, C −, T Di ) − gagg (log s− 
+
+> gi
+
+− log s− 
+
+> Di
+
+, C −, T gi ) − gagg (log s− 
+
+> τi
+
+− log s− 
+
+> gi
+
+, C −, T τi )
+
+!
+
+,
+
+(31) where the aggregate gate gagg is defined in Eq. 10. The gated residual is identical to FiberPO’s fiber gate (Eq. 11): 
+
+˜rFiber  
+
+> i
+
+:= logclip  (s(li) 
+
+> τi
+
+)−li ri, ϵ 
+
+logclip  (s(−li) 
+
+> τi
+
+)−li , ϵ  , (32) where li := sign(log ri). The prompt-group-level and domain-level aggregate log-ratios appearing in the base weight are defined as: 
+
+log s(l) 
+
+> g
+
+:= 1
+
+|Tj θold (g)|
+
+X 
+
+> τ∈g
+
+log s(l) 
+
+> τ
+
+, log s(l) 
+
+> D
+
+:= X
+
+> g∈D
+
+|Tj θold (g)||Tj θold (D)| log s(l) 
+
+> g
+
+. (33) The associated FGH objects (strata, reflecting kernels, atomic gates, and decomposition/recovery maps) that realize this objective as an n=3 FGH instance are specified in Appendix E.7. The base weight (31) has a transparent hierarchical structure. Each of the three positive terms gates the residual drift at one level of the hierarchy: log s+ 
+
+> Di
+
+captures domain-level drift, log s+ 
+
+> gi
+
+− log s+ 
+
+> Di
+
+captures the prompt group’s deviation from its domain aggregate, and log s+ 
+
+> τi
+
+− log s+ 
+
+> gi
+
+captures the trajectory’s deviation from its prompt group aggregate. The negative channel is treated symmetrically. At each level, gagg independently maintains a trust-region budget with the same three-regime (pass-through, rollback, zeroed) behavior as in FiberPO-Trajectory (Section 5.1), scaled by the appropriate count ( TDi , Tgi , or Tτi ). FiberPO-Domain inherits the structural merits that FiberPO-Trajectory demonstrates at the trajectory and token levels. The first-order agreement with the true RL objective near on-policy extends to the full hierarchy under the same identity conditions on the atomic gates (Theorem 4.5 applied to the FGH framework). The ratio decoupling property (Section 5.2), which ensures that tokens are regulated by their deviation from the trajectory mean rather than by their absolute log-ratio, now extends upward: each trajectory is regulated by its deviation from the prompt group aggregate, and each prompt group is regulated by its deviation from the domain aggregate. The rollback mechanism operates independently at each level, so that budget violation at one level of the hierarchy does not contaminate the gating at other levels. This information decoupling between hierarchical levels provides substantially more versatile optimization control for multi-domain LLM RL training than any single-scale or two-scale method. The FiberPO-Domain objective (30) admits an equivalent FGH gating form G(r•)i = wBase  
+
+> i
+
+· ˜rFiber  
+
+> i
+
+= R ◦ G ◦ F (r•)i
+
+corresponding to the n = 3 case of Definition 6.2. The detailed specification of the constituent FGH objects (fibration hierarchy, reflecting Markov kernels, atomic gating functions, and decomposition/recovery maps) is given in Appendix E.7. 
+
+Remark 6.5 (Heterogeneous fibration systems) . The uniform fibration hierarchy assumes a linear chain of strata 
+
+B0 ← B1 ← · · · ← Bn, which suffices for the domain–prompt-group–trajectory–token hierarchy considered here. A more general construction replaces the linear chain with a rooted tree (or more generally, a quiver), where each edge carries a fibration and each vertex carries a gating function. Given a rooted tree with source and target maps 
+
+s, t : Edge → Vertex (edges directed toward the root), one assigns a space Fv to each vertex and a fibration 
+
+F1(e) : Fs(e) → Ft(e) to each edge, together with reflecting kernels and atomic gates at each vertex. The resulting gating operator aggregates gated residuals from all vertices back to the total leaf space, generalizing the linear sum (26) to a tree-indexed sum. This heterogeneous fibration system accommodates branching hierarchies (e.g., separate domain and modality classifications at the same level) and provides a framework for expressing gating algebras over arbitrary dependency structures. 19 7 Conclusion 
+
+This paper develops an algebraic approach to multi-scale stability control in reinforcement learning for large language models. We begin by proving that classical TRPO trust-region guarantees collapse at discount factor γ = 1 , the regime required by sparse-reward LLM tasks, motivating a separation of the trust-region maintenance mechanism from the specific radius prescribed by the classical bound. We then derive Aggregational Policy Censoring Objective (APC-Obj), an unconstrained clipping-based surrogate that is provably equivalent to sample-based TV-TRPO under complete parametrization, establishing that clipping-based surrogate design and trust-region policy optimization are dual formulations of the same problem. Through the Ratio Gating Formalism (RGF), we show that PPO, GRPO, and GSPO each arise from APC-Obj via identifiable relaxation steps, making each method’s departure from the trust-region optimum explicit. Building on this analytical foundation, we introduce Fiber Bundle Gating (FBG), a framework that organizes sampled RLHF data as a fiber bundle and decomposes ratio gating into coordinated global and local components operating on densities over the base and total spaces. FBG preserves first-order agreement with the true RL objective near on-policy whenever the atomic gates reduce to identity at the reference point. From a relaxed APC-Obj formulation, we derive FiberPO, a concrete FBG instantiation whose trajectory-level aggregate gate and token-level residual gate provide independent trust-region budgets at two scales. The FiberPO Jacobian is block-diagonal over trajectories, reduces to identity at on-policy, and exhibits a restorative gradient structure in the rollback regime that is absent in all prior methods. To our knowledge, this is the first work to provide a principled algebraic framework that unifies trust-region maintenance, multi-scale gating, and gradient-level guarantees within a single coherent formalism. A natural question is whether the fiber bundle apparatus is necessary, or whether the same multi-scale gating could be achieved with a carefully hand-crafted structured clipping rule. We observe that methods coupling global and local stability control necessarily involves a dependency structure in which many local quantities depend on a shared global context. This dependency defines a fibration πE : E → B, and the three objects of a fiber bundle, the total space E, the base space B, and the projection πE , correspond directly to the components already present in the data. Methods that aggregate local quantities into context-level statistics implicitly invoke the pushforward πE∗, and methods that distribute context-level information back to local entries implicitly construct a Markov kernel K. The formalism makes these operations explicit and thereby exposes the reflecting condition πE∗ ◦ K = id B (for methods coupling global and local information to satisfy), a structural constraint ensuring that the residual σ − K(πE∗σ) carries no base-level information (Appendix E.3). Without this condition, the fiber gate re-gates global information already handled by the base gate, or the base gate inadvertently constrains genuinely local variation. Designing a gating map that avoids this double-counting while preserving first-order agreement (Theorem 4.5) amounts to satisfying exactly the reflecting condition, i.e., implicitly re-deriving the fiber bundle decomposition. The formalism identifies and makes explicit an underlying decomposition structure that multi-scale gating has, and provides a principled framework for reasoning about its correctness. Because fibrations compose algebraically, the same three-object template chains into the Fibration Gating Hierarchy (FGH) without introducing new primitives, with each stratum’s residual capturing the purest local variation at that level after all coarser influence has been removed. FiberPO-Domain (domain, prompt group, trajectory, token) is one such instantiation, and deeper hierarchies follow by appending another fibration layer. Achieving the same compositional guarantee with ad-hoc notation would require re-proving orthogonality and first-order agreement at every new level. The algebraic compositionality of fibrations provides this automatically. This positions FBG as a foundation for the stability challenges that arise in large-scale agentic systems and heterogeneous multi-domain training. 20 A Notation and Preliminaries 
+
+A.1 On MDP 
+
+For a given MDP, we denote its action space A, state space S, state transition probability T (s′|s, a ), its θ-parameter dependent policy πθ (a|s), and reward function R : S → R.We denote the space of all signed measures over a space X (equipped with a sigma algebra on it) as M(X). The space of probability measures is denoted P(X), and the space of smooth probability measures is denoted C∞P(X) when X
+
+is equipped with a smooth structure. We denote Pp0,π θ ,T (or simply Pθ if T and p0 are clear or assumed from context) as the probabilistic distribution of RL trajectories given the prior distribution p0 for initial states, the πθ action policy, and the state transition distribution T .The discounted RL objective is denoted 
+
+J(θ) := Eτ ∼P θ
+
+h ∞X
+
+> t=0
+
+γtR(st(τ )) 
+
+i
+
+.
+
+Given a reference policy parameter θold , we define: 
+
+Policy-likelihood ratio. The policy-likelihood ratio (or policy ratio) is defined to be 
+
+rs,a (θ|θold ) := πθ (a|s)
+
+πθold (a|s) , a ∈ A , s ∈ S .
+
+If θ, θ old are clear from context, we abbreviate this as rs,a .
+
+Linear surrogate RL objective. The linear surrogate RL objective (with respect to θold ) is denoted 
+
+J(1) (θ|θold ) := J(θold ) + Eτ ∼P θold 
+
+h ∞X
+
+> t=0
+
+γtrst(τ ),a t(τ )(θ|θold ) A(θold )  
+
+> st(τ),a t(τ)
+
+i
+
+,
+
+where A(θold ) 
+
+> s,a
+
+is the advantage value for the state-action pair (s, a ) given the reference policy πθold .The linear surrogate RL objective is the first-order approximation to the true RL objective near on-policy ( θ ≈ θold ), and thus has the same gradient as the true RL objective at θ = θold [8]: 
+
+∇θ J(1) (θ|θold ) θ=θold 
+
+= ∇θ J(θ) θ=θold 
+
+.
+
+Advantage norm. We further denote max (s,a )∈S×A |A(θ)
+
+> s,a
+
+| ≡ ∥ A(θ) 
+
+> •
+
+∥∞, the L∞ norm of the advantage A(θ) 
+
+> •
+
+(for placeholder • running over all state-action pairs), a notation agreeing with our later convention. 
+
+Discounted state distribution. We denote the discounted state distribution ρπθ
+
+> (γ)
+
+, defined as 
+
+ρπθ
+
+> (γ)
+
+(US ) := Eτ ∼P θ
+
+h ∞X
+
+> t=0
+
+γtIUS ( st(τ ) ) 
+
+i
+
+,
+
+where US ⊆ S is a measurable set in state space S, and IX (x) := 
+
+ 1 if x ∈ X
+
+0 otherwise is the indicator function. Note that for LLM γ = 1 , this infinite sum does not necessarily converge. However, typical LLMs have finite response length (or at least clip overly long responses), so the discounted state distribution can still be defined. 
+
+Normalized state distribution. We define the normalized state distribution 
+
+¯ρπθ := 
+
+
+
+(1 − γ)ρπθ 
+
+> (γ)
+
+if γ < 1lim 
+
+> γ→1−
+
+(1 − γ)ρπθ 
+
+> (γ)
+
+if γ = 1 
+
+and the trajectory-length-normalized state distribution 
+
+¯ρπθ
+
+> (tj)
+
+(US ) := Eτ ∼P θ
+
+hTτ −1X
+
+> t=0
+
+1
+
+Tτ
+
+IUS ( st(τ ) ) 
+
+i
+
+,
+
+where Tτ is the length of trajectory τ .21 A.2 On Estimation for MDP 
+
+In the context of estimation, we denote ˆEX∼p[X] the Monte Carlo estimation of EX∼p[X].For trajectory distributions Pθ , we denote Tj θ the collection of all sampled trajectories, Tj θ (s0) the set of all sampled trajectories from initial state s0, and X the collection of all state-action pairs that appeared in sampled trajectories, i.e., 
+
+X := {(st(τ ), a t(τ )) | τ ∈ Tj θ },
+
+in this given context of estimation. For later convenience, we also denote s0[Tj θ ] the set of all initial states s0 that appeared in the sampled trajectories. We denote the augmented (sampled) state-action pair space 
+
+¯X := {(st(τ ), a t(τ ), τ, t )} ⊆ X × Tj πθold × N
+
+(for mathematical completeness, even if a trajectory terminates at a finite step, we still include the null state-action pair 
+
+(∅, ∅, τ, t ) after termination). For any state-action pair (s, a ), we define ns,a ∈ N as the number of times (s, a ) appears in all the sampled trajectories 
+
+Tj θ (counting multiplicity inside the same trajectory as well). We further denote the normalized counting measure on space X as μX :
+
+μX ({(s, a )}) ≡ μs,a = ns,a 
+
+P 
+
+> (s′,a ′)∈X
+
+ns′,a ′
+
+.
+
+We also introduce, for a trajectory τ , the quantity n(τ ) 
+
+> s,a
+
+representing the number of times state-action pair (s, a ) appears in trajectory τ . (For LLM, it never goes beyond 1. However, for rigorousness and generality to RL, we still employ this notation; furthermore, we always assign n∅,∅ = 0 for the null state-action pair.) The normalized counting measure 
+
+μ(τ ) 
+
+> X
+
+is associated to it: 
+
+μ(τ ) 
+
+> X
+
+({(s, a )}) ≡ μ(τ ) 
+
+> s,a
+
+= n(τ )
+
+> s,a
+
+P   
+
+> (s′,a ′)∈X (τ)
+
+n(τ )
+
+> s′,a ′
+
+,
+
+where X (τ ) is the set of all state-action pairs that appear in trajectory τ .We also denote μ(τ )¯X := 1 
+
+> Tτ
+
+I∈τ the normalized counting measure on trajectory τ over the augmented state-action space 
+
+¯X , where 
+
+I∈τ (( s, a, τ ′, t )) = 
+
+ 1 if τ = τ ′
+
+0 otherwise ,
+
+and we conveniently denote ¯μ(τ ) 
+
+> s,a,t
+
+≡ ¯μ(s,a,τ,t ) ≡ μ(τ )¯X ({(s, a, τ, t )}).For convenience, we also define the normalized counting measure on natural numbers N (and subsets thereof) with respect to a trajectory as μ(τ ) ∈ P(N), μ(τ )({n}) := 1 
+
+> Tτ
+
+I[0 ,T τ )(n).
+
+A.3 On Divergences and Their Monte-Carlo Estimation 
+
+We define the total variation (TV) distance and Kullback–Leibler (KL) divergence at three levels—per-state, average/max over states, and trajectory-normalized—and give the distributional definition, the equivalent ratio form, and the Monte-Carlo estimator for each. All divergences are measured from πθold to πθ using the policy ratio rs,a := 
+
+πθ (a|s)/π θold (a|s); we abbreviate D(θold ∥θ) when the policies are clear from context. 
+
+A.3.1 Per-State Divergences Definitions. For a fixed state s ∈ S , the per-state TV distance and KL divergence between πθold (·| s) and πθ (·| s) are 
+
+DTV (s) := DTV 
+
+ πθold (·| s) πθ (·| s) = 12
+
+X
+
+> a∈A
+
+πθold (a|s) − πθ (a|s) , (34) 
+
+DKL (s) := DKL 
+
+ πθold (·| s) πθ (·| s) = X
+
+> a∈A
+
+πθold (a|s) log πθold (a|s)
+
+πθ (a|s) . (35) They are related by Pinsker’s inequality: 
+
+DTV (s)2 ≤ 12 DKL (s), (36) which is used throughout this paper to convert between KL-based and TV-based bounds. 22 Ratio forms. Using rs,a = πθ (a|s)/π θold (a|s), the per-state divergences can be rewritten as expectations under 
+
+πθold (·| s):
+
+DTV (s) = 12 Ea∼πθold (·| s)
+
+ |rs,a − 1| , (37) 
+
+DKL (s) = − Ea∼πθold (·| s)
+
+log rs,a 
+
+. (38) The TV ratio form (37) follows from factoring out πθold (a|s) in (34): 
+
+DTV (s) = 12
+
+X
+
+> a∈A
+
+πθold (a|s) − πθ (a|s) = 12
+
+X
+
+> a∈A
+
+πθold (a|s) πθold (a|s) − πθ (a|s)
+
+πθold (a|s)
+
+= 12
+
+X
+
+> a∈A
+
+πθold (a|s) 1 − rs,a = 12 Ea∼πθold (·| s)
+
+ |rs,a − 1| .
+
+The KL ratio form (38) follows from log( πθold /π θ ) = − log rs,a in (35). 
+
+Monte-Carlo estimation. Let Xs := {a : ( s, a ) ∈ X } be the set of actions sampled at state s, with multiplicities ns,a 
+
+per-state sample count Ts := P 
+
+> a∈X s
+
+ns,a , total sample count T = P 
+
+> s
+
+Ts is the total sample count, and the augmented state-action space ¯X (Appendix A.2). The Monte-Carlo estimators of the per-state divergences are: 
+
+ˆDTV (s) := 1
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a |rs,a − 1|, (39) 
+
+ˆDKL (s) := − 1
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a log rs,a , (40) which are the empirical means of the ratio-form integrands (37)–(38) over the samples at state s.
+
+A.3.2 Average and Max Divergences Average divergence. The average TV and KL divergences weight the per-state quantities by the normalized state distribution ¯ρπθold (Appendix A.1): 
+
+¯DTV /KL (θold ∥θ) := Es∼ ¯ρπθold 
+
+DTV /KL (s). (41) 
+
+Estimation of the average divergence. The augmented state-action space ¯X (Appendix A.2) pools tokens across all trajectories, so that the empirical state frequencies in ¯X are proportional to ¯ρπθold , i.e., Ts 
+
+> T
+
+∼ ¯ρπθold (s) as T → ∞ . The average divergence is therefore estimated by weighting the per-state estimators (39) –(40) by their sample counts, which can be expanded in two equivalent ways—over the states S[X ] with multiplicities, or directly over the augmented space 
+
+¯X :
+
+ˆ¯DTV /KL (θold ∥θ) = 1
+
+T
+
+X 
+
+> s∈S [X]
+
+Ts ˆDTV /KL (s) = 1
+
+T
+
+X 
+
+> s∈S [X]
+
+X
+
+> a∈X s
+
+ns,a f (rs,a ) = 1
+
+T
+
+X 
+
+> (s,a,τ,t )∈¯X
+
+f (rs,a ), (42) where f (rs,a ) = |rs,a − 1| for TV, and respectively f (rs,a ) = − log rs,a for KL, and S[X ] is the set of states appearing in X . The second equality substitutes the definition of ˆDTV /KL (s) (Eqs. 39–40); the third unfolds the state-action multiplicities into the augmented index (s, a, τ, t ), since each occurrence of (s, a ) in ¯X contributes exactly one term. Note that the estimation here is for the undiscounted case. We do not use discounted averages of TV or KL(or their estimation) elsewhere in this paper; for the generic form of discounted estimators, see Appendix D.1. 
+
+Max TV divergence. The max TV divergence takes the worst-case per-state TV over the entire state space: 
+
+Dmax TV (θold ∥θ) := max  
+
+> s∈S
+
+DTV (s). (43) This quantity appears in the TRPO surrogate-gap bound (Eq. 1). Its sample-based estimator restricts the maximum to states observed in the batch: ˆDmax TV (θold ∥θ) := max  
+
+> s∈S [X]
+
+ˆDTV (s), (44) which is used in the sample-based TV-TRPO formulation (Appendix D.2). 23 A.3.3 Trajectory-Normalized Divergences Definition. The trajectory-normalized TV and KL divergences average the per-state quantities over the trajectory-level normalized state distribution ¯ρπθold  
+
+> (tj)
+
+, which weights each state by its frequency within individual trajectories (Appendix A.1): 
+
+¯D(tj) TV /KL (θold ∥θ) := Es∼ ¯ρπθold (tj) 
+
+DTV /KL (s). (45) The key distinction from ¯DTV /KL (41) is the state distribution: ¯ρπθold weights states by their overall frequency across the sample, whereas ¯ρπθold  
+
+> (tj)
+
+gives each trajectory equal weight and distributes that weight uniformly among the trajectory’s states. 
+
+Ratio forms. Substituting the per-state ratio forms (37)–(38) into (45) and using the law of total expectation yields: 
+
+¯D(tj) TV (θold ∥θ) = 12 E s∼ ¯ρπθold (tj) ,a∼πθold (·| s)
+
+|rs,a − 1|, ¯D(tj) KL (θold ∥θ) = − E s∼ ¯ρπθold (tj) ,a∼πθold (·| s)
+
+log rs,a 
+
+. (46) 
+
+Estimation. We describe three related estimations for ¯D(tj) TV /KL , and ¯DTV /KL .
+
+(i) Single-trajectory estimation via ˆE(τ ). For a fixed trajectory τ ∼ P θold , the sequence of states {st(τ )}Tτ −1
+
+> t=0
+
+constitutes samples from ¯ρπθold  
+
+> (tj)
+
+, with actions drawn from πθold (·| st(τ )) . We define the single-trajectory Monte-Carlo estimator ˆE(τ ) as the empirical average over the state-action pairs visited by trajectory τ :
+
+ˆE(τ )[f (s, a )] := 1
+
+TτTτ −1X
+
+> t=0
+
+f rst(τ ), a t(τ )
+
+, (47) where all samples come from the single trajectory τ . Applying this to the per-state divergences: 
+
+ˆ¯D(τ )TV (θold ∥θ) := ˆE(τ )DTV (s) = 1
+
+TτTτ −1X
+
+> t=0
+
+|rst(τ ),a t(τ ) − 1|, (48) 
+
+ˆ¯D(τ )KL (θold ∥θ) := ˆE(τ )DKL (s) = − 1
+
+TτTτ −1X
+
+> t=0
+
+log rst(τ ),a t(τ ). (49) Averaging the single-trajectory estimators over trajectories recovers the population quantity: 
+
+¯D(tj) TV /KL (θold ∥θ) = Eτ ∼P θold 
+
+ ˆ¯D(τ )TV /KL (θold ∥θ) = E(s,a )∼ ¯ρπθold (tj) ·πθold 
+
+f (rs,a ). (50) It is worth mentioning that the single-trajectory estimator ˆ¯D(τ )TV /KL is not a single-sample estimator of the trajectory-normalized divergence ¯D(tj) TV /KL . We have mentioned the sequence of states(resp. state-action pairs) from a single trajectory τ are many samples from the trajectory-length-normalized state distribution ¯ρπθold  
+
+> (tj)
+
+(resp. ¯ρπθold  
+
+> (tj)
+
+· πθold ), so the single-trajectory estimator ˆ¯D(τ )TV /KL is an empirical average over those samples, and thus is a more accurate many sample( Tτ many samples) Monte-Carlo estimator of ¯D(tj) TV /KL according to the second equality. 
+
+(ii) Estimation over the augmented state-action space. Equivalently, ¯D(tj) TV /KL can be estimated by averaging over the full augmented state-action space ¯X (which contains not just one, but many trajectories), but weighting each sample by the inverse length of the trajectory it belongs to: 
+
+ˆ¯D(tj) TV /KL (θold ∥θ) = 1
+
+|Tj θold |
+
+X 
+
+> (s,a,τ,t )∈¯X
+
+1
+
+Tτ
+
+f (rs,a ), (51) where f (rs,a ) = |rs,a −1| for TV (resp. − log rs,a for KL), and |Tj θold | is the number of sampled trajectories. The factor 
+
+1/T τ ensures that each trajectory contributes equally regardless of its length, matching the trajectory-length-normalized state distribution ¯ρπθold  
+
+> (tj)
+
+.24 (iii) Recovering the average divergence from trajectory estimates. Given a set of sampled trajectories Tj θold , weighting each single-trajectory estimate by its trajectory length recovers the (non-trajectory-normalized) average divergence (41) :
+
+ˆ¯DTV /KL (θold ∥θ) = 1
+
+T
+
+X 
+
+> τ∈Tj θold
+
+Tτ ˆ¯D(τ )TV /KL (θold ∥θ) = 1
+
+T
+
+X 
+
+> (s,a,τ,t )∈¯X
+
+f (rs,a ), (52) where T = P 
+
+> τ
+
+Tτ is the total sample count. This follows because the trajectory-level estimator ˆ¯D(τ )TV /KL averages uniformly over Tτ tokens within trajectory τ , so multiplying by Tτ /T reweights each token equally across all trajectories, which is exactly the empirical average over ¯X and thus estimates ¯DTV /KL under the normalized state distribution 
+
+¯ρπθold .
+
+A.4 On Ratio Space 
+
+For sets X, Y , we denote Y X the collection of all functions from X to Y .
+
+Definition A.1 (Policy-ratio space) . Given the new policy πθ and old policy πθold , we can sample a set of state-action pairs X . The space RX≥0 ≡ (R≥0)X assigns a non-negative real number to every (s, a ) ∈ X . We define RX 
+
+> >0
+
+as the policy ratio space of all possible policy ratios over the sampled state-action space X . We typically denote its elements (the tuples of policy ratios) as r•(θ|θold ) ≡ r• (for placeholder • running over all X ). A tuple consists of components: 
+
+rst,a t (θ|θold ) ≡ rst,a t := πθ (at|st)
+
+πθold (at|st) .
+
+Remark A.2 . To incorporate more information, we sometimes use the space of state-action pairs with extra information instead of X . For example, in our fiber bundle and FiberPO, we use ¯X and R ¯X
+
+> >0
+
+. In general RGF forms, we use E and 
+
+RE
+
+> >0
+
+.
+
+Subscript conventions. Similarly, for elements in Y X , we use the bullet subscript (−)• to denote its placeholder index, which runs over X , and (−)s,a ∈ Y is the element evaluated at state-action pair (s, a ). We denote |q•|p the Lp
+
+norm of quantity q• ∈ CX in the measure space (X , μ X ).
+
+Parity superscript convention. In FiberPO, the sign assignment li := sign(log ri) ∈ { +1 , −1} partitions tokens into positive and negative channels. When l (or li, ls,a ) appears as a superscript in parentheses, it selects the corresponding sign channel: s(l) 
+
+> τ
+
+denotes s+ 
+
+> τ
+
+when l = +1 and s− 
+
+> τ
+
+when l = −1, and similarly C(l), γ(l) 
+
+> τ
+
+, etc. The negated form s(−l)
+
+> τ
+
+denotes the opposite channel. 
+
+Logit parametrization. We also introduce the quantity z• ∈ RX or z•,• ∈ RS×A , called the logit parameter, the output of the second-to-last layer of the neural network before the softmax activation. That is, 
+
+πθ (a|s) = exp( zs,a (θ)) 
+
+P 
+
+> a′: ( s,a ′)∈X
+
+exp( zs,a ′ (θ)) .
+
+This is a natural parametrization of probability measures, with one redundant dimension given by adding a constant to all logits (which maps to the same probability measure). 
+
+## B TRPO: Background, Proof, and Discussion 
+
+B.1 TV-Based TRPO (TV-TRPO) 
+
+Consider the discounted RL objective 
+
+J(θ) := Eτ ∼P θ
+
+h ∞X
+
+> t=0
+
+γt Rt(τ )
+
+i
+
+, (53) and its linear surrogate with respect to a reference policy πθold :
+
+J(1) (θ | θold ) := J(θold ) + Eτ ∼P θold 
+
+h ∞X
+
+> t=0
+
+γt rst(τ ),a t(τ )(θ | θold ) A(θold )  
+
+> st(τ),a t(τ)
+
+i
+
+, (54) 25 where rs,a (θ | θold ) := πθ (a | s) / π θold (a | s) is the importance-sampling ratio and A(θold ) 
+
+> s,a
+
+is the advantage under πθold .The linear surrogate is the first-order approximation of the true objective near on-policy ( θ ≈ θold ); in particular, 
+
+∇θ J(1) (θ | θold ) θ=θold 
+
+= ∇θ J(θ) θ=θold 
+
+.Trust region policy optimization (TRPO) [6] bounds the surrogate gap: 
+
+J(θ) − J(1) (θ | θold ) ≥ − 4γ ∥A(θold ) 
+
+> •
+
+∥∞
+
+(1 − γ)2 Dmax TV (θ ∥ θold )2, (55) where Dmax TV (θ ∥ θold ) := max s DTV 
+
+ πθold (· | s) ∥ πθ (· | s).Note that, unlike the original TRPO formulation of [ 6] which uses a KL-divergence penalty, here we work with the total-variation (TV) form throughout, since TV distance is the divergence that arises naturally from the performance-difference bound above. 
+
+TRPO’s monotonic improvement guarantee. Based on this bound, TRPO constructs a minorization–maximization 
+
+(MM) algorithm: at each step, (55) provides a minorizer of the true objective J(θ), and the update maximizes this minorizer, i.e. θnew is obtained by maximizing the penalized surrogate 
+
+J(1) (θ | θold ) − 4γ ∥A(θold ) 
+
+> •
+
+∥∞
+
+(1 − γ)2 Dmax TV (θ ∥ θold )2. (56) Since the true objective is bounded below by (56) and the optimum of (56) is at least J(θold ) (attained at θ = θold ), the true objective is guaranteed to be non-decreasing at every update, making the policy optimization stable. We refer to this MM algorithm as TV-based TRPO or TV-TRPO .
+
+Sample-based TV-TRPO. In practice, Dmax TV is intractable to compute over large state spaces, so it is replaced by the sample maximum ˆmax to estimate Dmax TV , this will be termed as sample-based TV-TRPO objective that serves as the theoretical foundation for the remainder of this paper. 
+
+B.2 Proof of the TRPO Vanishing Theorem 
+
+We first introduce the necessary definitions, then state and prove the theorem. 
+
+Definition B.1 (Trust Region) . For δ ≥ 0, define the TV trust region as 
+
+BTV -TR  
+
+> δ
+
+(θold ) :=  π ∈ (S → P(A)) Dmax TV (πθold ∥ π) ≤ δ ,
+
+and the KL trust region as 
+
+BKL -TR  
+
+> δ
+
+(θold ) :=  π ∈ (S → P(A)) Dmax KL (πθold ∥ π) ≤ δ ,
+
+where P(A) denotes the space of probability measures over the action space. The surrogate-gap bound (55) implies that TRPO updates are confined to a trust region whose radius depends on γ:
+
+Lemma B.2 (TV-TRPO update lies in the trust region) . Define the TRPO trust-region radius δ(TRPO) := 1−γ 
+
+> 8γ
+
+(see also (76) ). For any θnew produced by sample-based TV-TRPO, πθnew ∈ B TV -TR  
+
+> δ(TRPO)
+
+(θold ) (This is a restatement of Lemma D.12). 
+
+Theorem B.3 (TRPO vanishing theorem; restatement of Theorem 2.1) . When γ = 1 , both the TV-based and KL-based TRPO trust regions collapse to the reference policy: 
+
+BTV -TR  
+
+> δ(TRPO)
+
+(θold ) = BKL -TR  
+
+> δ(TRPO)
+
+(θold ) = { πθold }
+
+Proof. By Lemma B.2, taking γ → 1− in δ(TRPO) = 1−γ 
+
+> 8γ
+
+yields δ(TRPO) → 0+; at γ = 1 we have δ(TRPO) = 0 .Any policy πθ inside the trust region must therefore satisfy Dmax TV (πθold ∥ π) = 0 (and likewise for KL). This implies 
+
+πθold (· | s) = πθ (· | s) for every s, i.e., πθ is identical to πθold .26 B.3 On γ-Annealing as a Workaround 
+
+One might attempt to circumvent the vanishing theorem by introducing a variable discount factor γ < 1 into LLM RL, applying TRPO during training, and gradually annealing γ → 1. Similar discount-scheduling strategies have been explored in other RL settings [9]. However, this approach faces a fundamental practical obstacle in LLM RL. Language model reward functions are typically sparse and discontinuous: they yield a meaningful signal only at the end of a response, and often in an all-or-nothing fashion—the response is either fully correct or receives no reward. Some approaches incorporate a partial, continuous reward signal via a KL divergence penalty term [ 1], but this remains the exception rather than the rule in RLVR settings. Introducing a variable discount factor γ < 1 into such reward landscapes would exponentially suppress later tokens in the training objective J(θ) = E[P 
+
+> t
+
+γtRt], systematically downweighting the very signals (end-of-response correctness) that RL is meant to optimize. Moreover, the interaction between a changing γ and the already-discontinuous reward surface can further destabilize reward estimation, as the effective reward scale shifts across training. These difficulties make a γ-annealing strategy impractical for LLM RL, reinforcing the need for a direct approach to trust-region-style stabilization in the γ = 1 case. 
+
+## C RGF and APC-Obj: Derivations 
+
+C.1 APC-Obj in RGF form Definition C.1 (APC-Obj policy iteration) . The APC-Obj update selects θnew = arg max θ ˆJAPC -Obj (θ|θold ), where 
+
+ˆJAPC -Obj (θ|θold ) = 1
+
+T
+
+X 
+
+> (s,a,τ,t )∈¯X
+
+clip 
+
+
+
+rs,a − 1, T sδ(APC -Obj) − X   
+
+> (s,a ′,τ ′,t ′)∈¯X
+> (a′,τ ′,t ′)̸=( a,τ,t )
+
+|rs,a ′ − 1|
+
+ ˆAθold  
+
+> s,a
+
++ ˆAθold 
+
+> s,a
+
+ , (57) where δ(APC -Obj) := (1 −γ)2      
+
+> 8γ∥ˆAθold
+> •∥∞
+> M( ˆAθold
+> •)
+> T
+
+(the argument ˆAθold  
+
+> •
+
+makes the dependence on the advantage explicit), the per-entry clip bound is Bs,a,τ,t := Tsδ(APC -Obj) − P     
+
+> (s,a ′,τ ′,t ′)∈¯Xs,(a′,τ ′,t ′)̸=( a,τ,t )
+
+|rs,a ′ − 1|, and clip( a, B ) := clip( a, −B+, B +) with B+ := max( B, 0) .We point out that the APC-Obj objective in Definition C.1 removes the (1 − γ)−1 normalization constant in D.4. As the only factor (Sitting aside δ(APC -Obj) ’s dependence on γ, as we eventually will relax it to a constant hyperparameter. Even if δ(APC −Obj) = 0 , it will not make APC-Obj objective diverge) in the discounted APC-Obj objective that prevents convergence as γ → 1 is the multiplier 11−γ . This factor is a constant that does not depend on the policy ratios 
+
+rs,a , thus removing it does not change the arg max over θ and the APC-Obj policy update, for any value of γ. This removal corresponds to estimating the discounted objective with respect to the normalized discounted state distribution 
+
+¯ρθold  
+
+> (γ)
+
+than the unnormalized one ρθold  
+
+> (γ)
+
+= 11−γ ¯ρθold  
+
+> (γ)
+
+. With this convention, the APC-Obj objective converges and is well-defined at γ = 1 . 5
+
+The APC-Obj objective can equivalently be written in the RGF form of Definition 3.1: 
+
+Definition C.2 (APC-Obj surrogate objective, in RGF form) .
+
+ˆJAPC -Obj (θ|θold ) = 1
+
+T
+
+X
+
+> (s,a, I)∈E
+
+clip 
+
+
+
+rs,a − 1,
+
+
+
+Tsδ(APC -Obj) − X
+
+> (s,a ′,I′)∈E
+> (a′,I′)̸=( a, I),
+
+|rs,a ′ − 1|
+
+ ˆAθold  
+
+> s,a
+
++ ˆAθold 
+
+> s,a
+
+ , (58) 
+
+> 5
+
+We also mention that the APC-Obj objective varies smoothly with γ, as the per-state discount weight Γ( s)Γ (Γ( s) =
+
+P   
+
+> (s′,a,τ,t )∈¯X, s ′=s
+
+γt and Γ = P 
+
+> s
+
+Γ( s)) in APC-Obj algorithm varies smoothly with γ. When γ = 1 , γt = 1 for the sum-mand, so Γ( s) = Ts and Γ = T , giving Γ( s)Γ = Ts 
+
+> T
+
+for every state. Adding 1 
+
+> Ts
+
+weight for each token given by the APC-Obj in D.4, one recovering the normalized counting measure over all sampled tokens, the form displayed in Definition C.1 here. Thus removing of the (1 − γ)−1 factor smoothly and analytically extends the APC-Obj objective to γ = 1 without any discontinuity or singularity, resulting the exact form in Definition C.1. 
+
+27 where I = ( τ, t ) carries the trajectory membership and time step associated with state–action pair (s, a ) during sampling, E ⊆ X × Tj θold × N is the augmented index set in which each sampled token appears as a separate entry, and μs,a, I = 1 
+
+> T
+
+.Reading off the ratio gating map from (58): 
+
+Definition C.3 (APC-Obj ratio gating map) . The APC-Obj ratio gating map GAPC -Obj : RE 
+
+> >0
+
+→ RE 
+
+> >0
+
+is 
+
+GAPC -Obj (r•)s,a, I = clip 
+
+
+
+rs,a − 1,
+
+
+
+Tsδ(APC -Obj) − X
+
+> (s,a ′,I′)∈E
+> (a′,I′)̸=( a, I)
+
+|rs,a ′ − 1|
+
+ 
+
++ 1 . (59) Unlike PPO and GRPO, the APC-Obj gating map depends on the entire ratio tuple r• through the cross-action coupling in the clip bound, which is what enforces the per-state total-variation constraint in aggregate. 
+
+C.2 APC-Obj Budget Consumption and Clipping Regimes 
+
+The APC-Obj gating map (Definition C.3) contains a policy-ratio-dependent budget inside the clipping term that enforces the per-state trust-region constraint. To understand how this budget shapes the gated ratios, we analyze the per-token clipping behavior by decomposing it into three regimes according to budget consumption. 
+
+Budget and consumption terms. Consider a single per-token objective term from (58): 
+
+
+
+clip 
+
+
+
+rs,a − 1, T sδ(APC -Obj) 
+
+| {z }
+
+> (B): budget
+
+− X
+
+> (s,a ′,I′)∈E
+> (a′,I′)̸=( a, I)
+
+|rs,a ′ − 1|
+
+
+
++ 1 
+
+ ˆAθold  
+
+> s,a
+
+. (60) We identify three components that govern the clipping behavior: • (B) The total budget : Ts δ(APC -Obj) .• (C1) The cross-token consumption : X 
+
+> (s,a ′,I′)∈E ,(a′,I′)̸=( a, I)
+
+|rs,a ′ − 1| = Ts ˆDTV (s) − | rs,a − 1|, the total budget already consumed by all other tokens (except a) at state s.• (C2) The current-token deviation : |rs,a − 1|, the amount consumed by the token under consideration. The sum (C1) + (C2) = Ts ˆDTV (s) is the total per-state TV consumption. The effective clip bound for the current token is (B) − (C1), and the clipping activates when (C2) exceeds this residual budget. 
+
+Three clipping regimes. The clipping behavior at each token (s, a, I) falls into exactly one of three regimes, determined by the relationship between the budget (B) and the consumption terms (C1), (C2): 
+
+(P) Pass-through regime (clip inactive). The clip acts as the identity, so the gated ratio equals the ungated ratio. This occurs when 
+
+|rs,a − 1| ≤ Ts δ(APC -Obj) − (C1) , (61) which, after substituting (C1) + (C2) = Ts ˆDTV (s), reduces to a uniform condition across tokens: 
+
+ˆDTV (s) ≤ δ(APC -Obj) .
+
+In this regime, the aggregate consumption (C1) + (C2) does not exceed the total budget (B), and the per-token objective coincides with the linear surrogate. 
+
+(R) Rollback regime (clip active, output nonzero). The clip is active and suppresses |rs,a − 1| to a smaller value, but does not zero it out. This requires both 
+
+ˆDTV (s) > δ (APC -Obj) and |rs,a − 1|
+
+Ts
+
+> ˆDTV (s) − δ(APC -Obj) . (62) The first condition is the same uniform budget violation as in (P) (with reversed inequality). The second condition is token-specific: the cross-token consumption (C1) alone has not exhausted the entire budget, so the residual clip bound (B) − (C1) > 0 provides a nonzero but reduced clip output. In terms of the clip operator: 
+
+0 < | clip( rs,a − 1, (B) − (C1) )| < |rs,a − 1|.28 (Z) Zeroed regime (clip output is zero). The clip output is exactly zero, and the token no longer contributes to the surrogate objective. This occurs when 
+
+ˆDTV (s) > δ (APC -Obj) and |rs,a − 1|
+
+Ts
+
+≤ ˆDTV (s) − δ(APC -Obj) . (63) Here the cross-token consumption (C1) alone already exceeds the total budget (B), making the residual clip bound (B) − (C1) ≤ 0, which forces the clip output to zero and eliminates the token’s contribution entirely. 
+
+Connection to the retraction property. By Lemma D.9, whenever the policy ratios enter either the rollback regime (R) or the zeroed regime (Z)—that is, whenever the per-state TV divergence exceeds the trust-region radius δ(APC -Obj) —the APC-Obj clipping mechanism suppresses the gated ratios’ per-state TV divergence strictly below δ(APC -Obj) . This ensures that the arg max solution, i.e. the policy update, does not lie outside the trust region BTV -TRPO  
+
+> δ(APC -Obj)
+
+.
+
+Remark C.4 (From per-state regimes to aggregate regimes in FiberPO) . The three APC-Obj clipping regimes (P), (R), (Z) are defined at the per-state level with total budget Ts δ(APC -Obj) . After trajectory-level aggregation (replacing the per-state count Ts with the per-trajectory length Tτ ; see Appendix E.5.3), logarithmic approximation ( rs,a − 1 → log rs,a ;see Appendix E.5.2), and clipping decomposition into the fiber bundle gating form (Eq. 77), these three per-state regimes lift to the three regimes of the aggregate gating function gagg (Eq. 10): pass-through, rollback, and zeroed, respectively. 
+
+C.3 LLM-to-RL Notation Translation 
+
+To express PPO, GRPO, and GSPO in RGF form, we first establish the correspondence between the LLM indexing convention (g, j, i ) and the RL notation (τ, t ) used throughout this paper. 
+
+Index correspondence. In LLM notation, g indexes the query (prompt), j indexes the response (completion) generated for that query, and i indexes the token position within the response. The RL counterparts are the initial state s0(τ ), the trajectory τ , and the time step t:
+
+g := s0(τ ), j := τ, i := t. 
+
+Consequently, any per-token quantity qst(τ ),a t(τ ) in RL notation corresponds to q(g) 
+
+> j,i
+
+in LLM notation. 
+
+Aggregate ratios. The positive/negative sequence aggregate ratios s± 
+
+> τ
+
+in RL notation are denoted s(g)± 
+
+> j
+
+in LLM notation. 
+
+C.4 PPO, GRPO, and GSPO in RGF Form 
+
+We give the explicit RGF specifications (E, μ, G) for each method. Recall the general RGF form (Definition 3.1): 
+
+ˆJ(θ|θold ) = X
+
+> (s,a, I)∈E
+
+μs,a, I G(r•)s,a, I ˆAs,a .
+
+PPO [ 2]. I = ∅ (no extra information), E ≃ X , μs,a = μX ({(s, a )}) = ns,a  
+
+> T
+
+(normalized counting measure of state-action pair (s, a ), counting appearance multiplicity from all sampled trajectories. T is number of sampled state-action pairs(counting multiplicity) and ns,a is the multiplicity for state-action pair (s, a ). Definition is also given in Appendix A.2), and 
+
+GPPO (r•)s,a = sign( ˆAs,a ) · min  clip( rs,a , 1 ± ϵ) sign( ˆAs,a ), r s,a sign( ˆAs,a ).
+
+GRPO [ 3]. I = τ (trajectory membership), E ⊆ X × Tj θold , μs,a,τ = 1  
+
+> |Tj θold |
+
+· 1 
+
+> Tτ
+
+(where Tτ is the total number of steps within trajectory τ ), and GGRPO = GPPO (the same token-wise clipping, but with trajectory-normalized weights). 
+
+GSPO [7]. I = τ (trajectory membership), E ⊆ X × Tj θold , μs,a,τ = 1  
+
+> |Tj θold |
+
+· 1 
+
+> Tτ
+
+, and 
+
+GGSPO (r•)s,a,τ = lτ · min  clip( sτ , 1 ± ϵ) lτ , s τ lτ
+
+,
+
+where Tτ is the total number of steps within trajectory τ , lτ := sign  P Tτ −1 
+
+> t=0
+
+ˆAθold   
+
+> st(τ),a t(τ)
+
+, and sτ := 
+
+ Q Tτ −1 
+
+> t=0
+
+rst(τ ),a t(τ )
+
+1/T τ
+
+is the geometric-mean aggregate ratio over trajectory τ . Note that GSPO gates all tokens in a trajectory by the same aggregate sτ , moving the clipping from the token level to the trajectory level. 29 Remark C.5 . If we remove the minimize function from the clippings (i.e., let G(r•)s,a, I = clip( rs,a , 1 ± ϵ) for PPO/GRPO, and G(r•)s,a, I = clip( sτ , 1 ± ϵ) for GSPO), then the gating functions contain no sign functions ( sign and 
+
+lτ ). 
+
+C.5 Detailed Derivation: From APC-Obj to PPO, GRPO, and GSPO 
+
+We now trace the precise steps that transform the APC-Obj objective into each of PPO, GRPO, and GSPO, identifying the relaxation or approximation heuristic at each step. Throughout, rs,a implicitly represents rs,a (θ|θold ). We present the derivations without the minimize function, as it is not derived from trust-region theory but from other considerations (e.g., preventing excessive reward for actions that happen to have high ratios). Recall the APC-Obj RGF form (58): 
+
+ˆJAPC -Obj (θ|θold ) = 1
+
+T
+
+X
+
+> (s,a, I)∈E
+
+clip 
+
+
+
+rs,a − 1,
+
+
+
+Tsδ(APC -Obj) − X
+
+> (s,a ′,I′)∈E
+> (a′,I′)̸=( a, I),
+
+|rs,a ′ − 1|
+
+ ˆAθold  
+
+> s,a
+
++ ˆAθold 
+
+> s,a
+
+ . (64) 
+
+C.5.1 APC-Obj to PPO 
+
+The RGF form of PPO (without the minimize function) is: 
+
+ˆJPPO (θ|θold ) = X
+
+> (s,a )∈X
+
+μs,a clip( rs,a , 1 ± ϵ(PPO) ) ˆAs,a .
+
+Step 1 ( δ-relaxation). Replace the vanishing δ(APC -Obj) (which is zero at γ = 1 ) with a positive tunable hyperparam-eter δ(PPO) ; the exact trust-region guarantee is traded for a controllable approximation whose departure is quantified by 
+
+δ(PPO) itself. The relaxed objective becomes: 
+
+ˆJ(θ|θold ) = 1
+
+T
+
+X 
+
+> (s,a,τ,t )∈¯X
+
+h
+
+clip 
+
+
+
+rs,a − 1, ±  Tsδ(PPO) − X   
+
+> (s,a ′,τ ′,t ′)∈¯Xs
+> (a′,τ ′,t ′)̸=( a,τ,t )
+
+|rs,a ′ − 1|
+
++ 1 
+
+i ˆAθold  
+
+> s,a
+
+.
+
+Step 2 (decoupling). Decouple the clipping of individual ratios from other ratios by dropping the cross-entry sum from the clip bound and replacing it with a per-token constant ϵ(PPO) . This yields the PPO objective: 
+
+ˆJPPO (θ|θold ) = X
+
+> (s,a )∈X
+
+μs,a clip( rs,a , 1 ± ϵ(PPO) ) ˆAθold  
+
+> s,a
+
+.
+
+This step eliminates the gradient coupling between ratios of different state-action pairs, improving stability and robustness. 
+
+C.5.2 APC-Obj to GRPO 
+
+The RGF form of GRPO (without the minimize function) is: 
+
+ˆJGRPO (θ|θold ) = X  
+
+> τ∈Tj θold
+> Tτ−1
+
+X
+
+> t=0
+
+1
+
+|Tj θold | · 1
+
+Tτ
+
+clip( rs,a , 1 ± ϵ(GRPO) ) ˆAs,a ,
+
+where s ≡ st(τ ), a ≡ at(τ ). The derivation uses the same first two steps as PPO: 
+
+Step 1 ( δ-relaxation). δ(APC-Obj) 7 → δ(GRPO) .
+
+Step 2 (decoupling). Replace the per-entry clip bound Bs,a,τ,t := Tsδ(APC -Obj) − P (s,a ′,τ ′,t ′)∈ ¯Xs, 
+
+> (a′,τ ′,t ′)̸=( a,τ,t )
+
+|rs,a ′ − 1| with a per-token constant ϵ(GRPO) .30 Step 3 (sequence length weighting). Change the sampling weight from the normalized counting measure μs,a to the trajectory-normalized measure μ(GRPO) ({(st(τ ), a t(τ ), τ )}) := 1  
+
+> |Tj θold |
+
+· 1 
+
+> Tτ
+
+. This yields the final GRPO objective: 
+
+ˆJGRPO (θ|θold ) = X  
+
+> τ∈Tj θold
+> Tτ−1
+
+X
+
+> t=0
+
+1
+
+|Tj θold | · 1
+
+Tτ
+
+clip( rs,a − 1, ±ϵ(GRPO) ) ˆAs,a + ˆAs,a .
+
+Compared with PPO, GRPO penalizes extremely long sequences/trajectories via the 1/T τ normalization. 
+
+C.5.3 APC-Obj to GSPO 
+
+The RGF form of GSPO (without the minimize function) is: 
+
+ˆJGSPO (θ|θold ) = X  
+
+> τ∈Tj θold
+> Tτ−1
+
+X
+
+> t=0
+
+1
+
+|Tj θold | · 1
+
+Tτ
+
+clip( sτ , 1 ± ϵ(GSPO) ) ˆAs,a ,
+
+where s ≡ st(τ ), a ≡ at(τ ), and sτ :=  Q Tτ −1 
+
+> t=0
+
+rst(τ ),a t(τ )
+
+1/T τ
+
+= exp   1
+
+> Tτ
+
+PTτ −1 
+
+> t=0
+
+log rs,a 
+
+ is the geometric mean of the ratios. The derivation proceeds as follows: 
+
+Step 1 ( δ-relaxation). δ(APC-Obj) 7 → δ(GSPO) .
+
+Step 2 (trajectory-level decoupling approximation). Decouple the clipping of individual ratios at the trajectory level while performing trajectory-level reweighting. The per-entry clip bound Bs,a,τ,t := 
+
+Tsδ(GSPO) − P (s,a ′,τ ′,t ′)∈ ¯Xs, 
+
+> (a′,τ ′,t ′)̸=( a,τ,t )
+
+|rs,a ′ − 1| (which couples all entries at the same state) is replaced by a per-trajectory bound Tτ δ(GSPO)  
+
+> seq
+
+− P  
+
+> t′̸=t
+
+|rst′ (τ ),a t′ (τ ) − 1|. This yields: 
+
+ˆJ(θ|θold ) = X  
+
+> τ∈Tj θold
+> Tτ−1
+
+X
+
+> t=0
+
+1
+
+|Tj θold | · 1
+
+Tτ
+
+h
+
+clip  rs,a − 1, ± Tτ δ(GSPO)  
+
+> seq
+
+− 
+
+> Tτ−1
+
+X 
+
+> t′=0
+> t′̸=t
+
+|rst′ (τ ),a t′ (τ ) − 1| + 1 
+
+i ˆAs,a .
+
+It is also worth mentioning that in GSPO, the advantage estimation is chosen so that ˆAs,a agrees across all tokens within the same trajectory, so we can denote ˆAτ as the common advantage for trajectory τ . If the advantage estimation is not chosen in this way simply denote ˆAτ as the average advantage across all tokens within trajectory τ .
+
+Step 3 (log-ratio approximation). Replace r − 1 by log r, which provides better algebraic properties. Recall 
+
+ˆ¯D(τ )TV := 1
+
+> Tτ
+
+PTτ −1 
+
+> t′=0
+
+|rst(τ ),a t(τ ) − 1|, the Monte Carlo estimation of the average total variation distance given a sampled trajectory τ , and − log sτ := ˆ¯D(τ )KL := 1
+
+> Tτ
+
+PTτ −1 
+
+> t′=0
+
+log rst(τ ),a t(τ ), the sequence aggregate policy ratio (recall from Claim 3.5 that log sτ is the Monte Carlo estimation for the negative average KL divergence). The objective becomes: 
+
+ˆJ(θ|θold ) = X  
+
+> τ∈Tj θold
+> Tτ−1
+
+X
+
+> t=0
+
+1
+
+|Tj θold | · 1
+
+Tτ
+
+h
+
+clip  log rs,a , ± Tτ δ(GSPO)  
+
+> seq
+
+− Tτ ˆ¯D(τ )TV + | log rs,a | + 1 
+
+i ˆAs,a .
+
+Inspecting the clipping term, one sees that it activates only when Tτ ˆ¯D(τ )TV ≥ Tτ δ(GSPO)  
+
+> seq
+
+, regardless of log rs,a . We therefore consider two cases: 1. Tτ ˆ¯D(τ )TV ≥ Tτ δ(GSPO)  
+
+> seq
+
+: clipping applies to all individual log policy ratios within the trajectory. 2. Tτ ˆ¯D(τ )TV < T τ δ(GSPO)  
+
+> seq
+
+: all clipping functions reduce to the identity. In case (2), the objective simplifies to: 
+
+ˆJCase (2) (θ|θold ) = X 
+
+> τ∈Tj θold
+
+1
+
+|Tj θold | · (log sτ + 1) ˆAτ .
+
+31 Step 4 (clip-bound approximation). The unclipped case (2) holds if and only if Tτ δ(GSPO)  
+
+> seq
+
+≥ Tτ ˆ¯D(τ )TV . By Pinsker’s in-equality 12 DKL ≥ D2TV , we approximately have − 12 log sτ ≡ 12
+
+ˆ¯D(τ )KL ˙≥ ( ˆ¯D(τ )TV )2. Thus when − log sτ ≤ 2( δ(GSPO)  
+
+> seq
+
+)2,we obtain Tτ δ(GSPO)  
+
+> seq
+
+≥ Tτ
+
+q
+
+− 12 log sτ ˙≥ Tτ ˆ¯D(τ )TV , a condition for case (2) to be likely satisfied. Furthermore, GSPO implicitly requires the gradient to vanish when case (1) holds. Using this, we can combine both cases using the bound we just obtained via a simple clipping function on the aggregated ratio: 
+
+ˆJ(θ|θold ) = 1
+
+|Tj θold |
+
+X 
+
+> τ∈Tj θold
+
+ clip(log sτ , ±2( δ(GSPO)  
+
+> seq
+
+)2) + 1  ˆAτ .
+
+Applying the log approximation log sτ ≈ sτ − 1 once more: 
+
+ˆJ(θ|θold ) = 1
+
+|Tj θold |
+
+X 
+
+> τ∈Tj θold
+
+ clip( sτ − 1, ±2( δ(GSPO)  
+
+> seq
+
+)2) + 1  ˆAτ .
+
+Replacing the constant 2( δ(GSPO)  
+
+> seq
+
+)2 with ϵ(GSPO) , we arrive at the GSPO objective (without the minimize function): 
+
+ˆJGSPO (θ|θold ) = 1
+
+|Tj θold |
+
+X 
+
+> τ∈Tj θold
+
+clip( sτ , 1 ± ϵ(GSPO) ) ˆAτ
+
+= ˆJGSPO (θ|θold ) = X  
+
+> τ∈Tj θold
+> Tτ−1
+
+X  
+
+> t=0 (s≡st(τ), a ≡at(τ))
+
+1
+
+|Tj θold | · 1
+
+Tτ
+
+clip( sτ , 1 ± ϵ(GSPO) ) ˆAs,a .
+
+C.6 Proof of Claim 3.5: GSPO Maintains a trajectory-level TV distance bound 
+
+Proof. For notation, see: Appendix A.1. Recall the GSPO objective function in RGF form (without minimization clipping): 
+
+ˆJGSPO (θ|θold ) = X  
+
+> τ∈Tj θold
+> Tτ−1
+
+X  
+
+> t=0 (s≡st(τ), a ≡at(τ))
+
+1
+
+|Tj θold | · 1
+
+Tτ
+
+clip( sτ , 1 ± ϵ(GSPO) ) ˆAs,a .
+
+We write ϵ instead of ϵ(GSPO) for convenience. Given a sampled trajectory τ , the log-aggregate ratio is defined to be 
+
+log sτ := 1
+
+> Tτ
+
+PTτ −1 
+
+> t=0
+
+log rst(τ ),a t(τ ). This is a Monte Carlo estimation for the negative trajectory-normalized average KL divergence (at the trajectory level), see (49) . Thus, the clipping of the aggregate ratio in the objective function maintains 
+
+¯D(tj) KL 
+
+> (50)
+
+≈ ˆ¯D(τ )KL ≤ − log(1 − ϵ) ≈ ϵ (when ϵ ∼ 0) .
+
+Furthermore, based on 12 DKL ≥ (DTV )2 (Pinsker’s inequality) and Ep[X2] ≥ Ep[X]2 for probability measures, we have:   ¯D(tj) TV 
+
+2 = Es∼ ¯ρθold (tj) 
+
+[DTV (s)] 2 ≤ Es∼ ¯ρθold (tj) 
+
+[DTV (s)2] ≤ Es∼ ¯ρθold (tj) 
+
+ 12 DKL (s) = 12 ¯D(tj) KL ≲ ϵ 
+
+> 2
+
+.
+
+Therefore ¯D(tj) TV ≲ pϵ/ 2, which provides a rough estimation for δ which also bounds the trajectory-normalized average TV divergence. We roughly conclude that δ ∼ pϵ/ 2.
+
+## D Equivalence of APC-Obj and sample-based TV-TRPO 
+
+This appendix establishes that the Aggregational Policy Censoring Objective (APC-Obj) algorithm and sample-based Total Variation Trust Region Policy Optimization (TV-TRPO) produce identical policy updates under standard function approximation assumptions. The equivalence is nontrivial because APC-Obj and sample-based TV-TRPO have superficially different structures: APC-Obj applies per-token clipping with cross-action coupling, while sample-based TV-TRPO maximizes a globally penalized objective. The proof proceeds in three stages: (i) we characterize the maximizer of sample-based TV-TRPO (Theorem D.3), (ii) we show that APC-Obj’s clipping mechanism implicitly enforces the same trust-region constraint (Lemma D.9), and (iii) we unite the two by showing both produce the same policy ratio deviation (Theorem D.10). 32 D.1 Sampling Notation and Standing Assumptions 
+
+Let X denote the set of all state–action pairs encountered in the sampled trajectories, and let ns,a denote the sample multiplicity of pair (s, a ) in the sampled set. Write S[X ] for the set of all states appearing in X , and for each state 
+
+s ∈ S [X ], let Xs := {a ∈ A | (s, a ) ∈ X } be the set of actions co-occurring with s. Define T := P 
+
+> (s,a )∈X
+
+ns,a as the total sample count (with multiplicity), and Ts := P 
+
+> a∈X s
+
+ns,a as the per-state sample count. We also denote the 
+
+augmented state–action pair space ¯X := {(s, a, τ, t ) | (s, a ) ∈ X , τ ∈ Tj θold , t ∈ { 0, . . . , T τ − 1}} , the set of all sampled state–action pairs augmented with their trajectory membership τ and trajectory time step t. Each element of ¯X
+
+is a distinct sampled token, so | ¯X | = T . The multiplicity ns,a counts how many augmented entries in ¯X share the pair 
+
+(s, a ): ns,a = |{ (τ, t ) | (s, a, τ, t ) ∈ ¯X }| .The policy importance-sampling ratio is rs,a (θ|θold ) := πθ (a|s) / π θold (a|s), and we write the ratio deviation as 
+
+∆s,a := rs,a − 1.We adopt two standing identities. Both hold exactly for any policy πθ ; their sample-based counterparts are approxima-tions that we assume hold exactly throughout this section. 1. Probability constraint. Since P 
+
+> a∈A
+
+πθ (a|s) = 1 for any policy πθ (not only πθold ), the identity 
+
+Ea∼πθold (·| s)[rs,a ] = X
+
+> a∈A
+
+πθold (a|s) πθ (a|s)
+
+πθold (a|s) = X
+
+> a∈A
+
+πθ (a|s) = 1 
+
+holds for every θ; the πθold factors cancel algebraically, so the identity does not require πθ = πθold . The sample-based counterpart replaces the expectation with an average over the observed action set Xs:
+
+1
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a rs,a = 1 ⇐⇒ X
+
+> a∈X s
+
+ns,a ∆s,a = 0 , ∀ s ∈ S [X ]. (65) This approximation incurs error from two sources: (i) actions in A \ X s where πθ may place mass but no samples exist, and (ii) finite-sample noise in the empirical frequencies ns,a /T s. We assume both errors are negligible for the purposes of this analysis. 2. Advantage centering. By definition of the advantage, Ea∼πθold (·| s)[Aθold  
+
+> s,a
+
+] = 0 , so under sampling: 
+
+1
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a ˆAθold  
+
+> s,a
+
+= 0 , ∀ s ∈ S [X ]. (66) We assume both sample-based identities hold exactly throughout this section. 
+
+Discounted estimators. In the discounted case, there are a few consistent estimators for discounted quantities. For any X : S × A → R,
+
+Eτ ∼P θ
+
+hTτ −1X
+
+> t=0
+
+γtXst(τ ),a t(τ )
+
+i
+
+= E(s,a )∼ρθ 
+
+> (γ)·πθ
+
+[Xs,a ] = 11 − γ E(s,a )∼ ¯ρθ 
+
+> (γ)·πθ
+
+[Xs,a ] = 11 − γ Es∼ ¯ρθ
+
+> (γ)
+
+[Ea∼πθ (·| s)[Xs,a ]] 
+
+(the second from the definition of the normalized discounted distribution). The discounted naive Monte Carlo estimator is 
+
+ˆEτ ∼P θ
+
+hTτ −1X
+
+> t=0
+
+γtXst(τ ),a t(τ )
+
+i
+
+= 1
+
+|Tj θ |
+
+X  
+
+> τ∈Tj θ
+> Tτ−1
+
+X
+
+> t=0
+
+γtXst(τ ),a t(τ ).
+
+An alternative estimator leverages the time independence of the policy πθ (a|s):
+
+11 − γ ˆE(s,a )∼ ¯ρθ 
+
+> (γ)·πθ
+
+[Xs,a ] = 11 − γ
+
+X 
+
+> s∈S [X]
+
+Γ( s)Γ
+
+1
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a Xs,a 
+
+!
+
+,
+
+where Γ( s) := P   
+
+> (s′,a,τ,t )∈¯X, s ′=s
+
+γt and Γ = P  
+
+> s∈S [X]
+
+Γ( s). It is worth noting that Γ( s)/Γ ∼ ¯ρθ
+
+> (γ)
+
+(s) when number of samples T → ∞ .We choose this estimator as our discounted-case sampling estimator, for the following reason: no matter at which step a state st = s is encountered, the action at ∼ πθ (·| st) is always a valid sample from πθ (·| s) and contributes equally to the estimate of Ea∼πθ (·| st)[Xst,a ], because the policy is always time-independent. However, the naive discounted Monte Carlo estimator always weights this (st, a t) by γt, reducing the contribution of valid policy samples drawn at large time steps and thereby wasting their potential for better estimation. 33 D.2 The Sample-Based TV-TRPO Objective 
+
+The sample-based TV-TRPO objective is the Monte Carlo counterpart of the penalized surrogate (56). 
+
+Definition D.1 (Sample-based TV-TRPO policy iteration) . The updated parameter θnext at each iteration is the arg max 
+
+of the sample-based TV-TRPO objective, obtained by replacing the expectations with sample averages: 
+
+ˆJ(TV -TRPO) (θ|θold ) = ˆJ(1) (θ|θold ) − 4γ ∥ ˆAθold  
+
+> •
+
+∥∞
+
+(1 − γ)2 \max 
+
+> s∼ρθold (γ)
+
+ˆDTV (s, θ |θold )2
+
+= J(θold ) + ˆE(s,a )∼ρθold (γ) ·πθold 
+
+rs,a ˆAs,a 
+
+
+
+− 4γ ∥ ˆAθold  
+
+> •
+
+∥∞
+
+(1 − γ)2
+
+ \max 
+
+> s∼ρθold (γ)
+
+ˆEa∼πθold (·| s)
+
+|rs,a − 1|
+
+> 2
+
+= J(θold ) + 1(1 −γ)Γ 
+
+X 
+
+> s∈S [X]
+
+Γ( s)
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a rs,a ˆAθold 
+
+> s,a
+
+− 4γ ∥ ˆAθold  
+
+> •
+
+∥∞
+
+(1 − γ)2
+
+
+
+max  
+
+> s∈S [X]
+
+1
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a |rs,a − 1|
+
+| {z } 
+
+> ˆDTV (s): per-state TV divergence
+
+
+
+> 2
+
+. (67) When multiple maximizers exist, sample-based TV-TRPO selects the one with smallest ratio-deviation L2 norm: 
+
+min P  
+
+> s∈S [X]1
+> Ts
+
+P 
+
+> a∈X s
+
+|rs,a − 1|2.Note the second term contains the per-state estimated TV divergence ˆDTV (s) (Eq. 39), the Monte-Carlo estimator of the per-state TV distance DTV (s) (Eq. 34); see Appendix A.3.1 for the full definitions and ratio forms. The max-TV penalty couples all actions at every state, making the penalized objective a quadratic function of max per-state TV divergence ˆDmax TV = max s∈S [X ] ˆDTV (s).
+
+Reformulation in ratio deviations. Denoting the policy ratio deviation ∆s,a = rs,a − 1, the max-TV divergence becomes 
+
+ˆDmax TV = max  
+
+> s∈S [X]
+
+ˆDTV (s) = max  
+
+> s∈S [X]
+
+1
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a |∆s,a |.
+
+Since rs,a = 1 + ∆ s,a , the linear surrogate rewrites as 
+
+J(θold ) + 1(1 −γ)Γ 
+
+X 
+
+> s∈S [X]
+
+Γ( s)
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a rs,a ˆAθold  
+
+> s,a
+
+= 1(1 −γ)Γ 
+
+X 
+
+> s∈S [X]
+
+Γ( s)
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a ∆s,a ˆAθold 
+
+> s,a
+
++ 1(1 −γ)Γ 
+
+X 
+
+> s∈S [X]
+
+Γ( s)
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a ˆAθold  
+
+> s,a
+
++ J(θold )
+
+| {z } 
+
+> constant in ∆
+
+.
+
+The constant term is independent of ∆• and therefore irrelevant for maximization. We may thus equivalently maximize the reduced objective 
+
+j(∆) := 1(1 −γ)Γ 
+
+X 
+
+> s∈S [X]
+
+Γ( s)
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a ∆s,a ˆAθold  
+
+> s,a
+
+− 4γ ∥ ˆAθold  
+
+> •
+
+∥∞
+
+(1 − γ)2
+
+
+
+max  
+
+> s∈S [X]
+
+1
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a |∆s,a |
+
+| {z } 
+
+> ˆDTV (s, ∆) : per-state TV divergence
+
+
+
+> 2
+
+, (68) That is, j(∆) differs from ˆJ(TV -TRPO) only by the additive constant J(θold )+ 1(1 −γ)Γ 
+
+P 
+
+> s∈S [X]Γ( s)
+> Ts
+
+P 
+
+> a∈X s
+
+ns,a ˆAθold  
+
+> s,a
+
+,which is independent of rs,a and ∆s,a , so j(∆) and ˆJ(TV -TRPO) (∆ |θold ) share the same maximizer. 34 D.3 Characterizing the Sample-Based TV-TRPO Maximizer 
+
+The key insight is that TV-TRPO’s quadratic penalty on max TV divergence forces the optimal solution to equalize the TV divergence across all states. This section makes this statement precise. 
+
+Per-state normalized-TV maximizers. For each state s, consider maximizing the following auxiliary objective over the ratio deviations: 
+
+ˆ∆∗ 
+
+> s, •
+
+:= arg max    
+
+> ∆s, •: ˆDTV (s, ∆)=1 ,P
+> a∈X sns,a ∆s,a =0
+
+X
+
+> a∈X s
+
+ns,a ∆s,a ˆAθold  
+
+> s,a
+
+, (69) with two constraints: (i) the estimated per-state TV divergence ˆDTV (s, ∆) = 1
+
+> Ts
+
+P 
+
+> a∈X s
+
+ns,a |∆s,a | =
+
+> 1
+> Ts
+
+P 
+
+> a∈X s
+
+ns,a |rs,a − 1| is fixed to 1, and (ii) the probability constraint P 
+
+> a∈X s
+
+ns,a ∆s,a = 0 .Let M (s) := P 
+
+> a∈X s
+
+ns,a ˆ∆∗ 
+
+> s,a
+
+ˆAθold  
+
+> s,a
+
+denote the optimal objective value of this per-state problem. 
+
+Linearity of TV maximizer. Because the objective is linear in ∆s, •, the TV divergence constraint ˆDTV (s, ∆) = c
+
+is also linear in |∆s, •|, and the probability constraint P 
+
+> a
+
+ns,a ∆s,a = 0 is linear, the maximizer at radius c is simply 
+
+c ˆ∆∗
+
+> s, •
+
+, with optimal value c M (s):
+
+c ˆ∆∗ 
+
+> s, •
+
+= arg max   
+
+> ∆s, •: ˆDTV (s, ∆)= c, P
+> ans,a ∆s,a =0
+
+X
+
+> a∈X s
+
+ns,a ∆s,a ˆAθold  
+
+> s,a
+
+= c M (s), c ≥ 0. (70) The same conclusion holds when the equality constraint is relaxed to ˆDTV (s, ∆) ≤ c: Writing ∆s, • = c∗ ˆ∆s, • with 
+
+c∗ ≤ c and ˆDTV (s, ˆ∆) = 1 , one can reduce the problem to max c∗≤c c∗M (s), which is attained at c∗ = c:
+
+arg max    
+
+> ∆s, •: ˆDTV (s, ∆) ≤c, P
+> a∈X sns,a ∆s,a =0
+
+X
+
+> a∈X s
+
+ns,a ∆s,a ˆAθold 
+
+> s,a
+
+= arg max        
+
+> c∗ˆ∆s, •:c∗≤c, ˆDTV (s, ˆ∆)=1 ,
+> P
+> a∈X sns,a ˆ∆s,a =0
+
+X
+
+> a∈X s
+
+ns,a c∗ ˆ∆s,a ˆAθold 
+
+> s,a
+
+=
+
+
+
+arg max  
+
+> c∗≤c
+
+c∗ M (s)
+
+
+
+ˆ∆∗ 
+
+> s, •
+
+= c ˆ∆∗
+
+> s, •
+
+. (71) 
+
+Aggregate notation. Define the aggregate optimal value M := 1Γ
+
+P  
+
+> s∈S [X]Γ( s)
+> Ts
+
+M (s) =
+
+> 1Γ
+
+P 
+
+> s∈S [X]Γ( s)
+> Ts
+
+P 
+
+> a∈X s
+
+ns,a ˆ∆∗ 
+
+> s,a
+
+ˆAθold  
+
+> s,a
+
+. This quantity is the expectation of M (s) 
+
+> Ts
+
+under the probability distri-bution Γ( s)Γ over S[X ] ⊆ S . This distribution varies smoothly with γ; when γ = 1 , Γ( s)Γ becomes Ts 
+
+> T
+
+, the normalized counting distribution of ¯X over S[X ].
+
+Lemma D.2 (M is bounded by the advantage norm) . M ≤ ∥ ˆAθold  
+
+> •
+
+∥∞.Proof. Since 1 = ˆDTV (s, ˆ∆∗) = 1
+
+> Ts
+
+P 
+
+> a∈X s
+
+ns,a | ˆ∆∗
+
+> s,a
+
+|,
+
+M (s)
+
+Ts
+
+= 1
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a ˆ∆∗ 
+
+> s,a
+
+ˆAθold  
+
+> s,a
+
+≤ 1
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a | ˆ∆∗
+
+> s,a
+
+| | ˆAθold  
+
+> •
+
+|∞ = | ˆAθold  
+
+> •
+
+|∞ · 1
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a | ˆ∆∗
+
+> s,a
+
+| = | ˆAθold  
+
+> •
+
+|∞.
+
+Therefore, M = Es∼ Γ( ·)Γ
+
+ M (s)
+
+> Ts
+
+ ≤ Es∼ Γ( ·)Γ
+
+| ˆAθold  
+
+> •
+
+|∞
+
+ = | ˆAθold  
+
+> •
+
+|∞.
+
+Theorem D.3 (Sample-based TV-TRPO maximizer) . Suppose ∆∗• maximizes j(∆) (equivalently, ˆJ(TV -TRPO) ) subject to the probability constraint (65) . Then 
+
+∆∗ 
+
+> s,a
+
+= t∗ ˆ∆∗
+
+> s,a
+
+, t∗ = 1 − γ
+
+8γ ∥ ˆAθold  
+
+> •
+
+∥∞
+
+M. 
+
+35 Proof. Let t := ˆDmax TV (∆ ∗) = max s∈S [X ] ˆDTV (s, ∆∗).We first establish that ˆDTV (s, ∆∗) = t for every s ∈ S [X ]. Note that if M (s) = 0 for every state s, then M = 0 ,
+
+t∗ = 0 , and max j(∆) = 0 , so the theorem holds trivially with ∆∗ = 0 . We may therefore assume M (s) > 0 for at least one state. Suppose for contradiction that some state s with M (s) > 0 has ˆDTV (s, ∆∗) = t(s) < t . Since ∆∗ maximizes j,the per-state component ∆∗ 
+
+> s, •
+
+must maximize P 
+
+> a
+
+ns,a ∆s,a ˆAθold  
+
+> s,a
+
+subject to ˆDTV (s, ∆) = t(s) and the probability constraint. By the maximizer linearity (70), ∆∗ 
+
+> s, •
+
+= t(s) ˆ∆∗
+
+> s, •
+
+, achieving value t(s) M (s).Now construct ∆∗∗ by setting ∆∗∗  
+
+> s, •
+
+:= t(s)+ t 
+
+> 2
+
+ˆ∆∗ 
+
+> s, •
+
+while keeping ∆∗∗  
+
+> s′,•
+
+= ∆ ∗ 
+
+> s′,•
+
+for all s′̸ = s. The per-state advantage contribution at s increases to t(s)+ t 
+
+> 2
+
+M (s) > t (s) M (s), while ˆDmax TV (∆ ∗∗ ) = t since ˆDTV (s, ∆∗∗ ) = t(s)+ t 
+
+> 2
+
+< t .Therefore: 
+
+j(∆ ∗∗ ) = 1(1 −γ)Γ 
+
+X 
+
+> s∈S [X]
+
+Γ( s)
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a ∆∗∗  
+
+> s,a
+
+ˆAθold  
+
+> s,a
+
+− 4γ ∥ ˆAθold  
+
+> •
+
+∥∞
+
+(1 − γ)2 t2
+
+= Γ( s)(1 − γ)Γ 
+
+t − t(s)2Ts
+
+M (s) + 1(1 −γ)Γ 
+
+X 
+
+> s∈S [X]
+
+Γ( s)
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a ∆∗ 
+
+> s,a
+
+ˆAθold  
+
+> s,a
+
+− 4γ ∥ ˆAθold  
+
+> •
+
+∥∞
+
+(1 − γ)2 t2
+
+= Γ( s)(1 − γ)Γ 
+
+t − t(s)2Ts
+
+M (s) + j(∆ ∗) > j (∆ ∗),
+
+where the strict inequality holds since M (s) > 0 and t > t (s). This contradicts the optimality of ∆∗. For states with 
+
+M (s) = 0 , the per-state advantage contribution is zero(by TV-TRPO algorithm, when multiple argmax exists, the smallest L2 norm solution is chosen, thus forces ˆDTV (s) = 0 ), thus we can simply not consider them without loss of generality. Hence ˆDTV (s, ∆∗) = t for all s (except those with M (s) = 0 ). Since ˆDTV (s, ∆∗) = t for every s, and each ∆∗ 
+
+> s, •
+
+must maximize its per-state advantage contribution subject to this constraint, the maximizer linearity (70) gives ∆∗ 
+
+> s, •
+
+= t ˆ∆∗ 
+
+> s, •
+
+for all s. The discount-weighted total advantage contribution is then: 
+
+1Γ
+
+X 
+
+> s∈S [X]
+
+Γ( s)
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a ∆∗ 
+
+> s,a
+
+ˆAθold  
+
+> s,a
+
+= t
+
+Γ
+
+X 
+
+> s∈S [X]
+
+Γ( s)
+
+Ts
+
+M (s) = t M. 
+
+Substituting into j:
+
+j(∆ ∗) = t M 
+
+1 − γ − 4γ ∥ ˆAθold  
+
+> •
+
+∥∞
+
+(1 − γ)2 t2.
+
+This is a concave quadratic in t with maximum at 
+
+t∗ = 1 − γ
+
+8γ ∥ ˆAθold  
+
+> •
+
+∥∞
+
+M. 
+
+D.4 The APC-Obj Objective (In discounted case) Definition D.4 (APC-Obj policy iteration, in discounted case) . The APC-Obj update selects θnew =arg max θ ˆJAPC -Obj (θ|θold ), where 
+
+ˆJAPC -Obj (θ|θold ) = 1(1 −γ)Γ 
+
+X 
+
+> s∈S [X]
+
+Γ( s)
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a 
+
+h
+
+clip 
+
+
+
+rs,a − 1, T sδ(APC -Obj) 
+
+− X   
+
+> (s,a ′,τ ′,t ′)∈¯X
+> (a′,τ ′,t ′)̸=( a,τ,t )
+
+|rs,a ′ − 1|
+
+ ˆAθold  
+
+> s,a
+
++ ˆAθold 
+
+> s,a
+
+i
+
+, (72) where δ(APC -Obj) := 1−γ   
+
+> 8γ∥ˆAθold
+> •∥∞
+
+M , and M is also used in the sample-based TV-TRPO maximizer (Theorem D.3). The per-entry clip bound is 
+
+Bs,a,τ,t := Tsδ(APC -Obj) − X     
+
+> (s,a ′,τ ′,t ′)∈¯X,(a′,τ ′,t ′)̸=( a,τ,t )
+
+|rs,a ′ − 1|,
+
+36 and clip( a, B ) := clip( a, −B+, B +) with B+ := max( B, 0) . When multiple argmax exists, we assume APC-Obj chooses the one with smallest ratio-deviation L2 norm. 
+
+D.5 Surrogated APC-Obj Objective and Objective Equivalence 
+
+To analyze APC-Obj, we introduce a surrogate formulation that replaces the policy parameter θ with the ratio deviation 
+
+∆ directly. 
+
+Definition D.5 (Surrogated APC-Obj objective) . For ratio deviations ∆• and threshold δ, define 
+
+j(APC -Obj) (∆ , δ ) := 1(1 −γ)Γ 
+
+X 
+
+> s∈S [X]
+
+Γ( s)
+
+Ts
+
+X
+
+> a∈X s
+
+h
+
+ns,a clip 
+
+
+
+∆s,a , T sδ −X
+
+> a′∈X s
+
+(ns,a ′ − δa,a ′ ) |∆s,a ′ |
+
+ ˆAθold 
+
+> s,a
+
++ ns,a (1 − C (∆) s) ˆAθold 
+
+> s,a
+
+i
+
+, (73) where δa,a ′ is the Kronecker delta, and the correction term is 
+
+C(∆) s := 1
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a clip 
+
+
+
+∆s,a , T sδ(APC -Obj) −X
+
+> a′∈X s
+
+(ns,a ′ − δa,a ′ ) |∆s,a ′ |
+
+
+
+. (74) The correction term C(∆) s vanishes whenever ˆDTV (s, ∆) < δ (APC -Obj) : in that regime, the clipping is inactive (all clip terms are identities), and the probability constraint (65) gives C(∆) s = 1
+
+> Ts
+
+P 
+
+> a
+
+ns,a ∆s,a = 0 .
+
+Lemma D.6 (Objective equivalence) . Let ∆•(θ) := r•(θ|θold ) − 1. Then 
+
+j(APC -Obj) (∆( θ), δ (APC -Obj) ) = ˆJAPC -Obj (θ|θold ).
+
+Proof. Expanding the surrogated objective and collecting terms: 
+
+j(APC -Obj) (∆( θ), δ (APC -Obj) ) = ˆJAPC -Obj (θ|θold ) − 1(1 −γ)Γ 
+
+X 
+
+> s∈S [X]
+
+Γ( s)
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a C(∆( θ)) s ˆAθold 
+
+> s,a
+
+= ˆJAPC -Obj (θ|θold ) − 1(1 − γ)Γ 
+
+X 
+
+> s∈S [X]
+
+Γ( s) C(∆( θ)) s · 1
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a ˆAθold  
+
+> s,a
+
+.
+
+The advantage centering identity (66) ensures 1
+
+> Ts
+
+P 
+
+> a∈X s
+
+ns,a ˆAθold  
+
+> s,a
+
+= 0 for each s, so the correction vanishes. 
+
+Remark D.7 (Equivalence with the original form using ¯X). The surrogated form is obtained from the orig-inal APC-Obj (Definition D.4) by grouping entries that share the same pair (s, a ) and this extra constant 
+
+> 1(1 −γ)Γ
+
+P 
+
+> s∈S [X]Γ( s)C(∆) s
+> Ts
+
+P 
+
+> a∈X s
+
+ns,a ∆s,a , term that evaluates to 0. The augmented state-action pairs (s, a, τ, t ) in the space ¯X with the same (s, a ) has the same ratio rs,a and the same clip bound. Collecting the ns,a identical terms produces ns,a clip(∆ s,a , T sδ − P 
+
+> a′
+
+(ns,a ′ − δa,a ′ )|∆s,a ′ |).
+
+D.6 Retraction Property of APC-Obj Clipping 
+
+The following lemma establishes that the APC-Obj clipping mechanism acts as a retraction: when a candidate solution violates the TV constraint, the clipping projects the gated ratios back strictly inside the trust region. Combining this retraction property with the property that smaller ˆDTV (s) always produce argmax solutions with less objective value, the next theorem D.10 used these two properties to show APC-Obj implicitly enforces the update policy, given by the argmax, lies within TV trust-region constraint. Thus, this property can be seen as the mechanism by which APC-Obj enforces the trust-region constraint, without explicitly constraining the optimization problem. 
+
+Definition D.8 (Clipping operator and centered projection) . For any vector us,a ∈ RX satisfying P 
+
+> a∈X s
+
+ns,a us,a = 0 
+
+for all s ∈ S [X ], define the clipping operator 
+
+G(u•)s,a := clip  us,a , T s(δ − ˆDTV (s, u )) + |us,a |,
+
+and the centered projection 
+
+proj( G(u)) s,a := G(u)s,a − C (G(u)) s.
+
+Lemma D.9 (Retraction property) . For any u• satisfying the probability constraint (65) :
+
+37 1. ˆDTV 
+
+ s, proj( G(u))  ≤ δ for all s.2. If ˆDTV (s, u ) > δ , then ˆDTV 
+
+ s, proj( G(u))  < δ (strict inequality ).Proof. When ˆDTV (s, u ) ≤ δ, the clipping is inactive, proj( G(u)) = u, and the claim holds trivially. It remains to prove the case for ˆDTV (s, u ) > δ . Since all expressions aggregate only over Xs ⊆ A , we fix a state s without loss of generality. For any vector wa ∈ RXs , we have Ts ˆDTV (s, w ) = P 
+
+> a∈X s
+
+ns,a |wa|. Write va := G(u)s,a and ¯v := 
+
+> 1
+> Ts
+
+P 
+
+> a∈X s
+
+ns,a va; by definition, ¯v = C(u)s. Observe that G(−w) = −G (w), C(−w) = −C (w), and ˆDTV (s, −w) = ˆDTV (s, w ); hence proving the result for u implies it holding for −u as well. Thus we may therefore proceed to prove only the ¯v ≥ 0 case without loss of generality: if ¯v < 0, prove with −u, so that (−u) = C(−u) = −¯v > 0, and by proving the result for −u, the above symmetric property implies it holding for u that has ¯v < 0 as well. Let X + 
+
+> s
+
+(w) := {a ∈ X s | wa > 0}. By definition of ¯v, P 
+
+> a∈X s
+
+ns,a (va − ¯v) = 0 . Splitting the absolute value sum into its positive and negative parts: 
+
+Ts ˆDTV (s, v − ¯v) = X
+
+> a∈X s
+
+ns,a |va − ¯v|
+
+= X  
+
+> a∈X +
+> s(v−¯v)
+
+ns,a (va − ¯v) − X  
+
+> a∈X +
+> s(¯ v−v)
+
+ns,a (va − ¯v).
+
+Since  P    
+
+> a∈X +
+> s(v−¯v)
+
+ns,a (va − ¯v) +  P    
+
+> a∈X +
+> s(¯ v−v)
+
+ns,a (va − ¯v) = P 
+
+> a∈X s
+
+ns,a (va − ¯v) = 0 , the two partial sums are equal in magnitude, giving: 
+
+Ts ˆDTV (s, v − ¯v) = 2 X  
+
+> a∈X +
+> s(v−¯v)
+
+ns,a (va − ¯v).
+
+Since ¯v ≥ 0, every a ∈ X + 
+
+> s
+
+(v − ¯v) satisfies va > 0, which implies us,a > 0 (the clipping va = G(u)s,a preserves the sign of us,a whenever va̸ = 0 ). When ˆDTV (s, u ) > δ , the clipping reduces the absolute value of us,a to va by exactly 
+
+Ts( ˆDTV (s, u ) − δ) for va > 0, i.e.: 
+
+us,a = va + Ts( ˆDTV (s, u ) − δ) > v a.
+
+Substituting va = us,a − Ts( ˆDTV (s, u ) − δ) for each a ∈ X + 
+
+> s
+
+(v − ¯v):
+
+Ts ˆDTV (s, v − ¯v) = 2 X  
+
+> a∈X +
+> s(v−¯v)
+
+ns,a (va − ¯v)= 2 X  
+
+> a∈X +
+> s(v−¯v)
+
+ns,a 
+
+ us,a − Ts( ˆDTV (s, u ) − δ) − ¯v
+
+= 2 X  
+
+> a∈X +
+> s(v−¯v)
+
+ns,a us,a − 2 X  
+
+> a∈X +
+> s(v−¯v)
+
+ns,a 
+
+ Ts( ˆDTV (s, u ) − δ) + ¯ v.
+
+The chain of inequalities us,a > v a ≥ va − ¯v gives X + 
+
+> s
+
+(v − ¯v) ⊆ X + 
+
+> s
+
+(v) ⊆ X + 
+
+> s
+
+(u). The probability constraint yields P   
+
+> a∈X +
+> s(u)
+
+ns,a us,a = P   
+
+> a∈X +
+> s(−u)
+
+ns,a (−us,a ) (from P 
+
+> a
+
+ns,a us,a = 0 ) and consequently 2 P   
+
+> a∈X +
+> s(u)
+
+ns,a us,a =
+
+Ts ˆDTV (s, u ). Combining these: 
+
+Ts ˆDTV (s, v − ¯v) ≤ 2 X  
+
+> a∈X +
+> s(u)
+
+ns,a us,a − 2 X  
+
+> a∈X +
+> s(v−¯v)
+
+ns,a 
+
+ Ts( ˆDTV (s, u ) − δ) + ¯ v
+
+= Ts ˆDTV (s, u ) − N  Ts( ˆDTV (s, u ) − δ) + ¯ v
+
+= TsN δ − Ts(N − 1) ˆDTV (s, u ) − N ¯v
+
+= Tsδ − Ts(N − 1)   ˆDTV (s, u ) − δ − N ¯v, 
+
+where N := 2 P   
+
+> a∈X +
+> s(v−¯v)
+
+ns,a ∈ N is necessarily even (being twice a sum of positive integers). 38 Noting that proj( G(u)) = v − ¯v, two cases arise. If N = 0 , then va ≤ ¯v for all a, so ˆDTV (s, proj( G(u))) = 0 < δ 
+
+(since P 
+
+> a
+
+ns,a (va − ¯v) = 0 forces va = ¯ v for all a). If N ≥ 2 (since N is even and positive), then Ts(N − 1) ≥
+
+Ts ≥ 1 > 0. Combined with ˆDTV (s, u ) − δ > 0 and N ¯v ≥ 0, this gives Ts(N − 1)( ˆDTV (s, u ) − δ) + N ¯v > 0, and therefore Ts ˆDTV (s, proj( G(u))) < T sδ, i.e., ˆDTV (s, proj( G(u))) < δ . In either case, the strict inequality holds. 
+
+D.7 Main Theorem: Sample-Based TV-TRPO and APC-Obj Equivalence Theorem D.10 (Sample-based TV-TRPO APC-Obj equivalence) . Suppose θ satisfies standard function approximation assumptions, then APC-Obj and sample-based TV-TRPO produce the same policy update: 
+
+πθ(APC -Obj) new 
+
+= πθ(TV -TRPO) new 
+
+.
+
+Proof. By Lemma D.6, optimizing the APC-Obj objective over θ is equivalent to optimizing the surrogated APC-Obj objective j(APC -Obj) (∆ , δ (APC -Obj) ) over ratio deviations ∆. We therefore work with j(APC -Obj) directly. Rewriting j(APC -Obj) in terms of Definition D.8: 
+
+j(APC -Obj) (∆ , δ (APC -Obj) ) = 1(1 −γ)Γ 
+
+X 
+
+> s∈S [X]
+
+Γ( s)
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a 
+
+h
+
+clip  ∆s,a , T sδ(APC -Obj) − P 
+
+> a′
+
+(ns,a ′ − δa,a ′ ) |∆s,a ′ |
+
+· ˆAθold  
+
+> s,a
+
++ (1 − C (∆) s) ˆAθold 
+
+> s,a
+
+i
+
+= 1(1 −γ)Γ 
+
+X 
+
+> s∈S [X]
+
+Γ( s)
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a 
+
+h 
+
+clip  ∆s,a , T sδ(APC -Obj) − P 
+
+> a′
+
+(ns,a ′ − δa,a ′ ) |∆s,a ′ |
+
+− C (∆) s
+
+ ˆAθold  
+
+> s,a
+
++ ˆAθold 
+
+> s,a
+
+i
+
+= 1(1 −γ)Γ 
+
+X 
+
+> s∈S [X]
+
+Γ( s)
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a 
+
+proj( G(∆)) s,a ˆAθold 
+
+> s,a
+
++ ˆAθold 
+
+> s,a
+
+. (75) Here the second equality collects the (1 −C (∆) s) factor, and the third identifies the clipping-minus-correction expression with proj( G(∆)) s,a via Definition D.8. Observe that the per-action clip term admits the equivalent form 
+
+clip 
+
+
+
+∆s,a , T sδ(APC -Obj) −X
+
+> a′∈X s
+
+(ns,a ′ − δa,a ′ ) |∆s,a ′ |
+
+
+
+= clip  ∆s,a , T s(δ(APC -Obj) − ˆDTV (s, ∆)) + |∆s,a |,
+
+which connects the surrogated APC-Obj clipping to the operator G in Definition D.8. 
+
+The APC-Obj maximizer satisfies the trust-region constraint. Let ∆∗ denote the maximizer of j(APC -Obj) (·, δ (APC -Obj) ).We claim ˆDTV (s, ∆∗) ≤ δ(APC -Obj) for all s ∈ S [X ]. Suppose for contradiction that ˆDTV (s, ∆∗) > δ (APC -Obj) for some s. By Lemma D.9, ˆDTV 
+
+ s, proj( G(∆ ∗))  < δ (APC -Obj) . The maximizer linearity (70) then yields: 
+
+X
+
+> a∈X s
+
+ns,a proj( G(∆ ∗)) s,a ˆAθold  
+
+> s,a
+
+≤ ˆDTV 
+
+ s, proj( G(∆ ∗))  M (s).
+
+Construct ∆∗∗ by setting ∆∗∗  
+
+> s,a
+
+:= δ(APC -Obj) ˆ∆∗ 
+
+> s,a
+
+for actions at state s and ∆∗∗  
+
+> s′,a ′
+
+:= ∆ ∗ 
+
+> s′,a ′
+
+for all other states. Since ˆDTV (s, ∆∗∗ ) = δ(APC -Obj) , the clipping at state s is inactive for ∆∗∗ , so proj( G(∆ ∗∗ )) s,a = δ(APC -Obj) ˆ∆∗
+
+> s,a
+
+,39 achieving per-state value δ(APC -Obj) M (s). Therefore: 
+
+j(APC -Obj) (∆ ∗, δ (APC -Obj) ) = 1(1 −γ)Γ 
+
+X 
+
+> s∈S [X]
+
+Γ( s)
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a 
+
+proj( G(∆ ∗)) s,a ˆAθold  
+
+> s,a
+
++ ˆAθold 
+
+> s,a
+
+
+
+= 1(1 −γ)Γ 
+
+X 
+
+> s∈S [X]
+
+Γ( s)
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a 
+
+proj( G(∆ ∗∗ )) s,a ˆAθold  
+
+> s,a
+
++ ˆAθold 
+
+> s,a
+
+
+
+− Γ( s)(1 −γ)Γ 
+
+M (s)
+
+Ts
+
+ δ(APC -Obj) − ˆDTV (s, proj( G(∆ ∗))) 
+
+= j(APC -Obj) (∆ ∗∗ , δ (APC -Obj) ) − Γ( s)(1 −γ)Γ 
+
+M (s)
+
+Ts
+
+ δ(APC -Obj) − ˆDTV (s, proj( G(∆ ∗))) 
+
+< j (APC -Obj) (∆ ∗∗ , δ (APC -Obj) ),
+
+contradicting the optimality of ∆∗. Hence ˆDTV (s, ∆∗) ≤ δ(APC -Obj) for all s.
+
+Reduction to constrained linear maximization. Since ˆDTV (s, ∆∗) ≤ δ(APC -Obj) for all s, the clipping terms in (75) reduce to the identity ( G(∆) s,a = ∆ s,a ) and C(∆ ∗)s = 0 . The surrogated APC-Obj objective thus simplifies to: 
+
+j(APC -Obj) (∆ , δ (APC -Obj) ) = 1(1 −γ)Γ 
+
+X 
+
+> s∈S [X]
+
+Γ( s)
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a ∆s,a ˆAθold 
+
+> s,a
+
++ 1(1 −γ)Γ 
+
+X 
+
+> s∈S [X]
+
+Γ( s)
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a ˆAθold  
+
+> s,a
+
+.
+
+Dropping the constant, the maximization becomes: 
+
+∆∗• = arg max      
+
+> ∆: ˆDTV (s, ∆) ≤δ(APC -Obj) ∀s, P
+> a∈X sns,a ∆s,a =0 ∀s
+
+1(1 −γ)Γ 
+
+X 
+
+> s∈S [X]
+
+Γ( s)
+
+Ts
+
+X
+
+> a∈X s
+
+ns,a ∆s,a ˆAθold  
+
+> s,a
+
+.
+
+By the maximizer linearity (70), the unique maximizer is ∆∗• = δ(APC -Obj) ˆ∆∗•.
+
+Identification with the sample-based TV-TRPO maximizer. By definition, δ(APC -Obj) = 1−γ   
+
+> 8γ∥ˆAθold
+> •∥∞
+
+M = t∗,coinciding with the TV-TRPO optimal step size from Theorem D.3. Therefore the APC-Obj maximizer is 
+
+∆∗• = δ(APC -Obj) ˆ∆∗• = t∗ ˆ∆∗•, which is precisely the TV-TRPO maximizer. 
+
+Lifting to policies. Let θ∗ denote the policy update that maximizes the surrogated APC-Obj objective 
+
+j(APC -Obj) (∆( θ), δ (APC -Obj) ). If ∆( θ∗) did not coincide with ∆∗, then under the standard function approx-imation assumptions there would exist θ∗∗ with ∆( θ∗∗ ) = ∆∗, giving j(APC −Obj) (∆( θ∗∗ ), δ (APC -Obj) ) >j(APC −Obj) (∆( θ∗), δ (APC -Obj) ), contradicting the optimality of θ∗. Hence ∆( θ∗) = ∆ ∗ = δ(APC -Obj) ˆ∆∗•.By Lemma D.6, ∆( θ∗) also maximizes the original APC-Obj objective. By Theorem D.3, ∆( θ∗) = t∗ ˆ∆∗• is also the TV-TRPO maximizer. Therefore: 
+
+πθ(APC -Obj) new 
+
+= ( δ(APC -Obj) ˆ∆∗• + 1) πθold = πθ(TV -TRPO) new 
+
+.
+
+D.8 Trust-Region Bound for APC-Obj and TV-TRPO 
+
+Define the TRPO trust-region radius 
+
+δ(TRPO) := 1 − γ
+
+8γ . (76) 
+
+Lemma D.11 (APC-Obj trust-region radius is bounded) . δ(APC -Obj) ≤ δ(TRPO) .Proof. By Lemma D.2, M ≤ ∥ ˆAθold  
+
+> •
+
+∥∞. Therefore, 
+
+δ(APC -Obj) = 1 − γ
+
+8γ ∥ ˆAθold  
+
+> •
+
+∥∞
+
+M ≤ 1 − γ
+
+8γ ∥ ˆAθold  
+
+> •
+
+∥∞
+
+∥ ˆAθold  
+
+> •
+
+∥∞ = 1 − γ
+
+8γ = δ(TRPO) .
+
+40 Lemma D.12 (TV-TRPO and APC-Obj updates lie within the trust region) . The TV-TRPO and APC-Obj policy updates lie in the trust region BTV -TR  
+
+> δ(TRPO)
+
+(θold ).Proof. By Theorem D.3, 
+
+Dmax TV (πθold ∥ πθ(TV -TRPO) new 
+
+) = t∗ = 1 − γ
+
+8γ ∥ ˆAθold  
+
+> •
+
+∥∞
+
+M ≤ 1 − γ
+
+8γ = δ(TRPO) ,
+
+so πθ(TV -TRPO) new 
+
+∈ B TV -TR  
+
+> δ(TRPO)
+
+(θold ). By Theorem D.10, πθ(APC -Obj) new 
+
+= πθ(TV -TRPO) new 
+
+∈ B TV -TR  
+
+> δ(TRPO)
+
+(θold ).
+
+## E Fiber Bundle Theory 
+
+E.1 Fiber Bundle 
+
+The fiber bundle is the algebraic object underlying the local-global modelling. We first recall the relevant concepts before defining the specific bundle used in this work. 
+
+Definition E.1 (Fiber bundle) . A smooth fiber bundle is a tuple (E, B, π E , F ) where E, B, F are manifolds and 
+
+πE : E → B is a smooth surjection satisfying the local triviality condition. Specifically, for every b ∈ B, there exists an open neighborhood U ⊂ B containing b and a diffeomorphism ΦU (called a local trivialization): 
+
+ΦU : π−1 
+
+> E
+
+(U ) ∼=
+
+−→ U × F
+
+such that 
+
+proj 1(Φ U (x)) = πE (x) for all x ∈ π−1 
+
+> E
+
+(U ),
+
+where proj 1 : U × F → U is the projection onto the first factor, defined by (u, f ) 7 → u. The preimage Eb := 
+
+π−1 
+
+> E
+
+[{b}] ∼= F is called the fiber over b, and B is called the base .
+
+Remark E.2 (Triviality, base space, and extensibility) . In the setting of this paper, the base space B is finite (trajectory indices times sign channels), so every open cover admits a refinement into singletons and all transition functions are trivial. The fiber bundle is therefore globally trivializable ( E ∼= B × F ). Despite not yet having utilized much of the interesting topological structure that the fiber bundle enables, the fiber bundle formalism already has immediate merits in policy optimization despite this triviality. Moreover, the algebraic compositionality of fibrations, rather than their topology, is what enables the Fibration Gating Hierarchy (Section 6.1) and its concrete instantiation FiberPO-Domain (Section 6.2), demonstrating that the formalism provides genuine structural utility beyond the topologically trivial two-level case. The immediate merits are as follows: (i): It always formalizes general dependency, local-global structure, and for that it provides grounds to define well-behaved algebraic operations (in our paper, it is manifested with canonical decomposition structure of densities that contains policy ratio’s information into base and fiber components so that the FBG gating operator (Definition 4.3) can exploit upon). It enables treatment for continuous state-action spaces without modification, which is also one of the central merit of fiber bundle gating(FBG) and fibration gating hierarchy(FGH) formulations. (ii): It enables the synthetic treatment of heterogeneous architectures at LLM settings. More specifically, the choice of base space B determines what constitutes “global information” in the fiber bundle model, and the choice B is the primary key for extending FBG to richer, more heterogeneous settings. With B = Tj θold × {− 1, +1 } as in FiberPO-Trajectory, the base gate already provides refined control over trajectory-level drift while preserving update signals from well-behaved individual tokens, manifested in training stability and policy entropy behaviors. The same framework accommodates finer-grained structure without modifying the gating machinery. In Section 6, we generalize FBG to the Fibration Gating Hierarchy (FGH) by composing fibrations into a chain, and derive FiberPO-Domain, a four-level instantiation that enriches the base with domain and prompt group indices to produce per-domain and per-group aggregates, so the base gate regulates each domain’s drift independently. Even more, the natural fibration of permitted actions over space of states forms a natural and possibly highly nontrivial, geometrically rich fiber bundle, which also fits naturally into the FBG framework, and may be further exploited for stability control and achieving better performance. In each case, the fiber Eb := π−1 
+
+> E
+
+[{b}] ⊆ E collects exactly those tokens belonging to class b ∈ B, the Markov kernel K reflects gated base densities back to the bundle, and the atomic gate gBase operates per class, gFiber 
+
+operates per token. The local-global information decomposition is formalized by the concept of densities and Markov kernels (see Appendix E.2 and E.3) and remains unchanged for all these cases. 41 E.2 Density on a Manifold Definition E.3 (Density on a vector space) . A density on an n-dimensional vector space V is a function 
+
+μ : V × · · · × V
+
+| {z }
+
+> n
+
+→ R
+
+satisfying the following condition: if T : V → V is a linear map, then 
+
+μ(T v 1, · · · , T v n) = |det T | μ(v1, · · · , v n).
+
+Let D(V ) denote the set of all densities on V .
+
+Definition E.4 (Density on a manifold) . Let M be a smooth manifold. The set DM = F 
+
+> p∈M
+
+D(T pM) is called the density bundle of M. A section of DM is called a density on M.We denote the space of all densities on the manifold M as D1M or M. We denote the space of all global sections of the density bundle of M as Γ( M, D1M). Thus, 
+
+Γ( M, D1M) = D1M ≡ M.
+
+The fiber over a point x ∈ M is denoted D1
+
+> x
+
+M. It can be understood as the space of densities localized at this particular point. 
+
+Remark E.5 . Any density μ defines, at least locally, a smooth signed or complex measure ν on M, so the integral R 
+
+> K
+
+μ = ν(K) is well defined for any compact K ⊂ M , as is R 
+
+> K
+
+f μ = R 
+
+> K
+
+f dν for any f ∈ Cc(M).
+
+E.3 Fiber Bundle Gating: Detailed Exposition 
+
+We provide a detailed exposition of the Fiber Bundle Gating (FBG) framework introduced in Definition 4.3. The FBG instance is specified by the tuple (E, B, π E , K, g Base , g Fiber ,−; F, R), with πE : E → B being a fiber bundle. Recall 
+
+E, B are the spaces of densities on the bundle space and base space E, B , respectively. The associated FBG gating function G(πE ,K,g Base ,g Fiber ,−) : E → E is defined as: 
+
+G(σ) := K
+
+M 
+
+> b∈B
+
+gBase ,b 
+
+
+
+(πE∗σ)
+
+!
+
++
+
+M 
+
+> i∈E
+
+gFiber ,i,π E∗(σ)
+
+ σ − K(πE∗σ)!
+
+.
+
+We now discuss each constituent object in detail. 
+
+Object 1: Fiber bundle. πE : E → B is a fiber bundle. The local and global information of interest are associated with the points inside the bundle space and base space, respectively. This association is formalized by the densities on the total space and base space. The choice of (E, B, π E ) is a design decision in FBG: it determines the granularity at which the model operates, while the bundle projection πE determines the structural decomposition into classes. Different base spaces yield qualitatively different gating behaviors from the same FBG machinery. With B = Tj θold × {− 1, +1 }, the base gate controls trajectory-level drift. The remaining FBG objects ( K, gBase , gFiber , F, R) then specialize to the chosen granularity. 
+
+Object 2: Fibration decomposition map and recovery map. Recall the definition of ¯X , the augmented state-action space, and R ¯X
+
+> >0
+
+, the (augmented) policy ratio space (see Appendix A.4). To incorporate the policy ratios r• (the real-world information available during training) into the fiber bundle (which is so far a purely mathematical construct), we need to define a way to associate local information with points in E and global information with points in B. Because “local” and “global information” are intuitive but imprecise notions, we formalize them as densities on a manifold : the fibration decomposition map F converts policy ratios into densities on the total space E, these densities intuitively represent the weight, importance or relevance the corresponding local information has in the global quantities; algebraically, they are unique, canonical forms for the many possible expression of essentially the same global aggregation quantities. The pushforward πE∗ aggregates these to densities on the base B
+
+to produce interested global quantities, and the gating operators act on these densities. This density-based formulation makes the interaction between local and global information precise and compositional. In summary, we introduce: 1. The density spaces E and B (see Appendix E.2). 2. The fibration decomposition map F : R ¯X 
+
+> >0
+
+→ E, which converts policy ratios r• to densities on the total space. 42 3. The policy ratio recovery map R : E → R ¯X
+
+> >0
+
+, which converts densities back to policy ratios. R is a left-inverse of F.
+
+Definition E.6 (Local information in FBG) . Given any point i ∈ E in the bundle space, the local information qi
+
+associated to i is then represented as qi = F(r•)i, the density F(r•) localized at the point i.
+
+Definition E.7 (Global information in FBG) . Given any point b ∈ B, the global information qb associated to b is then represented as qb = ( πE∗F(r•)) b. Here πE∗F(r•) is the pushforward of the density F(r•) ∈ E (which consists of local information) by the bundle projection map πE .Finally, the recovery map R : E → R ¯X 
+
+> >0
+
+retrieves the gated information from the density space back to policy ratios, enabling their use in the surrogate objective. 
+
+Object 3: Reflecting Markov kernel. K : B → E is a Markov kernel that reflects densities on the base space to densities on the bundle space, satisfying πE∗ ◦ K = id B.The reflecting condition has a direct geometric interpretation. For a density σ ∈ E (local information), the pushforward 
+
+πE∗(σ) ∈ B yields the global information. The subtraction σ − K(πE∗σ) decouples the influence of the global information πE∗σ from σ through the kernel K. After this decoupling, the local residual should no longer "contain" global information, i.e., no longer contribute to any global information, equivalent to requiring πE∗(σ − K(πE∗σ)) = 0 .This condition is equivalent to the reflecting property πE∗ ◦ K = id B.
+
+Intuition for the FBG gating function. The two terms in G(σ) admit the following interpretation: 1. The term K  L  
+
+> b∈B
+
+gBase ,b 
+
+(πE∗σ): given the density (local information) σ ∈ E, the atomic gating function gates its global portion πE∗σ, and the Markov kernel K brings the gated global information back to the total space. 2. The term  L  
+
+> i∈E
+
+gFiber ,i,π E∗(σ)
+
+  σ −K(πE∗σ): the residual σ −K(πE∗σ) captures within-context variation after removing the global contribution. The fiber gating functions gFiber gate this residual independently at each point. 
+
+Object 4: Atomic gating functions. Recall D1
+
+> x
+
+M is the space of densities on manifold M localized at point x ∈ M 
+
+(Definition E.4). The atomic gating functions are: 
+
+gBase ,b : D1 
+
+> b
+
+B → D 1 
+
+> b
+
+B, gFiber ,i,p B : D1 
+
+> i
+
+E → D 1 
+
+> i
+
+E, 
+
+defined pointwise, where b ∈ B, i ∈ E, and pB ∈ B.Note that the fiber gating function gFiber ,i,p B may depend on an extra parameter 6, the base density pB ∈ B. This reflects the fact that local gating may be conditioned on global context. 
+
+FBG gating form. Recalling that an FBG instance induces a RGF surrogate objective (Definition 4.4): 
+
+ˆJ(G;F,R)(θ|θold ) := X 
+
+> τ∈Tj πθold
+
+"Tτ −1X
+
+> t=0
+
+1
+
+Tτ
+
+R ◦ G ◦ F (r•)st,a t
+
+ˆAst,a t
+
+#
+
+.
+
+Using the maps F, G, R, the final policy ratio transformation is r• 7 → R ◦ G ◦ F (r•) ∈ R ¯X
+
+> >0
+
+. For all r• ∈ R ¯X
+
+> >0
+
+, this transformation leverages the fiber bundle gating framework to treat local and global information in a structured way. 
+
+Extensibility. All four objects above are defined relative to the chosen base space B. Extending B to include additional classifying factors (domain, expert index, temporal grouping) naturally extends the FBG instance: the pushforward πE∗ produces finer aggregates, the Markov kernel K reflects finer base densities back to the bundle, and the atomic gates gBase , gFiber operate per class. Theorem 4.5 guarantees first-order agreement with the true RL objective for any such extension, provided the atomic gates satisfy the identity conditions at the on-policy point. The FiberPO-Trajectory objective derived in Section 5 is the simplest nontrivial instantiation of this framework. The Fibration Gating Hierarchy (Section 6.1) generalizes this construction to arbitrary hierarchical depth, and FiberPO-Domain (Section 6.2) demonstrates the concrete four-level case incorporating domain and prompt group structure. 
+
+> 6In the current FiberPO formulation, this dependence is not used. However, in general it is natural to introduce the global quantity/information influence on the gating of local quantities. We will be exploring this dependency in the future.
+
+43 Global-to-local information exchange of FBG. A crucial structural advantage of FBG, beyond first-order agreement near on-policy, is that it provides a principled mechanism for exchanging global gating effects with individual token ratios. We explain why this is non-trivial and why naive alternatives might fail. In the RGF framework (Definition 3.1), the ratio gating map G : RE 
+
+> >0
+
+→ RE 
+
+> >0
+
+takes the full ratio tuple r• as input and produces a gated ratio for each entry. Global quantities—such as the trajectory-level total variation distance ¯D(tj) TV , or the sequence aggregate ratio s± 
+
+> τ
+
+—are computed from many individual ratios. While these global quantities are well defined as functions of r•, they have no natural counterpart at the level of a single token ratio rs,a . That is, there is no canonical way to “assign” or “attribute” a global quantity to any individual entry in ratio space. This creates a fundamental difficulty for any approach that attempts to incorporate global gating directly in ratio space. Suppose one tries to define a gating map G that simultaneously enforces a global budget (e.g., a trajectory-level TV bound) and local per-token clipping, without the structured decomposition that FBG provides. Several problems arise: 1. Loss of first-order agreement. The global quantity is a nonlinear function of many ratios. Naively incorporat-ing it into per-token clipping changes the Jacobian ∂G(r•)i/∂r j at the on-policy point r• = 1. Unless the coupling is carefully designed, the surrogate will no longer agree with the true RL objective to first order near on-policy. 2. Uncontrolled gradient directions. When global and local gating are entangled in ratio space, the gradient 
+
+∇θ ˆJ at points r•̸ = 1 may point in directions that are undesirable: for instance, the gradient may encourage individual token ratios to move in a direction that increases the trajectory-level divergence ¯D(tj) TV , rather than respecting the trust region. This is because the global constraint, when projected onto individual token ratios without a structured decomposition, can create competing objectives between the global budget and local per-token updates. 3. Loss of fine-grained control. Without the orthogonal decomposition that the reflecting condition πE∗ ◦ K =id B provides, there is no way to gate the pure local variation—the part of each token’s density that remains after the global contribution has been cleanly removed. When global and local information are entangled, the local gate inevitably re-gates global information that has already been gated, or conversely, the global gate inadvertently constrains genuinely local variation. This double-counting makes it difficult for the two gates to operate at their intended granularity, potentially compromising the precision of the trajectory-level budget and the locality of per-token control. On top of having the first-order agreement, FBG avoids the problems 2 and 3 through the density-based decoupling. The pushforward πE∗ extracts global information from local densities in a canonical way. The Markov kernel K reflects the gated global signal back to the total space, and the reflecting condition ensures that the residual σ − K(πE∗σ) carries 
+
+no base-level information. As a result: • The base gate gBase controls the global budget in isolation, operating on the trajectory-level base density πE∗σ
+
+without interference from local variation. • The fiber gate gFiber operates on the purest form of local variation: the residual σ − K(πE∗σ), from which all global influence has been subtracted. This means gFiber gates each token’s deviation from the trajectory aggregate, not its absolute value—the most refined level of local control possible. • Because global and local components are orthogonal ( πE∗(σ − K(πE∗σ)) = 0 ), the two gates compose without cross-contamination: Their effects are independent and additive in the density space, guaranteeing that the combined gating inherits the desired properties of each component. In summary, the structured decomposition σ 7 → K(πE∗σ)+( σ−K(πE∗σ)) is not merely an organizational convenience; it enables non-interfering gating at both the global and local scales, while faithfully exchanging global gating effects with individual token ratios. 
+
+E.4 Proof of First-Order Agreement (Theorem 4.5) 
+
+We prove that the FBG surrogate objective agrees with the true RL objective to first order at θ = θold .
+
+Proof. Value agreement. At θ = θold , all importance ratios equal 1, so F(r•) = F(1). The identity conditions on the atomic gating functions state: 
+
+gFiber ,i,p B (F(1)i − K(πE∗F(1)) i) = F(1)i − K(πE∗F(1)) i, gBase ,b (πE∗F(1)) = πE∗F(1).
+
+44 We verify that G(F(1)) = F(1). The base component gives: 
+
+K
+
+M 
+
+> b∈B
+
+gBase ,b 
+
+
+
+(πE∗F(1)) 
+
+!
+
+= K(πE∗F(1)) .
+
+The fiber component gives: 
+
+M 
+
+> i∈E
+
+gFiber ,i,π E∗F(1)
+
+ F(1) − K(πE∗F(1))  = F(1) − K(πE∗F(1)) ,
+
+where the last equality uses the identity condition on gFiber applied to each fiber component. Summing gives G(F(1)) = 
+
+K(πE∗F(1)) + F(1) − K(πE∗F(1)) = F(1). Since R is a left-inverse of F, we obtain R ◦ G ◦ F (1) = 1, and the surrogate reduces to the linear surrogate value J(θold ).
+
+Gradient agreement. Taking the gradient with respect to θ at θ = θold , we need to show that ∇θ (R ◦ G ◦ F )|θold =
+
+∇θ (R ◦ F )|θold . By the chain rule, it suffices to show that the Jacobian of G at the on-policy density F(1) is the identity. The derivative conditions g′ 
+
+> Fiber ,i,p B
+
+(F(1)i − K(πE∗F(1)) i) = 1 and g′
+
+> Base ,b
+
+(πE∗F(1)) = 1 ensure that each atomic gating function has unit derivative at the on-policy point. Since G is composed of the base and fiber gating applied to the orthogonal decomposition σ = K(πE∗σ) + ( σ − K(πE∗σ)) , the Jacobian of G at F(1) is the identity on both the base and fiber components. Therefore: 
+
+∇θ (R ◦ G ◦ F ) θold 
+
+= ∇θ (R ◦ F ) θold 
+
+,
+
+which recovers the true policy gradient ∇θ J(θ) θ=θold 
+
+.
+
+E.5 Derivation of FiberPO 
+
+Recall the APC-Obj objective (in RGF form): 
+
+ˆJAPC-Obj (θ|θold ) = 1
+
+T
+
+X
+
+> (s,a, I)∈E
+
+h
+
+clip  rs,a − 1, ± Tsδ(APC-Obj) − X
+
+> (s,a ′,I′)∈E
+> (s,a ′,I′)̸=( s,a, I),
+
+|rs,a ′ − 1|
+
++ 1 
+
+i ˆAs,a .
+
+, where E := {(s, a, I)} = ¯X := {(s, a, τ, t )} is the space of all sampled state–action pairs augmented with trajectory membership τ and time step t; each element is a distinct sampled token, so | ¯X | = T and | ¯Xs| = Ts (Definition 3.2). The derivation begins from the APC-Obj objective (Section 3.2), which enforces a per-state TV budget Tsδ(APC-Obj) 
+
+through cross-token interaction terms  P (s,a ′,I′)∈E 
+
+> (s,a ′,I′)̸=( s,a, I),
+
+|rs,a ′ − 1|. We transform it into a form in which two scales of information are made explicit: the aggregate drift of a trajectory, measured by the positive and negative aggregate ratios s+ 
+
+> τ
+
+, s − 
+
+> τ
+
+(which reflect the trajectory-level TV distance, as established in Section 3), and the per-token ratio rs,a 
+
+(which captures how much each individual token has moved from the reference policy). Our goal is to use the APC-Obj objective as a reliable starting point, make reasonable relaxations, and arrive at the FBG form (Definition 4.3). The resulting objective can then inherit APC-Obj’s stability properties and the structural guarantees of the FBG form (first-order agreement, global-local decoupling, extensibility). Figure 5 illustrates this derivation roadmap. 
+
+E.5.1 Derivation I: δ-Relaxation 
+
+Replace the vanishing δ(APC-Obj) with a positive tunable hyperparameter δ. Since δ(APC -Obj) = δ(TRPO) = 0 at γ = 1 
+
+(Theorem 2.1), this relaxation trades the exact TRPO trust-region guarantee for a controllable approximation: the resulting objective no longer enforces the classical bound, but δ directly quantifies the departure, and the TV-based stability structure is retained as a design guide (Remark 3.4). 
+
+E.5.2 Derivation II: Logarithmic Approximation 
+
+Apply the logarithmic approximation log ri ≈ ri − 1 and 1 + clip( · · · ) ≈ exp(clip( · · · )) . This provides two benefits: 1. Positivity by construction. Policy ratios must satisfy r > 0. The map log r ∈ R 7 → exp( ·) > 0 guarantees this automatically: all subsequent gating operations—clipping, piecewise-linear gates gagg , additions—can be designed as unconstrained operations on R and exponentiated back, yielding valid positive ratios without explicit positivity constraints. This opens opportunity to many gating function design, not just a map from positive real line to positive real line. 45 Figure 5: Derivation roadmap from APC-Obj to FiberPO. The APC-Obj objective uses a single clipping with cross-token interaction to enforce a per-state TV budget; the two scales of stability information (trajectory-level aggregate ratios 
+
+s± 
+
+> τ
+
+and per-token ratios rs,a ) are implicitly entangled within this clipping. Through four successive relaxations, the key step (Derivation IV) decomposes the single clipping to make the two scales explicit, yielding separate global and local gates that fit naturally into the FBG form. The resulting FiberPO inherits trust-region stability from APC-Obj and structural guarantees (first-order agreement, global-local decoupling, information exchange, extensibility) from the FBG framework. 2. Better algebraic properties for subsequent simplifications, in particular the additive decomposition of the clipping bound in Derivation IV. 3. Natural asymmetry. The common asymmetry of clipping parameters on ratios (where ϵ− < ϵ +) is naturally captured: replacing clip( r; 1 − ϵ−, 1 + ϵ+) by exp(clip(log r, ±ϵ)) , the symmetric “log clipping” naturally exhibits this asymmetry. Under this approximation, the cross-token TV budget terms |rs,a ′ − 1| in the APC-Obj objective (3) become | log rs,a ′ |,so the per-state estimated TV divergence ˆDTV (s) is approximated by the mean absolute log-ratio, which we call the 
+
+absolute log divergence . This identification is used in Derivation IV to interpret the clipping bound as a TV-budget constraint expressed in log space. The objective becomes: 
+
+ˆJ(θ|θold ) = 1
+
+T
+
+X
+
+> (s,a, I)∈E
+
+exp 
+
+clip  log rs,a , ± Tsδ − X
+
+> (s,a ′,I′)∈E
+> (s,a ′,I′)̸=( s,a, I)
+
+| log rs,a ′ |  ˆAs,a .
+
+E.5.3 Derivation III: Sequence-Level Aggregation 
+
+Two changes restrict the cross-token coupling to within each trajectory. First, the summation inside the clip bound changes from all sampled tokens P  
+
+> (s,a ′,I′)∈E ,(a′,I′)̸=( a, I)
+
+to only those sharing the same trajectory 
+
+P   
+
+> (s′,a ′,I′)∈E ,(a′,I′)̸=( a, I), τ (I′)= τ(I)
+
+. Second, the per-state TV budget Tsδ is replaced by a per-trajectory budget 46 Tτ (I)δ, distributing the total budget proportionally to trajectory length. The objective becomes: 
+
+ˆJ(θ|θold ) = 1
+
+|Tj θold |
+
+X
+
+> (s,a, I)∈E
+
+1
+
+Tτ (I)
+
+× exp 
+
+clip  log rs,a , ± Tτ (I)δ − X  
+
+> (s′,a ′,I′)∈E
+> (s′,a ′,I′)̸=( s,a, I), τ (I′)= τ(I)
+
+| log rs′,a ′ |  ˆAs,a ,
+
+where τ (I) is the trajectory given by the extra information I (see Definition 3.1) associated with the pair (s, a, I) ∈ E ,and Tτ (I) is its length. As with GRPO, the 1/T τ (I) weighting also rewards shorter responses. 
+
+E.5.4 Derivation IV: Clipping Decomposition into Fiber Bundle Gating Form 
+
+This is the most important and distinctive derivation step compared to the derivation of PPO, GRPO, and GSPO. The goal is to decompose the current clipping, which enforces only a trajectory-level TV budget (P   
+
+> (s′,a ′,I′)∈E , τ (I′)= τ(I)
+
+| log rs′,a ′ | ≤ Tτ (I)δ, i.e. the sum of token log-ratios within the same trajectory is bounded), into explicit local and global clipping. We focus on the clipping term inside the objective: 
+
+clip  log rs,a , ± Tτ (I)δ − X  
+
+> (s′,a ′,I′)̸=( s,a, I)
+> τ(I′)= τ(I)
+
+| log rs′,a ′ | .
+
+Introducing aggregate ratios. Define the positive and negative (trajectory) aggregate ratios: 
+
+log( s+ 
+
+> τ
+
+) := 1
+
+TτTτ −1X
+
+> t=0
+
+max(log( rst(τ ),a t(τ )), 0) , log( s− 
+
+> τ
+
+) := 1
+
+TτTτ −1X
+
+> t=0
+
+max(log( r−1  
+
+> st(τ),a t(τ)
+
+), 0) ,
+
+and denote ls,a := sign(log rs,a ). The clipping term can be re-expressed as: 
+
+clip  log rs,a , ±(Tτ δ − Tτ log s+ 
+
+> τ
+
+− Tτ log s− 
+
+> τ
+
++ | log rs,a |).
+
+Negative skew of unsplit ˆ¯D(τ )TV gating. Using a single, unsplit estimate of ˆ¯D(τ )TV (Appendix A.3) as the global gating quantity introduces a systematic negative skew. Concretely, the absolute log divergence log s+ 
+
+> τ
+
++ log s− 
+
+> τ
+
+=(1 /T τ ) P 
+
+> t
+
+| log rst,a t | approximates the trajectory-level TV distance in log-ratio coordinates (Derivation II, Sec-tion E.5.2). By definition, log s+ 
+
+> τ
+
+, log s− 
+
+> τ
+
+≥ 0, so their sum is always nonnegative. In the FBG framework (Defi-nition 4.3), local-global decoupling subtracts the pushed-forward aggregate K(πE∗σ) from every fiber. When this aggregate is the unsplit (nonneg.) TV estimate, the subtraction removes a nonnegative quantity from every per-token log-ratio, imparting a systematic negative bias to all fiber residuals. The remedy is to split by sign into the positive channel s+ 
+
+> τ
+
+and negative channel s− 
+
+> τ
+
+: a token with log rs,a > 0 is then gated only by log s+ 
+
+> τ
+
+, and one with log rs,a < 0
+
+only by log s− 
+
+> τ
+
+, so the same-sign component is subtracted rather than the combined nonnegative total. 
+
+Per-channel budgets and the C− < C + condition. After splitting, each channel is gated independently, eliminating the sign-mixing skew. However, an intrinsic asymmetry between the two channels remains. Observe that 
+
+log s− 
+
+> τ
+
+− log s+ 
+
+> τ
+
+= − 1
+
+TτTτ −1X
+
+> t=0
+
+log rst(τ ),a t(τ ),
+
+which is a trajectory-averaged Monte Carlo estimate of the reverse KL divergence ¯D(tj) KL (πθold ∥πθ ). Since this quantity is nonnegative, we have log s− 
+
+> τ
+
+≥ log s+ 
+
+> τ
+
+in expectation, so the negative channel generically carries more aggregate drift. Imposing a symmetric budget δ/ 2 on each channel therefore insufficiently constrains the faster-drifting negative channel: because log s− grows faster, it reaches the shared threshold δ/ 2 sooner and dominates the base weight 
+
+wbase  
+
+> τ
+
+(Eq. 7), skewing the effective trust region toward the negative direction. To compensate, we decompose δ into per-channel budgets C+ and C− satisfying C+ + C− = δ, C+, C − > 0, with the recommendation C− < C +: the tighter negative budget ensures that the faster-drifting channel reaches rollback earlier, preventing the overall gated ratio G(r•)i = wbase  
+
+> τ
+
+· ˜rfiber  
+
+> i
+
+(Eq. 7) from being biased toward policy-ratio-decreasing updates. The symmetric case 
+
+C+ = C− = δ/ 2 is recovered as a special case. 47 We decompose the above into a stricter clipping by clipping positive and negative log ratios separately: For log rs,a > 0 ( ls,a = 1) : clip  log rs,a , ±(Tτ C+ − Tτ log s+ 
+
+> τ
+
++ log rs,a ),
+
+For log rs,a < 0 ( ls,a = −1) : clip  log rs,a , ±(Tτ C− − Tτ log s− 
+
+> τ
+
+− log rs,a ).
+
+Or equivalently: 
+
+clip  log rs,a , ±(Tτ C(ls,a ) − Tτ log s(ls,a ) 
+
+> τ
+
++ ls,a log rs,a ).
+
+Decomposing aggregate and individual clipping. The channel-split clipping above still acts jointly on the aggregate and per-token ratios. To introduce local clipping behavior that constrains each token individually and to further structure the objective into the fiber and base components required by the FBG framework, we decompose the clipping of the aggregate ratio explicitly out of the clipping of individual policy ratios, yielding a stricter clipping (absolute value strictly less than the above), where ls,a := sign(log rs,a ):
+
+ls,a clip( ls,a log rs,a − log s(ls,a ) 
+
+> τ
+
+, ±ϵ) + clip  ls,a log s(ls,a ) 
+
+> τ
+
+, ±(Tτ C(ls,a ) − Tτ log s(ls,a ) 
+
+> τ
+
+− (ϵ − ls,a log rs,a )) .
+
+The decomposition naturally introduces an extra constant ϵ, representing the clipping bound for individual policy ratios. Now we are ready to define an intermediate object, object gagg , which will be used to define gBase in FBG, the above is equivalent to: 
+
+ls,a clip( ls,a log rs,a − log s(ls,a ) 
+
+> τ
+
+, ±ϵ) + ls,a gagg 
+
+
+
+log s(ls,a ) 
+
+> τ
+
+, Tτ C(ls,a ) − (ϵ − ls,a log rs,a )
+
+Tτ + 1 , T τ
+
+
+
+, (77) where 
+
+gagg (x, C, k ) := 
+
+
+
+x if |x| ≤ C
+
+sign( x)( k + 1) C − kx if C < |x| < (1 + k−1)C
+
+0 otherwise (78) Removing the nonnegative factor ls,a log rs,a from gagg , and noting that Tτ is typically large in the LLM context so that ϵTτ +1 quickly vanishes and Tτ C(ls,a )  
+
+> Tτ+1
+
+≈ C(ls,a ), we obtain the simplified clipping term: 
+
+ls,a clip( ls,a log rs,a − log s(ls,a ) 
+
+> τ
+
+, ±ϵ) + ls,a gagg 
+
+log s(ls,a ) 
+
+> τ
+
+, C (ls,a ), T τ
+
+
+
+. (79) 
+
+Remark E.8 (Three-regime structure of gagg ). The function gagg that emerges from this decomposition has three regimes: pass-through when | log s(l) 
+
+> τ
+
+| ≤ C(l), linear rollback when C(l) < | log s(l) 
+
+> τ
+
+| < (1 + T −1 
+
+> τ
+
+)C(l), and zeroing beyond that threshold. See Figure 2 for a visualization. 
+
+Fiber Bundle Gating objects. The two terms in (79) correspond to fiber and base gating components respectively; we now identify the FBG objects that realize this decomposition. By defining E = ¯X × {− 1, +1 }, (s, a, τ, t ; l) ∈ E,
+
+F(r•)(s,a,τ,t ; l) := 1
+
+Tτ
+
+max( l log rs,a , 0) = μ(τ )¯X max( l log rs,a , 0) ∈ D 1(s,a,τ,t ; l)E ≃ R
+
+as local information, and B = Tj θold × {− 1, +1 } with the projection πE : E → B, πE (s, a, τ, t ; l) := ( τ, l ), one finds that 
+
+log s(l) 
+
+> τ
+
+= πE∗F(r•) (τ,l )∈B .
+
+The reflecting Markov kernel is defined as K(·| (τ, l )) := μ(τ )¯X (see Appendix A.2), so that K(( s, a, τ, t ; l)|(τ, l )) := 
+
+μ(τ )¯X ({(s, a, τ, t )}) = 1 
+
+> Tτ
+
+. One can verify that πE∗K(pB ) = pB = id B(pB ).The fibration recovery map is defined as 
+
+R(σ•)(s,a,τ,t ) := exp  Tτ (σ(s,a,τ,t ; +1) − σ(s,a,τ,t ; −1) ).
+
+The atomic gating functions are: 
+
+gFiber ,i,p B (σi) := clip 
+
+
+
+σi, ± ϵTτ (i)
+
+
+
+, i ∈ E, gBase ,(τ,l )(σ(τ,l )) := gagg 
+
+σ(τ,l ), C (l), T τ
+
+
+
+, (τ, l ) ∈ B. 
+
+48 Verification. The expression (79) fits exactly into the fiber bundle gating formalism: 
+
+clip( ls,a log rs,a − log s(ls,a ) 
+
+> τ
+
+, ±ϵ) + gagg 
+
+log s(ls,a ) 
+
+> τ
+
+, C (ls,a ), T τ
+
+
+
+= gFiber ,i,π E∗σ
+
+ σ − K(πE∗σ) 
+
+> i
+
++ K gBase ,(τ,l s,a )(πE∗σ)
+
+> i
+
+≡ G(σ)i,
+
+where σ ≡ F (r•) ∈ E and i ≡ (s, a, τ, t ; ls,a ) ∈ E.The clipping-decomposed objective is therefore in standard Fiber Bundle Gating form: 
+
+ˆJ(G;F,R)(θ|θold ) := X 
+
+> τ∈Tj πθold
+
+"Tτ −1X
+
+> t=0
+
+1
+
+Tτ
+
+R ◦ G ◦ F (r•)st,a t
+
+ˆAst,a t
+
+#
+
+.
+
+E.5.5 The FiberPO Objective 
+
+By fully expanding the FBG form, we obtain the FiberPO objective. 
+
+Definition E.9 (Fiber-Aware Clipping Policy Optimization (FiberPO) objective) . In standard RGF form: 
+
+ˆJFiberPO (θ|θold ) = X 
+
+> (s,a,τ,t )∈¯X
+
+"
+
+1
+
+|Tj θold |
+
+1
+
+Tτ
+
+· exp ◦ gagg (log s+ 
+
+> τ
+
+, C +, T τ )exp ◦ gagg (log s− 
+
+> τ
+
+, C −, T τ )
+
+×
+
+logclip  
+
+(s(ls,a ) 
+
+> τ
+
+)−ls,a 
+
+rs,a 
+
+
+
+, ϵ 
+
+logclip  
+
+(s(−ls,a ) 
+
+> τ
+
+)−ls,a 
+
+
+
+, ϵ  · ˆAs,a 
+
+#
+
+, (80) where: • ls,a := sign(log rs,a ).• log( s+ 
+
+> τ
+
+) := 1
+
+> Tτ
+
+PTτ −1 
+
+> t=0
+
+max(log( rst(τ ),a t(τ )), 0) ,• log( s− 
+
+> τ
+
+) := 1
+
+> Tτ
+
+PTτ −1 
+
+> t=0
+
+max(log( r−1  
+
+> st(τ),a t(τ)
+
+), 0) ,• logclip( x, a ) := exp(clip(log( x), ±a)) ,• gagg (x, C, k ) is as defined in (78), • E = ¯X is the augmented state-action pair space (see Appendix A.2), • C+ and C− are the per-channel trust-region budgets with C+ + C− = δ; ϵ and δ are hyperparameters. 
+
+E.6 FiberPO Objective in LLM Notation 
+
+We restate the FiberPO objective (Definition 5.1) using standard LLM notation (g, j, i ), where g indexes the query group, j indexes the j-th trajectory within group g, and i indexes the i-th token within trajectory j. The translation from RL notation is τ, t 7 → g, j, i := s0(τ ), τ, t (see Appendix C.3). The FiberPO objective in LLM notation is: 
+
+ˆJFiberPO (θ|θold ) = Eg∼D 
+
+"
+
+1
+
+|Tj θold (g)|
+
+X 
+
+> j∈Tj θold (g)
+
+1
+
+T (g) 
+
+> jT(g)
+> j
+
+X
+
+> i=1
+
+exp ◦ gagg (log s(g)+  
+
+> j
+
+, C +, T (g) 
+
+> j
+
+)exp ◦ gagg (log s(g)− 
+
+> j
+
+, C −, T (g) 
+
+> j
+
+)
+
+×
+
+logclip   (s(g, l (g)  
+
+> j,i )
+> j
+
+)
+
+> −l(g)
+> j,i
+
+r(g)
+
+> j,i
+
+!
+
+, ϵ 
+
+logclip   (s(g, −l(g)  
+
+> j,i )
+> j
+
+)
+
+> −l(g)
+> j,i
+
+!
+
+, ϵ  · ˆA(g)
+
+> j,i
+
+#
+
+, (81) where l(g) 
+
+> j,i
+
+:= sign(log r(g) 
+
+> j,i
+
+), and the constituent quantities are: 49 • Positive and negative trajectory aggregate ratios: 
+
+log s(g)+  
+
+> j
+
+:= 1
+
+T (g)  
+
+> jT(g)
+> j−1
+
+X
+
+> i=0
+
+max(log r(g) 
+
+> j,i
+
+, 0) , log s(g)− 
+
+> j
+
+:= 1
+
+T (g)  
+
+> jT(g)
+> j−1
+
+X
+
+> i=0
+
+max( − log r(g) 
+
+> j,i
+
+, 0) .
+
+• Log-clipping function: logclip( x, ϵ ) := exp(clip(log x, ±ϵ)) .• Aggregate gating function: gagg (x, C, k ) as defined in (10). • C+ and C− are the per-channel trust-region budgets with C+ + C− = δ.• T (g) 
+
+> j
+
+is the sequence length of the j-th trajectory in group g; ϵ and δ are hyperparameters. 
+
+E.7 FiberPO-Domain: FGH Objects 
+
+The FiberPO-Domain objective (30) can equivalently be written in the FGH gating form (29): 
+
+ˆJFiberPO-Domain (θ|θold ) = X 
+
+> i∈¯X
+
+1
+
+|Tj θold |
+
+1
+
+Tτ
+
+R ◦ G ◦ F (r•)i ˆAi, (82) where G(r•)i = wBase  
+
+> i
+
+· ˜rFiber  
+
+> i
+
+= R ◦ G ◦ F (r•)i corresponds to the FGH case n = 3 . The constituent FGH objects are: 1. Fibration hierarchy ( n=3 ). The four strata are: 
+
+B0 := Domain × {− 1, +1 }, B1 := PromptGroup × {− 1, +1 },B2 := Tj θold × {− 1, +1 }, B3 ≡ E := ¯X × {− 1, +1 },
+
+with fibrations π3(s, a, τ, t ; l) := ( τ, l ), π2(τ, l ) := ( gτ , l ), π1(g, l ) := ( Dg , l ).2. Reflecting Markov kernels. 
+
+K0(g, l | D, l ′) := |Tj θold (g)||Tj θold (D)| Ig∈D Il=l′ ,K1(τ, l | g, l ′) := 1
+
+|Tj θold (g)| Iτ ∈g Il=l′ ,K2(i, l | τ, l ′) := 1
+
+Tτ
+
+Ii∈τ Il=l′ .
+
+3. Atomic gating functions. At the domain level ( k=0 ): 
+
+g0,(D,l )(σ0) := |Tj θold (D)| gagg 
+
+ 1
+
+|Tj θold (D)| (σ0)(D,l ), C (l), T D
+
+
+
+.
+
+At the prompt group level ( k=1 ): 
+
+g1,p <1,(g,l )(σ1) := |Tj θold (g)| gagg 
+
+ 1
+
+|Tj θold (g)| (σ1)(g,l ), C (l), T g
+
+
+
+.
+
+At the trajectory level ( k=2 ): 
+
+g2,p <2,(τ,l )(σ2) := gagg 
+
+(σ2)(τ,l ), C (l), T τ
+
+
+
+.
+
+At the token level ( k=3 ): 
+
+g3,p <3,(i,l )(σ) := 1
+
+Tτi
+
+clip  Tτi σ(i,l ), ϵ  .
+
+4. Fibration decomposition and recovery. F(r•)i,l := Ili=l
+
+> Tτi
+
+li log ri, R(σ)i := exp( Tτi (σi, +1 − σi, −1)) .50 References 
+
+[1] Long Ouyang, Jeffrey Wu, Xu Jiang, Diogo Almeida, Carroll Wainwright, Pamela Mishkin, Chong Zhang, Sandhini Agarwal, Katarina Slama, Alex Ray, et al. Training language models to follow instructions with human feedback. 
+
+Advances in Neural Information Processing Systems , 35:27730–27744, 2022. [2] John Schulman, Filip Wolski, Prafulla Dhariwal, Alec Radford, and Oleg Klimov. Proximal policy optimization algorithms. arXiv preprint arXiv:1707.06347 , 2017. [3] Zhihong Shao, Peiyi Wang, Qihao Zhu, Runxin Xu, Junxiao Song, Xiao Bi, Haowei Zhang, Mingchuan Zhang, YK Li, Yang Wu, et al. Deepseekmath: Pushing the limits of mathematical reasoning in open language models. 
+
+arXiv preprint arXiv:2402.03300 , 2024. [4] Qiying Yu, Zheng Zhang, Ruofei Zhu, Yufeng Yuan, Xiaochen Zuo, Yu Yue, Weinan Dai, Tiantian Fan, Gaohong Liu, Lingjun Liu, et al. Dapo: An open-source llm reinforcement learning system at scale. arXiv preprint arXiv:2503.14476 , 2025. [5] Yuhui Wang, Hao He, and Xiaoyang Tan. Truly proximal policy optimization. In Proceedings of the 35th Conference on Uncertainty in Artificial Intelligence , pages 113–122. PMLR, 2020. [6] John Schulman, Sergey Levine, Pieter Abbeel, Michael Jordan, and Philipp Moritz. Trust region policy optimization. In International Conference on Machine Learning , pages 1889–1897. PMLR, 2015. [7] Chujie Zheng, Shixuan Liu, Mingze Li, Xiong-Hui Chen, Bowen Yu, Chang Gao, Kai Dang, Yuqiong Liu, Rui Men, An Yang, et al. Group sequence policy optimization. arXiv preprint arXiv:2507.18071 , 2025. [8] Sham Kakade and John Langford. Approximately optimal approximate reinforcement learning. In International Conference on Machine Learning , pages 267–274, 2002. [9] MyeongSeop Kim, Jung-Su Kim, Myoung-Su Choi, and Jae-Han Park. Adaptive discount factor for deep reinforcement learning in continuing tasks with uncertainty. Sensors , 22(19):7266, 2022. 51

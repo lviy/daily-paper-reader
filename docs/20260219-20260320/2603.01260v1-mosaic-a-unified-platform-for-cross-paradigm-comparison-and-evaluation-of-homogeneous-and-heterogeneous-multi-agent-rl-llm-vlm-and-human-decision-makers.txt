@@ -1,0 +1,608 @@
+Title: MOSAIC: A Unified Platform for Cross-Paradigm Comparison and Evaluation of Homogeneous and Heterogeneous Multi-Agent RL, LLM, VLM, and Human Decision-Makers
+
+URL Source: https://arxiv.org/pdf/2603.01260v1
+
+Published Time: Tue, 03 Mar 2026 02:40:02 GMT
+
+Number of Pages: 16
+
+Markdown Content:
+arXiv preprint. March 2026. 
+
+# MOSAIC: A Unified Platform for Cross-Paradigm Comparison and Evaluation of Homogeneous and Heterogeneous Multi-Agent RL, LLM, VLM, and Human Decision-Makers 
+
+Abdulhamid M. Mousa 1 Yu Fu 1 Rakhmonberdi Khajiev 1 Jalaledin M. Azzabi 1   
+
+> mousa.abdulhamid@bit.edu.cn 3120245427@bit.edu.cn khajiev.rakhmonberdi@bit.edu.cn jalaledin.azzabi@bit.edu.cn
+
+Abdulkarim M. Mousa 3 Peng Yang 1 Yunusa Haruna 2 Ming Liu 1∗   
+
+> abdulkarim.mousa@outlook.com 964342226@qq.com yunusa2k2@buaa.edu.cn bit411liu@bit.edu.cn
+> 1
+
+School of Optics and Photonics, Beijing Institute of Technology, Beijing 100081, China 
+
+> 2
+
+School of Automation Science and Electrical Engineering, Beihang University, Beijing 100191, China 
+
+> 3
+
+Faculty of Science, Ain Shams University, Cairo, Egypt 
+
+March 2026 
+
+Abstract 
+
+Reinforcement learning (RL), large language models (LLMs), and vision-language models (VLMs) have been widely studied in isolation. However, existing infrastructure lacks the abil-ity to deploy agents from different decision-making paradigms within the same environment, making it difficult to study them in hybrid multi-agent settings or to compare their behaviour fairly under identical conditions. We present Mosaic , an open-source platform that bridges this gap by incorporating a diverse set of existing reinforcement learning environments and en-abling heterogeneous agents (RL policies, LLMs, VLMs, and human players) to operate within them in ad-hoc team settings with reproducible results. Mosaic introduces three contribu-tions. (i) An IPC-based worker protocol that wraps both native and third-party frameworks as isolated subprocess workers, each executing its native training and inference logic unmod-ified, communicating through a versioned inter-process protocol. (ii) An operator abstraction 
+
+that forms an agent-level interface by mapping workers to agents: each operator, regardless of whether it is backed by an RL policy, an LLM, or a human, conforms to a minimal unified interface. (iii) A deterministic cross-paradigm evaluation framework offering two complemen-tary modes: a manual mode that advances up to N concurrent operators in lock-step under shared seeds for fine-grained visual inspection of behavioural differences, and a script mode 
+
+that drives automated, long-running evaluation through declarative Python scripts, for repro-ducible experiments. We release Mosaic as an open, visual-first platform to facilitate repro-ducible cross-paradigm research across the RL, LLM, VLM, and human-in-the-loop commu-nities. Source code: https://github.com/Abdulhamid97Mousa/MOSAIC and Documentation: 
+
+https://mosaic-platform.readthedocs.io .
+
+Keywords: Reinforcement Learning, Large Language Models, Multi-Agent Systems, Agent-Level Interface, Cross-Paradigm Evaluation, Open-Source Software 
+
+> ∗
+
+Corresponding author. 
+
+> 1
+
+Corresponding author: Ming Liu. 
+
+1
+
+> arXiv:2603.01260v1 [cs.LG] 1 Mar 2026
+
+# 1 Introduction 
+
+Reinforcement learning (RL) frameworks (RLlib [16]; CleanRL [10]; Stable-Baselines3 [22]; Tian-shou [32]; XuanCe [18]; OpenRL [11]; Acme [7]) and LLM/VLM benchmarks (BALROG [21]; AgentBench [19]; TextArena [6]; GameBench [5]; AgentGym [33]) have matured independently. Gymnasium [28] and PettingZoo [26] standardised the environment side of the agent/environment loop, enabling any algorithm to connect to any compatible simulator. However, the agent side remains fragmented: RL trainers expect tensor observations and produce integer actions, LLM agents expect text prompts and produce text responses, and human operators need interactive in-terfaces. No existing platform bridges these paradigms under a single evaluation protocol. The ad hoc teamwork (AHT) literature [20, 24] studies agents that must cooperate with previously un-known teammates; recent work generalises this to N agents [29] and open team compositions [23]. However, all prior AHT and zero-shot coordination (ZSC) work assumes that every agent shares the same observation and action representations. Mosaic targets a significantly more complex setting: teammates may operate through entirely different paradigms ( πRL , λLLM , or human h), each with its own observation modality and action interface. Table 1: Comparison with 21 existing frameworks. Agent Paradigms : supported decision-maker types. Framework : third-party algorithms integrate without source-code modifications. Platform GUI : real-time visualisation during execution. Cross-Paradigm : infrastructure for comparing dif-ferent agent types ( e.g. , RL vs. LLM) on identical environment instances with shared seeds. ✓ Sup-ported, × Not supported, ◦ Partial.                                                                                                                                                                    
+
+> Agent Paradigms Infrastructure Evaluation System RL LLM VLM Human Framework Platform GUI Cross-Paradigm
+> RL Frameworks
+> RLlib [16] ✓×××✓××
+> CleanRL [10] ✓×××✓××
+> Tianshou [32] ✓×××✓××
+> Acme [7] ✓×××✓××
+> XuanCe [18] ✓×××✓××
+> OpenRL [11] ✓×××✓××
+> Stable-Baselines3 [22] ✓×××✓××
+> Coach [3] ✓×××✓✓×
+> BenchMARL [1] ✓×××✓××
+> LLM/VLM Benchmarks
+> BALROG [21] ×✓✓×✓××
+> TextArena [6] ×✓×✓✓××
+> GameBench [5] ×✓××✓××
+> lmgame-Bench [9] ×✓××✓××
+> LLM Chess [12] ✓✓××✓××
+> LLM-Game-Bench [27] ×✓××✓◦×
+> AgentBench [19] ×✓××✓××
+> MultiAgentBench [35] ×✓××✓××
+> GAMEBoT [17] ×✓××✓××
+> Collab-Overcooked [25] ◦✓××✓××
+> BotzoneBench [13] ×✓××✓××
+> AgentGym [33] ×✓××✓××
+> MOSAIC (Ours) ✓✓✓✓✓✓✓
+
+Mosaic is the only system that supports all four agent types (RL, LLM, VLM, Human) while allowing researchers to extend these types with custom logic that integrates seamlessly with the 2platform. It provides a platform GUI, integrates third-party frameworks without source-code mod-ifications, and enables cross-paradigm evaluation with shared seeds. A detailed comparison with recent cross-paradigm frameworks (Game Reasoning Arena, CREW, LLM-PySC2) is provided in Appendix B. 
+
+# 2 Software Design 
+
+Mosaic follows a three-tier architecture separating orchestration (Qt6 GUI), communication (IPC protocol), and execution (worker subprocesses), as shown in Figure 1. 
+
+Figure 1: Mosaic architecture. Left: Operator types (RL, LLM, VLM, Human, Random) de-ployed across environments. Right: Internal process structure: Daemon (gRPC, RunRegistry, Dispatcher), Worker Processes (CleanRL, XuanCe, RLlib, BALROG, MOSAIC LLM), Telemetry Proxy, and Qt6 Main Process. 
+
+Orchestration layer. The Qt6 main process acts as the authoritative control plane: it spawns and supervises workers as isolated subprocesses via os.setsid() for process-group isolation, establishes bidirectional IPC with a structured capability handshake, routes commands ( reset , step , train ), aggregates live telemetry into SQLite-backed models, and exposes pause/resume controls. The GUI never embeds algorithmic logic. 
+
+Worker protocol. Each worker subprocess communicates via a lightweight JSON protocol over stdin/stdout. Commands flow from the GUI: {"cmd":"reset","seed":42} , {"cmd":"step"} ,
+
+{"cmd":"stop"} . Typed responses return: ready (environment metadata, seed, observation shape after reset), step (action, reward, terminated, render payload), episode_end (total reward, episode 3Table 2: Integration cost: lines of glue code required to wrap each framework as a Mosaic worker, with zero modifications to the original library source. 
+
+Worker Glue LOC Lib. Modifications 
+
+CleanRL (PPO, DQN, SAC, TD3, DDPG, C51) ∼50 None XuanCe (MAPPO, QMIX, VDN, MADDPG) ∼120 None Ray RLlib (PPO, IMPALA, APPO) ∼60 None BALROG (GPT-4o, Claude, Gemini) ∼80 None MOSAIC LLM (multi-agent coordination) native n/a MOSAIC Human (keyboard input) native n/a MOSAIC Random (baseline) native n/a MOSAIC Chess LLM (multi-turn dialog) native n/a 
+
+length), and error (failure message). In batch mode, workers accept CLI arguments and emit JSONL to stdout; a telemetry proxy (sidecar process) parses JSON lines, validates against ver-sioned schemas, converts them to Protocol Buffer messages, and forwards them to the daemon via gRPC streams ( PublishRunSteps , PublishRunEpisodes ). Workers maintain liveness via peri-odic heartbeats every 60 seconds; absence for 300 seconds triggers fault recovery with checkpoint restoration. 
+
+Operator abstraction. An operator maps one or more workers to agent slots in an environ-ment. The OperatorLauncher selects the appropriate worker based on operator type: RL operators invoke framework workers (CleanRL, XuanCe, Ray RLlib) with --interactive flags; LLM oper-ators route to environment-specific workers: BALROG for single-agent MiniGrid/BabyAI, or the native MOSAIC LLM Worker for multi-agent coordination and adversarial setups; human opera-tors connect keyboard input via the Human Worker for human-in-the-loop evaluation; and baseline operators invoke the Random Worker with random, noop, or cycling behaviors. For multi-agent en-vironments, MultiAgentOperatorHandle manages one worker process per agent, routing per-agent 
+
+select_action commands and aggregating responses. The operator exposes a unified protocol via the OperatorController interface:          
+
+> class OperatorController ( Protocol ) : def select_action ( self , agent_id , observation , info = None ) : " " " AEC ␣ mode : ␣ one ␣ agent ␣ acts ␣ at ␣ a ␣ time . " " " ... def select_actions ( self , observations ) : " " " Parallel ␣ mode : ␣ all ␣ agents ␣ act ␣ simultaneously . " " " ...
+
+Cross-paradigm evaluation. The two evaluation modes outlined in Section 1 are implemented as follows. In Manual Mode , N operators advance in lock-step under shared seeds while the GUI renders each operator’s viewport side by side with colour-coded badges (RL = purple, LLM = blue, Human = orange). In Script Mode , a declarative Python script drives execution without user inter-action, producing JSONL telemetry per step and episode. 
+
+# 3 Usage Examples 
+
+Installation. Mosaic uses a modular extras system so that users install only the workers and environments they need: 4pip install -e " .[ cleanrl , minigrid ] " # RL + grid worlds pip install -e " .[ xuance , mosaic_multigrid ] " # MARL + soccer pip install -e " .[ full ] " # everything 
+
+Configuring heterogeneous agents. A single JSON configuration assigns different decision-makers to each agent slot. The following excerpt uses WorkerAssignment to deploy a trained MAPPO policy and a GPT-4o agent ( λLLM ) as teammates against a random baseline ( ρ) and a second RL agent ( πRL ) in N -agent soccer:              
+
+> config =OperatorConfig . multi_agent ( operator_id = " heterogeneous_team " , env_name = " multigrid " , task = " MosaicMultiGrid - Soccer -2 vs2 - IndAgObs - v0 " , player_workers ={ " green_0 " : WorkerAssignment ( worker_type = " rl " , settings ={ " algorithm " : " ppo " , " checkpoint " : " mappo_1v1 . pt " }) , " green_1 " : WorkerAssignment ( worker_type = " llm " , settings ={ " model_id " : " gpt -4 o " , " temperature " : 0}) , " blue_0 " : WorkerAssignment ( worker_type = " rl " , settings ={ " algorithm " : " ppo " , " checkpoint " : " mappo_1v1 . pt " }) , " blue_1 " : WorkerAssignment ( worker_type = " baseline " , settings ={}) , } , )
+
+This configuration demonstrates heterogeneous ad-hoc teamwork: an RL agent trained in 1v1 is paired with an LLM teammate in 2v2, isolating the cross-paradigm variable (Appendix A). 
+
+# 4 Software Quality and Availability 
+
+Testing. Mosaic includes 28+ test files distributed across workers (CleanRL: 17, BALROG: 6, Jumanji: 3, Chess: 1, LLM: 1), covering seed reproducibility, train/eval consistency, overhead benchmarking, and action-space correctness. Tests are run via pytest with CI through GitHub Actions. 
+
+Documentation. The documentation site ( https://mosaic-platform.readthedocs.io ) com-prises 135+ pages covering: installation guides for Ubuntu and WSL with common-error trou-bleshooting; quickstart tutorials; per-environment guides for all 26 families; full architecture doc-umentation; API reference (Core, Services, Adapters); a contributing guide; and a changelog. Six embedded demonstration videos show live cross-paradigm evaluation. 
+
+License and availability. Mosaic is released under the MIT License. Source code: https:// github.com/Abdulhamid97Mousa/MOSAIC . Documentation: https://mosaic-platform.readthedocs. io . PyPI package: pip install mosaic-platform (forthcoming). 55 Conclusion 
+
+We presented Mosaic , an open-source platform that standardizes the agent side of the agent/en-vironment interface, complementing Gymnasium’s environment standardisation. Through the Op-erator Protocol, IPC-based worker isolation, and deterministic cross-paradigm evaluation, Mosaic 
+
+enables the first infrastructure for fair, reproducible comparison between RL, LLM/VLM, and hu-man decision-makers in shared multi-agent environments. The platform supports 26 environment families, 8 worker types, and produces unified telemetry for systematic agent comparison research. 
+
+# Acknowledgements 
+
+The authors thank the Beijing Institute of Technology for computing resources. We acknowledge the developers of Gymnasium, PettingZoo, CleanRL, XuanCe, Ray RLlib, and BALROG, whose open-source contributions made this work possible. 
+
+# References 
+
+[1] Matteo Bettini, Amanda Prorok, and Vincent Moens. Benchmarl: benchmarking multi-agent reinforcement learning. J. Mach. Learn. Res. , 25(1), January 2024. ISSN 1532-4435. [2] Florian Bordes, Richard Yuanzhe Pang, Anurag Ajay, Alexander C. Li, Adrien Bardes, Suzanne Petryk, Oscar Mañas, Zhiqiu Lin, Anas Mahmoud, Bargav Jayaraman, Mark Ibrahim, Melissa Hall, Yunyang Xiong, Jonathan Lebensold, Candace Ross, Srihari Jayakumar, Chuan Guo, Diane Bouchacourt, Haider Al-Tahan, Karthik Padthe, Vasu Sharma, Hu Xu, Xiaoqing Ellen Tan, Megan Richards, Samuel Lavoie, Pietro Astolfi, Reyhane Askari Hemmat, Jun Chen, Kushal Tirumala, Rim Assouel, Mazda Moayeri, Arjang Talattof, Kamalika Chaudhuri, Zechun Liu, Xilun Chen, Quentin Garrido, Karen Ullrich, Aishwarya Agrawal, Kate Saenko, Asli Celikyilmaz, and Vikas Chandra. An introduction to vision-language modeling, 2024. URL 
+
+https://arxiv.org/abs/2405.17247 .[3] Itai Caspi, Gal Leibovich, Gal Novik, and Shadi Endrawis. Reinforcement learning coach, December 2017. URL https://doi.org/10.5281/zenodo.1134899 .[4] Lucia Cipolina-Kun, Marianna Nezhurina, and Jenia Jitsev. Game reasoning arena: A frame-work and benchmark for assessing reasoning capabilities of large language models via game play, 2025. URL https://arxiv.org/abs/2508.03368 .[5] Anthony Costarelli, Mat Allen, Roman Hauksson, Grace Sodunke, Suhas Hariharan, Carl-son Cheng, Wenjie Li, Joshua Clymer, and Arjun Yadav. Gamebench: Evaluating strategic reasoning abilities of llm agents, 2024. URL https://arxiv.org/abs/2406.06613 .[6] Leon Guertler, Bobby Cheng, Simon Yu, Bo Liu, Leshem Choshen, and Cheston Tan. Textarena, 2025. URL https://arxiv.org/abs/2504.11442 .[7] Matthew W. Hoffman, Bobak Shahriari, John Aslanides, Gabriel Barth-Maron, Nikola Mom-chev, Danila Sinopalnikov, Piotr Stańczyk, Sabela Ramos, Anton Raichuk, Damien Vincent, Léonard Hussenot, Robert Dadashi, Gabriel Dulac-Arnold, Manu Orsini, Alexis Jacq, Johan Ferret, Nino Vieillard, Seyed Kamyar Seyed Ghasemipour, Sertan Girgin, Olivier Pietquin, Fer-yal Behbahani, Tamara Norman, Abbas Abdolmaleki, Albin Cassirer, Fan Yang, Kate Baumli, 6Sarah Henderson, Abe Friesen, Ruba Haroun, Alex Novikov, Sergio Gómez Colmenarejo, Serkan Cabi, Caglar Gulcehre, Tom Le Paine, Srivatsan Srinivasan, Andrew Cowie, Ziyu Wang, Bi-lal Piot, and Nando de Freitas. Acme: A research framework for distributed reinforcement learning, 2022. URL https://arxiv.org/abs/2006.00979 .[8] Hengyuan Hu, Adam Lerer, Alex Peysakhovich, and Jakob Foerster. “other-play” for zero-shot coordination. In International Conference on Machine Learning (ICML) , volume 119, pages 4399–4410, 2020. [9] Lanxiang Hu, Mingjia Huo, Yuxuan Zhang, Haoyang Yu, Eric P. Xing, Ion Stoica, Tajana Rosing, Haojian Jin, and Hao Zhang. lmgame-bench: How good are llms at playing games?, 2025. URL https://arxiv.org/abs/2505.15146 .[10] Shengyi Huang, Rousslan Fernand Julien Dossa, Chang Ye, Jeff Braga, Dipam Chakraborty, Kinal Mehta, and JoÃ£o G.M. AraÃ ºjo. Cleanrl: High-quality single-file implementations of deep reinforcement learning algorithms. Journal of Machine Learning Research , 23(274):1–18, 2022. URL http://jmlr.org/papers/v23/21-1342.html .[11] Shiyu Huang, Wentse Chen, Yiwen Sun, Fuqing Bie, and Wei-Wei Tu. Openrl: A unified reinforcement learning framework, 2023. URL https://arxiv.org/abs/2312.16189 .[12] Sai Kolasani, Maxim Saplin, Nicholas Crispino, Kyle Montgomery, Jared Quincy Davis, Matei Zaharia, Chi Wang, and Chenguang Wang. Llm chess: Benchmarking reasoning and instruction-following in llms through chess, 2025. URL https://arxiv.org/abs/2512.01992 .[13] Lingfeng Li, Yunlong Lu, Yuefei Zhang, Jingyu Yao, Yixin Zhu, KeYuan Cheng, Yongyi Wang, Qirui Zheng, Xionghui Yang, and Wenxin Li. Botzonebench: Scalable llm evaluation via graded ai anchors, 2026. URL https://arxiv.org/abs/2602.13214 .[14] Wenhao Li, Wenwu Li, Chuyun Shen, Junjie Sheng, Zixiao Huang, Di Wu, Yun Hua, Wei Yin, Xiangfeng Wang, Hongyuan Zha, and Bo Jin. Textatari: 100k frames game playing with language agents, 2025. URL https://arxiv.org/abs/2506.04098 .[15] Zongyuan Li, Yanan Ni, Runnan Qi, Lumin Jiang, Chang Lu, Xiaojie Xu, Xiangbei Liu, Pengfei Li, Yunzheng Guo, Zhe Ma, Huanyu Li, Hui Wu, Xian Guo, Kuihua Huang, and Xuebo Zhang. Llm-pysc2: Starcraft ii learning environment for large language models, 2025. URL https://arxiv.org/abs/2411.05348 .[16] Eric Liang, Richard Liaw, Robert Nishihara, Philipp Moritz, Roy Fox, Ken Goldberg, Joseph Gonzalez, Michael Jordan, and Ion Stoica. RLlib: Abstractions for distributed reinforce-ment learning. In Jennifer Dy and Andreas Krause, editors, Proceedings of the 35th Inter-national Conference on Machine Learning , volume 80 of Proceedings of Machine Learning Re-search , pages 3053–3062. PMLR, 10–15 Jul 2018. URL https://proceedings.mlr.press/ v80/liang18b.html .[17] Wenye Lin, Jonathan Roberts, Yunhan Yang, Samuel Albanie, Zongqing Lu, and Kai Han. GAMEBoT: Transparent assessment of LLM reasoning in games. In Wanxiang Che, Joyce Nabende, Ekaterina Shutova, and Mohammad Taher Pilehvar, editors, Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers) ,pages 7656–7682, Vienna, Austria, July 2025. Association for Computational Linguistics. ISBN 979-8-89176-251-0. doi: 10.18653/v1/2025.acl-long.378. URL https://aclanthology.org/ 2025.acl-long.378/ .7[18] Wenzhang Liu, Wenzhe Cai, Kun Jiang, Guangran Cheng, Yuanda Wang, Jiawei Wang, Jingyu Cao, Lele Xu, Chaoxu Mu, and Changyin Sun. Xuance: A comprehensive and unified deep reinforcement learning library, 2023. URL https://arxiv.org/abs/2312.16248 .[19] Xiao Liu, Hao Yu, Hanchen Zhang, Yifan Xu, Xuanyu Lei, Hanyu Lai, Yu Gu, Hangliang Ding, Kaiwen Men, Kejuan Yang, Shudan Zhang, Xiang Deng, Aohan Zeng, Zhengxiao Du, Chenhui Zhang, Sheng Shen, Tianjun Zhang, Yu Su, Huan Sun, Minlie Huang, Yuxiao Dong, and Jie Tang. Agentbench: Evaluating llms as agents, 2025. URL https://arxiv.org/abs/2308. 03688 .[20] Reuth Mirsky, Ignacio Carlucho, Arrasy Rahman, Elliot Fosong, William Macke, Mohan Srid-haran, Peter Stone, and Stefano V. Albrecht. A survey of ad hoc teamwork research. In 
+
+European Conference on Multi-Agent Systems (EUMAS) . Springer, 2022. [21] Davide Paglieri, Bartłomiej Cupiał, Samuel Coward, Ulyana Piterbarg, Maciej Wolczyk, Akbir Khan, Eduardo Pignatelli, Łukasz Kuciński, Lerrel Pinto, Rob Fergus, Jakob Nicolaus Foer-ster, Jack Parker-Holder, and Tim Rocktäschel. Balrog: Benchmarking agentic llm and vlm reasoning on games, 2025. URL https://arxiv.org/abs/2411.13543 .[22] Antonin Raffin, Ashley Hill, Adam Gleave, Anssi Kanervisto, Maximilian Ernestus, and Noah Dormann. Stable-baselines3: reliable reinforcement learning implementations. J. Mach. Learn. Res. , 22(1), January 2021. ISSN 1532-4435. [23] Arrasy Rahman, Ignacio Carlucho, Niklas Höpner, and Stefano V. Albrecht. A general learning framework for open ad hoc teamwork using graph-based policy learning. Journal of Machine Learning Research , 24(298):1–74, 2023. [24] Peter Stone, Gal A. Kaminka, Sarit Kraus, and Jeffrey S. Rosenschein. Ad hoc autonomous agent teams: Collaboration without pre-coordination. In AAAI Conference on Artificial Intel-ligence , pages 1504–1509, 2010. [25] Haochen Sun, Shuwen Zhang, Lujie Niu, Lei Ren, Hao Xu, Hao Fu, Fangkun Zhao, Caixia Yuan, and Xiaojie Wang. Collab-overcooked: Benchmarking and evaluating large language models as collaborative agents. In Christos Christodoulopoulos, Tanmoy Chakraborty, Carolyn Rose, and Violet Peng, editors, Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing , pages 4922–4951, Suzhou, China, November 2025. Association for Computational Linguistics. ISBN 979-8-89176-332-6. doi: 10.18653/v1/2025.emnlp-main.249. URL https://aclanthology.org/2025.emnlp-main.249/ .[26] J. K. Terry, Benjamin Black, Nathaniel Grammel, Mario Jayakumar, Ananth Hari, Ryan Sul-livan, Luis Santos, Rodrigo Perez, Caroline Horsch, Clemens Dieffendahl, Niall L. Williams, Yashas Lokesh, and Praveen Ravi. Pettingzoo: Gym for multi-agent reinforcement learning, 2021. URL https://arxiv.org/abs/2009.14471 .[27] Oguzhan Topsakal, Colby Jacob Edell, and Jackson Bailey Harper. Evaluating large language models with grid-based game competitions: An extensible llm benchmark and leaderboard, 2024. URL https://arxiv.org/abs/2407.07796 .[28] Mark Towers, Ariel Kwiatkowski, Jordan Terry, John U. Balis, Gianluca De Cola, Tristan Deleu, Manuel Goulão, Andreas Kallinteris, Markus Krimmel, Arjun KG, Rodrigo Perez-Vicente, Andrea Pierré, Sander Schulhoff, Jun Jet Tai, Hannah Tan, and Omar G. Younis. Gymnasium: 8A standard interface for reinforcement learning environments, 2025. URL https://arxiv. org/abs/2407.17032 .[29] Caroline Wang, Arrasy Rahman, Ishan Durugkar, Elad Liebman, and Peter Stone. N-agent ad hoc teamwork. In Advances in Neural Information Processing Systems (NeurIPS) , volume 37, pages 111832–111862, 2024. [30] Xihuai Wang, Shao Zhang, Wenhao Zhang, Wentao Dong, Jingxiao Chen, Ying Wen, and Weinan Zhang. ZSC-Eval: An evaluation toolkit and benchmark for multi-agent zero-shot coordination. In Advances in Neural Information Processing Systems (NeurIPS), Datasets and Benchmarks Track , volume 37, 2024. [31] Nicholas R. Waytowich, Devin White, MD Sunbeam, and Vinicius G. Goecks. Atari-gpt: Benchmarking multimodal large language models as low-level policies in atari games, 2024. URL https://arxiv.org/abs/2408.15950 .[32] Jiayi Weng, Huayu Chen, Dong Yan, Kaichao You, Alexis Duburcq, Minghao Zhang, Yi Su, Hang Su, and Jun Zhu. Tianshou: A highly modularized deep reinforcement learning library. 
+
+J. Mach. Learn. Res. , 23(1), January 2022. ISSN 1532-4435. [33] Zhiheng Xi, Yiwen Ding, Wenxiang Chen, Boyang Hong, Honglin Guo, Junzhe Wang, Dingwen Yang, Chenyang Liao, Xin Guo, Wei He, Songyang Gao, Lu Chen, Rui Zheng, Yicheng Zou, Tao Gui, Qi Zhang, Xipeng Qiu, Xuanjing Huang, Zuxuan Wu, and Yu-Gang Jiang. Agentgym: Evolving large language model-based agents across diverse environments, 2024. URL https: //arxiv.org/abs/2406.04151 .[34] Lingyu Zhang, Zhengran Ji, and Boyuan Chen. Crew: Facilitating human-ai teaming research, 2025. URL https://arxiv.org/abs/2408.00170 .[35] Kunlun Zhu, Hongyi Du, Zhaochen Hong, Xiaocheng Yang, Shuyi Guo, Zhe Wang, Zhenhailong Wang, Cheng Qian, Xiangru Tang, Heng Ji, and Jiaxuan You. Multiagentbench: Evaluating the collaboration and competition of llm agents, 2025. URL https://arxiv.org/abs/2503.01935 .9Appendix 
+
+Table 3 summarises the notation used throughout this paper. Table 3: Summary of notation for cross-paradigm multi-agent systems. 
+
+Symbol Description 
+
+Agent Paradigms: 
+
+πRL  
+
+> i
+
+RL policy trained via reinforcement learning 
+
+¯πRL  
+
+> i
+
+Frozen RL policy (parameters θi fixed; no further learning) 
+
+λLLM  
+
+> j
+
+LLM agent (large language model) 
+
+ψVLM  
+
+> k
+
+VLM agent (vision-language model) 
+
+hm Human operator (interactive GUI control) 
+
+ρ Uniform random baseline policy 
+
+ν No-op baseline policy (null action at every step) 
+
+Agent Populations and Sizes: 
+
+ΠRL = {πRL  
+
+> i
+
+}nRL  
+
+> i=1
+
+Population of RL policies (size nRL )
+
+ΛLLM = {λLLM  
+
+> j
+
+}nLLM  
+
+> j=1
+
+Population of LLM agents (size nLLM )
+
+ΨVLM = {ψVLM  
+
+> k
+
+}nVLM  
+
+> k=1
+
+Population of VLM agents (size nVLM )
+
+H = {hm}nH 
+
+> m=1
+
+Population of human operators (size nH)
+
+N = nRL + nLLM + nVLM + nH Total number of agents in the system 
+
+Team Partitions: 
+
+TA, TB Disjoint team partitions: TA ∩ T B = ∅, TA ∪ T B = {1, . . . , N }
+
+nA, n B Team sizes: nA = |T A|, nB = |T B |, nA + nB = N
+
+Observation and Action Spaces: 
+
+ORL = Rd RL observation space (continuous tensor) 
+
+OLLM = Σ ∗ LLM observation space (strings over alphabet Σ)
+
+OVLM = Σ ∗ × RH×W ×C VLM observation space (multimodal: text and RGB image) 
+
+OH = RH×W ×C Human observation space (rendered RGB image) 
+
+A = {1, 2, . . . , K } Discrete action space (shared after paradigm-specific parsing) 
+
+ϕ : Σ ∗ → A Deterministic parsing function mapping LLM/VLM text to actions 
+
+.1 Language Model Agent Modalities and Environmental Scope 
+
+MOSAIC distinguishes between two classes of language-model agents based on their input modal-ities. Large Language Model (LLM) agents ( λLLM ) are foundation models that process text-only observations: the environment state is serialized to natural language (e.g., “You see a red ball 2 steps ahead”), and the model generates text actions that are parsed to discrete commands. 
+
+Vision-Language Model (VLM) agents ( ψVLM ) are multimodal extensions [2] that receive obser-vations combining text descriptions with rendered RGB images, enabling models such as GPT-4V to reason directly over visual features that may be lost in text serialization. The configuration parameter max_image_history distinguishes these modalities: zero for text-only LLMs, positive for multimodal VLMs. 
+
+Environmental Scope for LLM and VLM Agents. While MOSAIC supports a diverse suite of environments ranging from classic control to complex physics simulations, we explicitly scope the deployment of LLM and VLM agents to discrete grid-world domains (e.g., MiniGrid, MO-SAIC MultiGrid, INI MultiGrid, Melting Pot, Griddly). We exclude continuous robotic control 10 tasks (MuJoCo, PyBullet Drones) from this specific evaluation track due to fundamental limita-tions identified in recent literature. Atari-GPT [31] demonstrates that while frontier VLMs possess semantic understanding, they struggle with the low-level spatial reasoning and reaction-time con-straints required for real-time control in continuous domains. Similarly, TextAtari [14] highlights that even with state-serialized textual inputs, LLMs suffer from severe performance degradation in long-horizon planning, failing to maintain coherent decision-making over tens of thousands of steps. By focusing on grid-world environments, we isolate the agents’ strategic reasoning capabilities such as coordination and instruction following without the confounding variables of motor control la-tency or high-frequency visual processing that currently render these models ineffective as low-level controllers in continuous domains. 
+
+.2 Single-Agent and Multi-Agent LLM Support 
+
+The BALROG worker, inherited from the BALROG benchmark [21], provides high-quality single-agent LLM/VLM evaluation for grid-world environments. The native MOSAIC LLM Worker ex-tends this foundation with multi-agent capabilities: Theory of Mind observations ( observation_mode :egocentric or visible teammates); coordination levels (emergent, basic hints, role-based assignments); and agent-specific indexing ( agent_id ) for heterogeneous team compositions. This enables the first systematic study of LLM-LLM and LLM-VLM coordination in adversarial and cooperative multi-agent settings. The architectural separation of workers allows MOSAIC to leverage the strengths of different paradigms for different domains. As noted in Section .1, the deployment of LLMs in continuous control remains an open challenge; Waytowich et al. [31] found that VLMs often fail to map visual features to valid low-level actions in dynamic environments, while Li et al. [14] showed that long-horizon reasoning breaks down without explicit memory mechanisms. MOSAIC addresses these constraints by assigning RL agents to high-frequency control tasks (e.g., MuJoCo, PyBullet) while deploying LLM/VLM agents in discrete grid-worlds where the action space is symbolic and the observation horizon is manageable. In these structured environments, LLMs can effectively uti-lize prior knowledge, such as game manuals or expert demonstrations, to bridge the gap between zero-shot coordination and optimal performance, a capability that remains elusive in unstructured, continuous domains. Figure 2 contrasts zero-shot coordination (ZSC) with our cross-paradigm transfer design. In ZSC (panel a), all agents share the same paradigm, observation space O = Rd, and action space 
+
+A. In our setting (panel b), agents are trained solo ( N = 1 ) and deployed in heterogeneous teams where Oi̸ = Oj across paradigms. 
+
+# A Experimental Configurations 
+
+The operator abstraction and cross-paradigm evaluation infrastructure described in Section 2 enable a systematic ablation matrix over agent paradigms. We formalize the experimental design for N -agent competitive environments with team partitions TA and TB , where agents are drawn from 
+
+ΠRL ∪ ΛLLM ∪ ΨVLM ∪ H . Tables 4 and 5 enumerate representative configurations instantiated with N = 4 agents partitioned into two teams of size nA = nB = 2 for concreteness, though the framework generalizes to arbitrary N and team compositions. 11 Figure 2: Zero-shot coordination (ZSC) versus cross-paradigm transfer. (a) ZSC trains N RL policies πRL  
+
+> 1
+
+, . . . , π RL N via self-play, then evaluates unseen pairs πRL i ∥πRL j that share the same O
+
+and A. (b) Our design trains each πRL i solo ( N = 1 ), then deploys frozen policies alongside λLLM j ,
+
+ψV LM k , and hm in an N -agent environment with heterogeneous observation spaces. 
+
+A.1 Adversarial Cross-Paradigm Matchups 
+
+The first set of configurations establishes single-paradigm baselines before introducing cross-paradigm matchups to measure relative performance. Let TA and TB denote disjoint team partitions with 
+
+|T A| = nA and |T B | = nB . For each team Tk (k ∈ { A, B }), we define its paradigm composition as 
+
+(Π RL  
+
+> k
+
+, ΛLLM  
+
+> k
+
+, ΨVLM  
+
+> k
+
+, Hk) where |ΠRL  
+
+> k
+
+| + |ΛLLM  
+
+> k
+
+| + |ΨVLM  
+
+> k
+
+| + |H k| = nk.Configurations A1-A3 measure the performance ceiling for homogeneous teams within each paradigm: RL policies trained via MARL, LLM agents reasoning via text-based decision-making, and VLM agents processing multimodal observations. Configurations A4-A6 address the central cross-paradigm research questions: under identical environmental conditions and shared random seeds, does a team of RL policies outperform teams of LLM or VLM agents, and how do LLM and VLM agents compare head-to-head? A7 serves as a sanity check, confirming that trained agents significantly outperform uniform-random baseline policies. 12 Table 4: Adversarial configurations for N = 4 agents with nA = nB = 2 . Each row specifies the paradigm composition for teams k ∈ { A, B }. Configurations A1-A3 establish single-paradigm base-lines; A4-A6 address cross-paradigm comparisons. Notation: ρ denotes uniform-random baseline. 
+
+Config.Team A Composition Team B Composition Purpose 
+
+A1 |ΠRL  
+
+> A
+
+| = 2 |ΠRL  
+
+> B
+
+| = 2 Homogeneous RL base-line A2 |ΛLLM  
+
+> A
+
+| = 2 |ΛLLM  
+
+> B
+
+| = 2 Homogeneous LLM base-line A3 |ΨVLM  
+
+> A
+
+| = 2 |ΨVLM  
+
+> B
+
+| = 2 Homogeneous VLM base-line A4 |ΠRL  
+
+> A
+
+| = 2 |ΛLLM  
+
+> B
+
+| = 2 Cross-paradigm (RL vs LLM) A5 |ΠRL  
+
+> A
+
+| = 2 |ΨVLM  
+
+> B
+
+| = 2 Cross-paradigm (RL vs VLM) A6 |ΛLLM  
+
+> A
+
+| = 2 |ΨVLM  
+
+> B
+
+| = 2 Cross-paradigm (LLM vs VLM) A7 |ΠRL  
+
+> A
+
+| = 2 ρ baseline ( nB = 2 ) Sanity check (trained vs random) 
+
+A.2 Cooperative Heterogeneous Teams 
+
+The second set of configurations examines intra-team heterogeneity by mixing paradigms within ateam. These configurations test whether an LLM or VLM agent ( λLLM or ψVLM ) can effectively cooperate with a frozen RL policy ¯πRL that was trained without any partner model. Table 5: Cooperative configurations for N = 4 agents with nA = nB = 2 . All RL policies are trained solo ( N = 1 , see Appendix A.3) and frozen before deployment. Configurations C1-C4 test LLM teammates; C5-C8 test VLM teammates. 
+
+Config.Team A Composition Team B Composition Research Question 
+
+C1 |ΠRL  
+
+> A
+
+| = 1 , |ΛLLM  
+
+> A
+
+| = 1 |ΠRL  
+
+> B
+
+| = 1 , ρ baseline Does λLLM outperform ρ as teammate? C2 |ΠRL  
+
+> A
+
+| = 1 , |ΛLLM  
+
+> A
+
+| = 1 |ΠRL  
+
+> B
+
+| = 1 , ν baseline Does λLLM actively con-tribute? C3 |ΠRL  
+
+> A
+
+| = 1 , |ΨVLM  
+
+> A
+
+| = 1 |ΠRL  
+
+> B
+
+| = 1 , ρ baseline Does ψVLM outperform ρ as teammate? C4 |ΠRL  
+
+> A
+
+| = 1 , |ΨVLM  
+
+> A
+
+| = 1 |ΠRL  
+
+> B
+
+| = 1 , ν baseline Does ψVLM actively con-tribute? C5 |ΠRL  
+
+> A
+
+| = 2 |ΠRL  
+
+> B
+
+| = 2 Solo-pair baseline (no co-training) C6 |ΠRL  
+
+> A
+
+| = 1 , |ΛLLM  
+
+> A
+
+| = 1 |ΠRL  
+
+> B
+
+| = 2 (co-trained) Can zero-shot LLM teaming match co-training? C7 |ΠRL  
+
+> A
+
+| = 1 , |ΨVLM  
+
+> A
+
+| = 1 |ΠRL  
+
+> B
+
+| = 2 (co-trained) Can zero-shot VLM teaming match co-training? C8 |ΠRL  
+
+> A
+
+| = 1 , |ΛLLM  
+
+> A
+
+| = 1 |ΠRL  
+
+> B
+
+| = 1 , |ΨVLM  
+
+> B
+
+| = 1 LLM vs VLM as heteroge-neous teammates 
+
+Configurations C1-C2 and C3-C4 test whether LLM and VLM agents can serve as effective teammates for frozen RL policies, respectively. C5 serves as the fair comparison baseline: two inde-13 pendently trained solo experts paired at evaluation time. C6-C7 compare zero-shot cross-paradigm teaming against co-trained RL teams. C8 directly compares LLM and VLM agents as teammates within heterogeneous teams. These configurations distinguish four possible outcomes for cross-paradigm cooperation: (a) The RL agent dominates and the LLM/VLM contributes negligibly (performance ≈ C1/C3 with ρ baseline); (b) The LLM/VLM agent dominates and the RL agent contributes negligibly (symmetric to case (a)); (c) True synergy emerges, where the heterogeneous team outperforms both homogeneous baselines; or (d) Interference occurs, where paradigm mis-match degrades performance below both homogeneous baselines. 
+
+A.3 Solo-to-Team Transfer Design 
+
+A critical design choice underpins all cooperative configurations. Let πRL  
+
+> i
+
+denote an RL policy training in a single-agent environment ( N = 1 ). At evaluation time, these policies are frozen .Parameters θi remain fixed, and we denote them as ¯πRL  
+
+> i
+
+to emphasize that no further learning occurs. A set of nRL such frozen policies {¯πRL  
+
+> i
+
+}nRL  
+
+> i=1
+
+is deployed alongside nLLM language model agents {λLLM  
+
+> j
+
+}nLLM  
+
+> j=1
+
+, nVLM vision-language model agents {ψVLM  
+
+> k
+
+}nVLM  
+
+> k=1
+
+, and nH human operators 
+
+{hm}nH
+
+> m=1
+
+, with N = nRL + nLLM + nVLM + nH total agents, without any fine-tuning .This design eliminates the co-training confound . If RL agents were instead trained via N -agent multi-agent RL (e.g., MAPPO self-play), their policies πRL  
+
+> i
+
+(· | oi; θi) would encode implicit partner models calibrated against other MAPPO agents sharing the same observation space ORL = Rd.Replacing such a partner with an LLM/VLM agent ( λLLM  
+
+> j
+
+or ψVLM  
+
+> k
+
+) that receives observations 
+
+oj ∈ O LLM = Σ ∗ or ok ∈ O VLM = Σ ∗ ×RH×W ×C would conflate two distinct variables: the paradigm difference and the partner distribution mismatch. By training agents in isolation ( N = 1 ), each ¯πRL 
+
+> i
+
+carries zero partner expectations, cleanly isolating the paradigm variable as the sole experimental factor. 
+
+A.4 Distinction from Zero-Shot Coordination 
+
+Ad hoc teamwork (AHT) [24] addresses the problem of designing agents capable of collaborating with previously unseen teammates without prior coordination. Mirsky et al. [20] formalize AHT under three core assumptions: (i) no prior coordination protocol exists between agents, (ii) the learner has no control over teammate policies, and (iii) all teammates share a cooperative objective. Zero-shot coordination (ZSC) [8] further specializes this setting by requiring agents trained independently to coordinate at test time without adaptation; the focus is on producing robust policies via self-play or population-based training [30]. Recent work has generalized AHT to N agents (NAHT) [29], where an arbitrary subset of controlled agents must cooperate with remaining uncontrolled teammates whose number and type may vary dynamically. Rahman et al. [23] formalize the open variant via the Open Stochastic Bayesian Game (OSBG), permitting team composition to vary between episodes under partial observability. 14 Table 6: Formal comparison between zero-shot coordination (ZSC) and cross-paradigm transfer. Let ΠRL , ΛLLM , ΨVLM , and H denote the sets of frozen RL policies, LLM agents, VLM agents, and human operators, respectively. 
+
+Zero-Shot Coordination Cross-Paradigm Transfer Partner identity Unknown but intra-paradigm: 
+
+∀i, j : paradigm (πi) =
+
+paradigm (πj )
+
+Unknown and cross-paradigm: 
+
+∃i, j : paradigm (πi)̸ =
+
+paradigm (πj )
+
+Observation space Homogeneous: ∀i, j : Oi = Oj = Rd Heterogeneous: ORL , OLLM , OVLM ,
+
+OH distinct. 
+
+Action space Homogeneous: ∀i, j : Ai = Aj = A Paradigm-specific with parsing: RL outputs a ∈ A ; LLM/VLM outputs 
+
+t ∈ Σ∗ with ϕ(t) ∈ A 
+
+Training regime Multi-agent self-play or population-based training with N ≥ 2
+
+Solo single-agent training ( N = 1 ); zero partner model 
+
+Comparison base-line 
+
+Co-trained team: {πRL  
+
+> i
+
+}Ni=1 trained jointly via MARL Solo-trained team: {¯πRL  
+
+> i
+
+}Ni=1 each trained independently (config. C3) 
+
+Research question Can πRL  
+
+> i
+
+generalize to unseen πRL 
+
+> j
+
+from same paradigm? Can λLLM /ψVLM serve as ad hoc partner for frozen ¯πRL from differ-ent paradigm? 
+
+Our cross-paradigm transfer design is related to, but formally distinct from, both ZSC and AHT. Table 6 provides a systematic comparison. In ZSC, the coordination challenge arises from agents sharing identical interfaces but lacking joint training history [8, 30]. In our cross-paradigm setting, the challenge is fundamentally deeper: part-ners are not only unseen but operate through qualitatively different decision-making mechanisms. Formally, ZSC assumes all agents share observation and action spaces (∀i, j : Oi = Oj , Ai = Aj )
+
+and differ only in learned parameters θi̸ = θj . In contrast, MOSAIC’s cross-paradigm setting admits agents i, j such that Oi̸ = Oj and paradigm (πi)̸ = paradigm (πj ), where paradigm (·) ∈{RL , LLM , VLM , Human } denotes the decision-making mechanism. The appropriate comparison baseline also differs fundamentally. In ZSC, the reference is a co-trained RL team where policies were jointly optimized via multi-agent RL algorithms. In our design, the fair reference is configuration C3 (Table 5): N independently solo-trained experts {¯πRL  
+
+> i
+
+}Ni=1 
+
+paired at evaluation time, since no agent was ever trained with any partner. This baseline isolates the paradigm variable by ensuring that neither homogeneous nor heterogeneous teams benefit from co-training. Wang et al. [29] observe that “current approaches to learning cooperative multi-agent behaviours assume relatively restrictive settings.” We extend this observation by noting that prior work further assumes all agents share the same decision-making paradigm. MOSAIC lifts this restriction by providing infrastructure to compose teams from ΠRL ∪ ΛLLM ∪ ΨVLM ∪ H and evaluate them under shared random seeds with unified telemetry, enabling the first systematic study of cross-paradigm cooperation. 
+
+# B Related Cross-Paradigm Frameworks 
+
+Recent work has begun exploring the intersection of RL and LLM agents. We discuss the closest related platforms and distinguish Mosaic from them. 15 Game Reasoning Arena [4]. This framework enables systematic comparisons between LLM-based agents, RL agents, heuristic agents, and random agents through OpenSpiel board games. While it supports multiple agent types, it focuses on assessing LLM reasoning capabilities rather than cross-paradigm comparison. Unlike Mosaic , Game Reasoning Arena lacks a visual-first GUI for real-time comparison, does not support deterministic evaluation with shared seeds across paradigms, and is restricted to OpenSpiel board and matrix games rather than the 26 diverse en-vironment families supported by Mosaic . Furthermore, it does not provide the IPC-based worker protocol that enables heterogeneous observation spaces ( ORL ̸ = OLLM ̸ = OH). 
+
+CREW [34]. CREW facilitates Human-AI teaming research with real-time human-guided RL agents, supporting multimodal human physiological signal recording and parallel sessions. How-ever, CREW focuses on human-guided RL training rather than cross-paradigm comparison: it does not integrate LLM/VLM agents and is designed specifically for human-in-the-loop RL rather than comparing RL, LLM, and human decision-makers under identical conditions. 
+
+LLM-PySC2 [15]. This environment extends StarCraft II for LLM agents with the complete pysc2 action space and multi-agent collaboration capabilities. However, LLM-PySC2 does not support human players in the same environment, is limited to the StarCraft II domain without spanning multiple environment families, and primarily evaluates LLM decision-making rather than enabling systematic cross-paradigm comparison. Table 7: Comparison with cross-paradigm frameworks. Mosaic is the only platform combining RL, LLM, and Human agents with a visual GUI and deterministic cross-paradigm evaluation.                                
+
+> Game Reasoning CREW LLM-PySC2 MOSAIC Arena
+> RL Agents ✓✓✓✓
+> LLM/VLM Agents ✓×✓✓
+> Human Agents ◦✓×✓
+> Platform GUI ×××✓
+> Cross-Paradigm Eval ×××✓
+> Shared Seeds ×××✓
+> Environment Families 1 (OpenSpiel) 41 (SC2) 26 total; 8 cross-paradigm
+
+Note: Empirical results for the adversarial and cooperative configurations described above will be presented in a forthcoming companion paper. 16

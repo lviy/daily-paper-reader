@@ -1,0 +1,602 @@
+Title: Robustness of Agentic AI Systems via Adversarially-Aligned Jacobian Regularization
+
+URL Source: https://arxiv.org/pdf/2603.04378v1
+
+Published Time: Thu, 05 Mar 2026 02:31:51 GMT
+
+Number of Pages: 12
+
+Markdown Content:
+# Robustness of Agentic AI Systems via Adversarially-Aligned Jacobian Regularization 
+
+## Furkan Mumcu, Yasin Yilmaz 
+
+## University of South Florida  
+
+> {furkan, yasiny }@usf.edu
+
+# Abstract 
+
+As Large Language Models (LLMs) transition into autonomous multi-agent ecosystems, robust minimax training becomes essential yet remains prone to instability when highly non-linear policies induce extreme local curvature in the inner maximization. Standard remedies that enforce global Jacobian bounds are overly conservative, suppressing sensitivity in all directions and inducing a large Price of Robustness . We introduce Adversarially-Aligned Jacobian Regularization (AAJR), a trajectory-aligned approach that controls sensitivity strictly along adversarial ascent directions. We prove that AAJR yields a strictly larger admissible policy class than global constraints under mild conditions, implying a weakly smaller approximation gap and reduced nominal performance degradation. Furthermore, we derive step-size conditions under which AAJR controls effective smoothness along optimization trajectories and ensures inner-loop stability. These results provide a structural theory for agentic robustness that decouples minimax stability from global expressivity restrictions. 
+
+# 1. Introduction 
+
+The deployment of Large Language Models (LLMs) is rapidly shifting from isolated, single-turn interactions to autonomous, multi-agent ecosystems. In these environments, agents must not only optimize for localized tasks but also maintain stability against adversarial shifts, competing objectives, and system-level congestion. To guarantee worst-case performance and system robustness, training these agents can naturally be formulated as a minimax optimization problem [ 14 , 25 ]. However, while minimax frameworks provide rigorous theoretical guarantees in convex settings, scaling them to highly non-linear systems like deep neural networks introduces profound optimization challenges. A primary bottleneck in training robust agentic systems via gradient-based minimax learners is the instability of Gradient Descent-Ascent (GDA). Because deep neural networks are highly expressive, unconstrained internal propagation dynamics can allow the inner maximization loop (the adversary) to encounter regions of extreme local curvature, leading to limit cycles or divergence. To secure convergence, traditional stabilization methods such as spectral normalization or standard adversarial training, implicitly or explicitly enforce a global bound on the network’s local Lipschitz constant, typically by limiting the spectral norm of the state-action Jacobian across the state domain. While such global constraints can stabilize the minimax learner, they introduce a trade-off commonly described as the 
+
+Price of Robustness [ 3 ]. By globally choking sensitivity, the model’s admissible hypothesis class is severely restricted. This strictly increases the approximation gap relative to the unconstrained policy class, embedding a structural Price of Robustness in exchange for worst-case stability. Existing literature often treats this trade-off as an unavoidable consequence of adversarial robustness [22, 28]. In this work, we challenge the necessity of this strict trade-off. We argue that global Jacobian constraints are inherently overly pessimistic: the inner maximization loop does not exploit the entire state space uniformly, but instead follows localized ascent trajectories that expose directions of maximum vulnerability. Consequently, suppressing sensitivity in all orthogonal, task-relevant directions can be mathematically unnecessary for GDA stability and destructive to nominal expressivity. 1
+
+> arXiv:2603.04378v1 [cs.LG] 4 Mar 2026
+
+This limitation becomes particularly pronounced in autonomous agentic systems operating in interactive environments. Global sensitivity constraints have historically provided reasonable robustness–utility trade-offs for standard predictive models. Passive predictors can tolerate globally restricted input sensitivity because their outputs do not directly influence future states. In contrast, agentic systems must continuously adapt their actions within dynamic, shared environments. Enforcing uniform global bounds on state sensitivity therefore restricts responsiveness across all directions of the state space, effectively shrinking the admissible policy class. As a result, the resulting Price of Robustness becomes especially severe for agentic systems, where expressive and context-dependent behavior is essential for coordination and planning. To bridge internal propagation dynamics and minimax stability, we introduce Adversarially-Aligned Jacobian Regularization 
+
+(AAJR). Rather than enforcing a rigid global Lipschitz bound, AAJR adaptively suppresses sensitivity strictly along adversarial ascent directions induced by the inner maximization procedure. This directional perspective decouples inner-loop stability from global expressivity restrictions. Our theory establishes (i) an expressivity gain via strict hypothesis class expansion under mild conditions, and (ii) stability of the inner maximization dynamics via trajectory-wise curvature control and explicit step-size conditions. The main contributions of this paper are as follows: • Bottleneck Formalization for Agentic Minimax Learning: We formalize the expressivity versus stability tension in gradient-based minimax training for agentic systems by showing that global Jacobian control restricts the admissible policy class and induces a Price of Robustness in nominal risk. • Trajectory-Aligned Sensitivity Control: We propose Adversarially-Aligned Jacobian Regularization (AAJR), which suppresses state sensitivity only along adversarial ascent directions generated by the inner maximization, rather than enforcing a global Jacobian bound. • Expressivity Guarantee via Class Expansion: We introduce a trajectory-adaptive hypothesis class induced by directional constraints and prove that the globally constrained class is strictly contained in it, implying a weakly smaller approximation gap and thus a reduced Price of Robustness relative to global sensitivity control. • Optimization Guarantees for Inner Maximization Stability: Under our standing smoothness assumptions, we show that bounding adversarially-aligned Jacobian amplification yields an explicit bound on the effective smoothness of the inner objective along projected gradient ascent iterates, and we derive step-size conditions ensuring stable inner-loop dynamics that avoid curvature-driven divergence. 
+
+# 2. Preliminaries 
+
+In this section, we establish the notation and foundational concepts regarding empirical risk minimization, minimax optimization, and the mathematical properties governing sensitivity of non-linear systems. 
+
+2.1. Notation and Multi-Agent Objective 
+
+For agent i, let D be a distribution over an environment state space S ⊂ Rd and a peer action/context space A−i. We consider an autonomous agent parameterized by a deep neural network policy πθ : S → A with weights θ ∈ Θ, where A is the agent’s action space. The standard goal of learning in this context is to find nominal parameters θ∗ 
+
+> nom
+
+that minimize the expected system-level loss (e.g., negative aggregate utility) L:
+
+θ∗ 
+
+> nom
+
+= arg min  
+
+> θ∈Θ
+
+E(s,a −i)∼D 
+
+L(πθ (s), a −i). (1) When D is unknown, the expectation is typically approximated by an empirical average over a finite sample of environment states and peer interactions. 
+
+2.2. Minimax Optimization and GDA Dynamics 
+
+In multi-agent environments requiring robustness against worst-case environmental shifts or adversarial perturbations δ ∈ ∆
+
+(where ∆ = {δ ∈ Rd : ∥δ∥p ≤ ϵ}), the standard nominal objective is insufficient. A common robust objective is the following minimax problem: 
+
+min  
+
+> θ∈Θ
+
+E(s,a −i)∼D 
+
+h
+
+max  
+
+> δ∈∆
+
+L πθ (s + δ), a −i
+
+i
+
+. (2) 2In this agentic setting, s represents the agent’s observation of the environment state (e.g., current resource availability) and a−i encapsulates the multi-agent context, including the observable actions or demands of peer agents. Crucially, an adversarial perturbation δ mathematically represents a systemic shock to the shared state (e.g., a sudden, destabilizing spike in peer demand) rather than a standard text-level adversarial prompt. Correspondingly, L is a system-level objective induced by the agent’s behavior, such as negative aggregate utility −U sys (πθ (s), a −i) or system instability. Thus, the inner maximization corresponds to worst-case state shifts that degrade overall system outcomes. This objective is typically optimized using Gradient Descent-Ascent (GDA) or its variants (e.g., Projected Gradient Descent for the inner loop) [ 20 , 21 , 26 ]. The inner maximization step plays the role of the adversary or worst-case environment, taking projected gradient ascent steps with respect to δ (equivalently, with respect to the perturbed state s + δ). The outer minimization step plays the role of the agent, taking gradient descent steps with respect to the policy parameters θ.
+
+2.3. Lipschitz Continuity and the Policy Jacobian 
+
+For a non-linear system such as a deep neural network policy, the behavior of the inner maximization loop is governed by how sensitively the agent’s actions respond to small state variations. A policy πθ is L-Lipschitz continuous with respect to the ℓ2-norm if there exists a constant L ≥ 0 such that for all s1, s 2 ∈ S :
+
+∥πθ (s1) − πθ (s2)∥2 ≤ L∥s1 − s2∥2. (3) If πθ is differentiable, then for any convex set S one has the standard bound 
+
+sup 
+
+> s∈S
+
+∥J(θ, s )∥2 ≤ L, (4) where J(θ, s ) = ∇sπθ (s) is the state-action Jacobian. In particular, bounding sup s∈S ∥J(θ, s )∥2 provides a sufficient condition for ℓ2-Lipschitz continuity on S, which mathematically limits the extent to which small environmental shocks cascade into massive shifts in the agent’s behavior. 
+
+# 3. Problem Formulation 
+
+We formalize the central bottleneck in robust learning for agentic systems trained via gradient-based min-max procedures: ensuring stability of the inner maximization dynamics without globally restricting the policy class and incurring a large nominal performance penalty. 
+
+3.1. Stability Requirement and Global Sensitivity Control 
+
+We study robust training objectives of the form 
+
+min  
+
+> θ∈Θ
+
+E(s,a −i)∼D 
+
+h
+
+max  
+
+> δ∈∆
+
+L πθ (s + δ), a −i
+
+i
+
+, (5) typically optimized by Gradient Descent-Ascent (GDA) or Projected Gradient Ascent (PGA/PGD) in the inner loop. In highly non-linear policies, the inner maximization can exhibit oscillation or divergence when local curvature along the ascent trajectory is large, making the overall min-max training unstable. In agentic settings, such instability can manifest as large swings in an agent’s actions under small state shifts, potentially cascading into system-level failures. A common stabilization approach enforces a global bound on state sensitivity by constraining the operator norm of the state-action Jacobian: 
+
+sup 
+
+> s∈S
+
+∥Jθ (s)∥2 ≤ γ, (6) where Jθ (s) := ∇sπθ (s) and γ > 0 is a global sensitivity budget. Such bounds are sufficient (though generally conservative) for limiting worst-case amplification of state perturbations and, in turn, stabilizing gradient-based inner maximization. 
+
+3.2. Globally Constrained Policy Class 
+
+Let F denote the unconstrained policy class. The global constraint (6) induces the restricted class 
+
+Fγ =
+
+n
+
+π ∈ F : sup 
+
+> s∈S
+
+∥Jπ (s)∥2 ≤ γ
+
+o
+
+. (7) 3As robustness requirements increase (e.g., larger perturbation radius ϵ in ∆), practical procedures often require stronger sensitivity control, which strictly reduces the volume of the admissible class Fγ and mathematically forces a larger lower bound on the nominal approximation gap. 
+
+3.3. Price of Robustness 
+
+We quantify this degradation via the nominal risk 
+
+Rnom (π) = E(s,a −i)∼D 
+
+L(π(s), a −i), (8) and define the Price of Robustness induced by global sensitivity control as the approximation gap 
+
+T (γ) = inf 
+
+> π∈F γ
+
+Rnom (π) − inf  
+
+> π∈F
+
+Rnom (π). (9) Intuitively, smaller γ yields a more restrictive class Fγ and tends to increase T (γ).
+
+Core bottleneck. Global Jacobian control can stabilize the inner maximization but may be overly pessimistic, suppressing sensitivity in directions that are irrelevant to adversarial ascent and thereby increasing T (γ). This motivates seeking stability guarantees that depend only on trajectory-relevant directions induced by the inner maximization dynamics. 
+
+3.4. Standing Assumptions 
+
+We state the conditions under which we develop our theoretical guarantees. 
+
+Assumption 1 (Loss smoothness) . For each multi-agent context a−i, the function z 7 → L (z, a −i) is LL-smooth in the ℓ2
+
+norm. That is, for all actions z1, z 2 ∈ A , the gradient ∇z L satisfies the Lipschitz condition: 
+
+∥∇ z L(z1, a −i) − ∇ z L(z2, a −i)∥2 ≤ LL∥z1 − z2∥2 (10) 
+
+Assumption 2 (Differentiable policy) . The policy πθ is differentiable in s for all θ ∈ Θ and s ∈ S , with Jacobian 
+
+Jθ (s) = ∇sπθ (s).
+
+Assumption 3 (Bounded second-order term along PGA iterates) . Along the line segments between the inner-loop PGA iterates {δt}Kt=0 , the policy’s second-order contribution to the inner objective curvature is bounded by a constant C ≥ 0.Specifically, letting z = πθ (s + δ), we assume the spectral norm of the residual Hessian term satisfies: 
+
+X
+
+> j
+
+∂L(z, a −i)
+
+∂z j
+
+∇2 
+
+> δ
+
+πθ,j (s + δ)
+
+> 2
+
+≤ C
+
+for all δ ∈ [δt, δ t+1 ] and t = 0 , . . . , K − 1.
+
+Assumption 4 (Compact perturbation set and finite inner steps) . The perturbation set ∆ is compact and convex, and the inner maximization uses K < ∞ projected gradient steps with step size η > 0.These assumptions are standard in nonconvex minimax analysis [ 13 , 14 , 23 ] and allow us to relate stability of the inner maximization to Jacobian-controlled propagation dynamics along adversarial trajectories. 
+
+# 4. Directional Jacobian Constraints for Structural Agentic Robustness 
+
+Section 3 showed that stabilizing minimax learning via a global Jacobian bound can be overly conservative: it restricts the hypothesis class and can increase the Price of Robustness T (γ). We now introduce a trajectory-aligned alternative that controls sensitivity only along adversarial ascent directions induced by the inner maximization dynamics. 
+
+4.1. Adversarial Ascent Trajectories and Directional Sensitivity 
+
+Fix a policy πθ and a sample (s, a −i) ∼ D . Consider K steps of projected gradient ascent in the perturbation space ∆:
+
+δ0 = 0 , δt+1 = Π ∆
+
+
+
+δt + η∇δ L(πθ (s + δt), a −i)
+
+
+
+, t = 0 , . . . , K − 1. (11) 4where η > 0 is the step size and Π∆ denotes projection onto ∆. To evaluate the policy’s sensitivity purely along this trajectory, we isolate the normalized ascent direction: 
+
+ut = ∇δ L(πθ (s + δt), a −i)
+
+∥∇ δ L(πθ (s + δt), a −i)∥2 + ε0
+
+, ε0 > 0. (12) By definition, ∥ut∥2 ≤ 1. The resulting adversarial perturbation after K steps is δ⋆ := δK . Our central object is the 
+
+directional Jacobian amplification along the ascent directions: 
+
+∥Jθ (s + δt) ut∥2 . (13) Instead of globally bounding ∥Jθ (s)∥2, we impose a trajectory-aligned directional budget :
+
+∥Jθ (s + δt) ut∥2 ≤ γadv , t = 0 , . . . , K − 1, (14) where γadv > 0 controls amplification only in directions that the inner maximization actually exploits. 
+
+4.2. Adaptive Hypothesis Class and Price-of-Robustness Implications 
+
+Let {δt(s, a −i; π)}Kt=0 be the deterministic PGA iterates generated by (11) applied to δ 7 → L (π(s + δ), a −i), with directions 
+
+{ut(s, a −i; π)} defined by (12). We define the trajectory-adaptive policy class as 
+
+Fad (γadv ) = 
+
+n
+
+π ∈ F : ∥Jπ (s + δt) ut(s, a −i; π)∥2 ≤ γadv , ∀t = 0 , . . . , K − 1, D-a.e. (s, a −i)
+
+o
+
+. (15) Recall the globally constrained class 
+
+Fγ =
+
+n
+
+π ∈ F : sup 
+
+> s∈S
+
+∥Jπ (s)∥2 ≤ γ
+
+o
+
+. (16) 
+
+Proposition 1 (Global constraints imply directional constraints) . If π ∈ F γ and γ ≤ γadv , then π ∈ F ad (γadv ).
+
+Proof sketch. For any unit vector u, ∥Jπ (x)u∥2 ≤ ∥ Jπ (x)∥2. Since ∥ut∥2 ≤ 1 by construction, the global bound implies (14) along the trajectory. □
+
+As a consequence, for γ ≤ γadv we have 
+
+Fγ ⊆ F ad (γadv ) ⊆ F . (17) Define the corresponding approximation gaps: 
+
+T (γ) = inf 
+
+> π∈F γ
+
+Rnom (π) − inf  
+
+> π∈F
+
+Rnom (π), Tad (γadv ) = inf   
+
+> π∈F ad (γadv )
+
+Rnom (π) − inf  
+
+> π∈F
+
+Rnom (π). (18) The inclusion (17) implies 
+
+Tad (γadv ) ≤ T (γ). (19) In Section 5, we provide conditions under which the inclusion Fγ ⊊ Fad (γadv ) is strict, yielding a strictly improved robustness-expressivity trade-off. 
+
+4.3. A Practical Surrogate: Adversarially-Aligned Jacobian Regularization 
+
+The constraint (14) motivates a tractable regularizer that penalizes directional Jacobian amplification along the inner-loop ascent trajectory. Given PGA iterates {δt}Kt=0 and ascent directions {ut}K−1 
+
+> t=0
+
+, define 
+
+RAAJR (θ; s, a −i) = 1
+
+K
+
+> K−1
+
+X
+
+> t=0
+
+∥Jθ (s + δt) stopgrad( ut)∥22 . (20) We then consider the regularized robust objective 
+
+min  
+
+> θ∈Θ
+
+E(s,a −i)∼D 
+
+h
+
+max  
+
+> δ∈∆
+
+L(πθ (s + δ), a −i) + λ RAAJR (θ; s, a −i)
+
+i
+
+, (21) where λ ≥ 0 controls the strength of trajectory-aligned sensitivity suppression. The stopgrad( ·) operator indicates that gradients are not backpropagated through {ut}, yielding a stable first-order surrogate analogous to standard adversarial training. 5Agentic interpretation. In agentic systems, L captures system-level performance induced by an agent’s actions in a multi-agent context (e.g., aggregate utility or stability). Although RAAJR acts on an individual agent’s internal propagation through Jθ , the directions {ut} are determined by ascent on the system loss L. Thus AAJR suppresses sensitivity only along directions that most degrade system outcomes under worst-case shifts, rather than globally across all state directions. 
+
+# 5. Theoretical Guarantees 
+
+We provide formal guarantees for trajectory-aligned directional Jacobian control. First, we show that replacing a global Jacobian constraint with a trajectory-aligned directional constraint expands the admissible policy class, yielding a (weakly) smaller approximation gap and thus a lower Price of Robustness. Second, under the standing assumptions of Section 3.4, we show that the directional constraint upper bounds the effective smoothness of the inner maximization objective along the PGA iterates, which controls curvature growth and stabilizes the inner-loop dynamics. 
+
+5.1. Expressivity: Class Expansion and Price-of-Robustness 
+
+Recall the globally constrained class Fγ in (16) and the trajectory-adaptive class Fad (γadv ) in (15). 
+
+Theorem 1 (Class inclusion and strict expansion) . Fix γ > 0 and choose γadv = γ. Then 
+
+Fγ ⊆ F ad (γ).
+
+Moreover, the inclusion is strict, Fγ ⊊ Fad (γ), whenever the ascent directions induced by the inner maximization do not span all directions on a set of positive D-measure; concretely, if there exists a set E with D(E) > 0 such that for all 
+
+(s, a −i) ∈ E and all t ∈ { 0, . . . , K − 1},
+
+ut(s, a −i; π) ∈ U ⊊ R d for some fixed proper subspace U, 
+
+then there exists a policy π ∈ F ad (γ) with π / ∈ F γ .Proof. Inclusion. Let π ∈ F γ . Then for all x ∈ S and all unit vectors v, ∥Jπ (x)v∥2 ≤ ∥ Jπ (x)∥2 ≤ γ. Since ∥ut∥2 ≤ 1 by construction, it follows that along any PGA trajectory, ∥Jπ (s + δt)ut∥2 ≤ γ for all t, hence π ∈ F ad (γ).
+
+Strictness (construction). Assume the ascent directions lie in a fixed proper subspace U ⊊ R d on a set E of positive measure. Let PU be the orthogonal projector onto U and PU ⊥ onto its orthogonal complement. Consider a (local) Jacobian of the form 
+
+J = γ P U + M P U ⊥ , with M > γ. 
+
+Then for any u ∈ U with ∥u∥2 ≤ 1, we have Ju = γu and thus ∥Ju ∥2 ≤ γ, while ∥J∥2 = M > γ because J amplifies vectors in U ⊥ by a factor M . Therefore, any policy whose Jacobian equals J on the relevant states satisfies the directional constraints along all ascent directions (hence belongs to Fad (γ)) but violates the global constraint (hence is not in Fγ ). This proves strict inclusion. 
+
+Corollary 1 (Price-of-robustness ordering) . For γadv = γ, define T (γ) and Tad (γ) as in (18) . Then 
+
+Tad (γ) ≤ T (γ).
+
+Proof. Immediate from Fγ ⊆ F ad (γ) and the definitions of the infima. 
+
+5.2. Stability: Trajectory-wise Effective Smoothness of the Inner Objective 
+
+Fix (s, a −i) and define the inner objective 
+
+g(δ) := L(πθ (s + δ), a −i).
+
+Let {δt}Kt=0 be the PGA iterates in (11) with ascent directions {ut} in (12) . We now show that bounding directional Jacobian amplification along the update trajectory controls the directional curvature of g along the iterates .
+
+Theorem 2 (Trajectory-wise effective directional smoothness) . Under Assumptions 1-4, let vt = ( δt+1 − δt)/∥δt+1 − δt∥2
+
+be the normalized update direction (for δt+1 ̸ = δt). Suppose additionally that the directional amplification constraint holds along the line segment between iterates: 
+
+∥Jθ (s + δ) vt∥2 ≤ γadv , ∀δ ∈ [δt, δ t+1 ], t = 0 , . . . , K − 1.
+
+6Then the inner objective g has bounded directional curvature along the PGA trajectory in the sense that 
+
+v⊤ 
+
+> t
+
+∇2 
+
+> δ
+
+g(δ)vt ≤ Leff , ∀δ ∈ [δt, δ t+1 ],
+
+with 
+
+Leff ≤ LL γ2adv + C, 
+
+where C is the bound from Assumption 3. Consequently, this bounds the effective smoothness along the step, ensuring 
+
+g(δt+1 ) ≥ g(δt) + ⟨∇ g(δt), δ t+1 − δt⟩ − Leff  
+
+> 2
+
+∥δt+1 − δt∥22, which controls step-size-induced curvature amplification. Proof. By the chain rule, 
+
+∇δ g(δ) = Jθ (s + δ)⊤∇z L(z, a −i), z = πθ (s + δ).
+
+Differentiating again yields the Hessian 
+
+∇2 
+
+> δ
+
+g(δ) = J⊤∇2 
+
+> z
+
+L(z, a −i) J + X
+
+> j
+
+∂L
+
+∂z j
+
+∇2 
+
+> δ
+
+πθ,j (s + δ).
+
+For any unit vector v, the directional curvature is given by the quadratic form v⊤∇2 
+
+> δ
+
+g(δ)v. Bounding the dominant term yields: 
+
+v⊤J⊤∇2 
+
+> z
+
+L Jv ≤ ∥∇ 2 
+
+> z
+
+L∥ 2 ∥Jv ∥22 ≤ LL ∥Jv ∥22.
+
+Applying this with v = vt and using our segment-wise assumption ∥Jv t∥2 ≤ γadv bounds the dominant term along the update direction by LLγ2adv . Assumption 3 bounds the remaining second-order term’s contribution along the iterates by C.Combining these yields 
+
+v⊤ 
+
+> t
+
+∇2 
+
+> δ
+
+g(δ)vt ≤ LLγ2adv + C
+
+for all δ ∈ [δt, δ t+1 ]. By Taylor’s theorem, this directional curvature bound implies the claimed trajectory-wise smoothness inequality, providing the necessary foundation for step-size stability in the ascent loop. 
+
+5.3. Optimization Stability of the Inner Maximization 
+
+We now show that trajectory-wise effective smoothness implies stability of the projected gradient ascent (PGA) dynamics under an appropriate step size. 
+
+Theorem 3 (Stability of PGA under Directional Jacobian Control) . Let g(δ) = L(πθ (s + δ), a −i), and let {δt}Kt=0 be generated by projected gradient ascent 
+
+δt+1 = Π ∆
+
+ δt + η∇δ g(δt).
+
+Suppose the conditions of Theorem 2 hold, so that along the line segment between iterates, the directional curvature is bounded by Leff ≤ LLγ2adv + C.If the step size satisfies 
+
+0 < η ≤ 1
+
+Leff 
+
+,
+
+then the PGA iterates satisfy: 1. Directional gradient control: Let vt = ( δt+1 − δt)/∥δt+1 − δt∥2. The change in the gradient strictly along the update direction is bounded: 
+
+v⊤
+
+> t
+
+ ∇δ g(δt+1 ) − ∇ δ g(δt) ≤ Leff ∥δt+1 − δt∥2,
+
+preventing curvature-induced divergence along the actual trajectory. 2. Monotone ascent (up to projection effects): 
+
+g(δt+1 ) ≥ g(δt) + η
+
+2 ∥∇ δ g(δt)∥22,
+
+whenever δt+1 lies in the interior of ∆.
+
+73. Trajectory stability: The iterates remain bounded within ∆, and monotonic growth ensures no oscillatory divergence driven by local curvature can occur along the ascent trajectory. Proof. By Theorem 2, g has bounded directional curvature Leff along the segment [δt, δ t+1 ]. By Taylor’s theorem, this implies the directional ascent lemma holds: 
+
+g(δt+1 ) ≥ g(δt) + ⟨∇ g(δt), δ t+1 − δt⟩ − Leff 
+
+2 ∥δt+1 − δt∥22. (22) Now use the defining property of Euclidean projection onto a closed convex set: since δt+1 = Π ∆(δt + η∇g(δt)) , we have for all y ∈ ∆,
+
+⟨δt + η∇g(δt) − δt+1 , y − δt+1 ⟩ ≤ 0. (23) Choosing y = δt ∈ ∆ in (23) yields 
+
+⟨δt + η∇g(δt) − δt+1 , δ t − δt+1 ⟩ ≤ 0,
+
+which rearranges to 
+
+⟨∇ g(δt), δ t+1 − δt⟩ ≥ 1
+
+η ∥δt+1 − δt∥22. (24) Substituting (24) into (22) gives 
+
+g(δt+1 ) ≥ g(δt) + 
+
+ 1
+
+η − Leff 
+
+2
+
+
+
+∥δt+1 − δt∥22.
+
+If 0 < η ≤ 1/L eff , then ηL eff ≤ 1, hence 
+
+1
+
+η − Leff 
+
+2 = 12η + 1 − ηL eff 
+
+2η ≥ 12η .
+
+Therefore, 
+
+g(δt+1 ) ≥ g(δt) + 12η ∥δt+1 − δt∥22. (25) If δt+1 is in the interior of ∆, the projection acts as the identity, meaning δt+1 − δt = η∇g(δt). Substituting this into (25) yields 
+
+g(δt+1 ) ≥ g(δt) + η
+
+2 ∥∇ g(δt)∥22,
+
+establishing monotone ascent for the projected update. Finally, let dt := δt+1 − δt and (when dt̸ = 0 ) define vt := dt/∥dt∥2. By the fundamental theorem of calculus applied along the segment δt + τ d t, we have 
+
+∇g(δt+1 ) − ∇ g(δt) = 
+
+Z 10
+
+∇2g(δt + τ d t) dt dτ, 
+
+and therefore 
+
+v⊤
+
+> t
+
+ ∇g(δt+1 ) − ∇ g(δt) = ∥dt∥2
+
+Z 10
+
+v⊤ 
+
+> t
+
+∇2g(δt + τ d t) vt dτ. 
+
+Since v⊤ 
+
+> t
+
+∇2g(δ) vt ≤ Leff for all δ, it follows that 
+
+v⊤
+
+> t
+
+ ∇g(δt+1 ) − ∇ g(δt) ≤ Leff ∥δt+1 − δt∥2,
+
+confirming directional gradient control. Boundedness of {δt} is immediate from δt ∈ ∆ for all t and compactness of ∆
+
+(Assumption 4), completing the stability claim. 86. Discussion and Pathways to Scalable Implementation 
+
+Our theoretical analysis establishes that Adversarially-Aligned Jacobian Regularization (AAJR) strictly expands the admissible policy class and stabilizes inner-loop dynamics. Translating these structural guarantees from continuous state spaces to the training of transformer-based agents outlines a clear roadmap for future empirical research and identifies specific frontiers in optimization and model architecture. 
+
+High-Rank Adversarial Subspaces and PEFT. While Parameter-Efficient Fine-Tuning (PEFT) methods like Low-Rank Adaptation (LoRA) [ 9] mitigate memory constraints, they introduce structural limitations regarding robustness. Adversarial perturbations and their resulting trajectory-aligned sensitivities frequently span high-rank subspaces. LoRA forces weight updates into a low-rank bottleneck, restricting the capacity of the model to adjust its directional Jacobian Jθ (s + δt)ut;indeed, recent theoretical analysis confirms that LoRA training provably converges to such low-rank minima [ 11 ]. This suggests that future agentic defense mechanisms must explore high-rank adapters or full-rank fine-tuning strategies to provide the mathematical degrees of freedom necessary to suppress sensitivity along adversarial ascent directions without affecting orthogonal task-relevant directions. 
+
+Hypothesis Class Capacity and Environmental Complexity. Quantifying the Price of Robustness requires environments that satisfy a specific complexity threshold. In elementary low-dimensional settings such as 2D continuous control the baseline hypothesis class F is inherently restricted. Consequently the gap between the globally constrained class Fγ and the adaptive class Fad (γadv ) becomes negligible. Future empirical validation must therefore target regimes where the hypothesis class is sufficiently expressive to manifest the nominal performance degradation that necessitates AAJR while avoiding the empirical brittleness associated with the massive embedding spaces of LLM agents. 
+
+Gradient Propagation and Memory Efficiency. The practical surrogate RAAJR relies on isolating the normalized ascent direction ut derived from Projected Gradient Ascent (PGA). Executing this currently requires unrolling the inner maximization loop. In deep architectures unrolling PGA iterates and passing gradients through the computation graph via reverse-mode automatic differentiation induces significant memory overhead and numerical instability. Addressing these constraints offers a compelling case for investigating forward-mode automatic differentiation or implicit differentiation techniques to stabilize this nested optimization process without prohibitive computational costs. 
+
+Benchmarks for Adversarial Dynamics. Valid empirical verification requires benchmarks beyond merely chaining LLMs in benign cooperative settings. Current evaluations often prioritize task completion in static environments which fail to trigger the worst-case propagation dynamics analyzed here. The theoretical instabilities we identify manifest primarily under active system-level pressure. Future benchmarks must therefore explicitly simulate hostile environmental shifts and resource congestion to properly evaluate trajectory-aligned regularizers like AAJR. These considerations indicate that while AAJR provides a sound structural theory for agentic robustness its application to trillion-parameter models will likely drive advancements in efficient differentiation algorithms and high-rank parameter-efficient adapters. 
+
+# 7. Related Work 
+
+Adversarial attacks and robustness. Deployed learning systems are vulnerable to worst-case distribution shifts and adversarial manipulations that can induce large behavioral changes from small input perturbations [ 17 , 15 , 4 , 14 , 5]. This motivates training objectives that explicitly reason about worst-case perturbations and provide stability guarantees under adversarial conditions. 
+
+The rise of agentic AI. LLMs are increasingly used not only as passive predictors but as agents that plan, act, and interact with other agents and shared environments. In multi-agent deployments, local decisions can couple through the environment, creating emergent failure modes such as feedback loops, congestion, and collective instability [ 24 , 12 , 8, 18 , 19 , 2]. These settings motivate robustness notions that are system-level and dynamic, not merely per-instance robustness. 
+
+Adversarial robustness and stability control. A large body of work studies adversarial robustness through minimax training and regularization schemes that control sensitivity, including Lipschitz [ 6] or Jacobian-based stabilization [ 10 ] and related gradient penalties [ 7]. These methods often target worst-case amplification by imposing global constraints on the model’s input sensitivity, which can improve stability but may reduce expressive capacity. In contrast, although empirical benchmarks for agentic risks are emerging, the problem of system-level robustness where risks propagate dynamically through multi-turn tool execution and planning, remains comparatively understudied [27, 1]. 9Inference-time alignment and social weighting. An alternative line of work addresses system-level failures in multi-agent settings via inference-time interventions that modify decision rules without changing the underlying model parameters. [ 16 ]for example, interpolate between private utility and approximate welfare to mitigate congestion and tragedy-of-the-commons behavior. These methods can be highly efficient and avoid training instabilities, but they are complementary to approaches that aim to stabilize the training dynamics of minimax learners. Our approach targets intrinsic stability by shaping directional propagation during learning, which can coexist with inference-time heuristics. 
+
+# 8. Conclusion 
+
+As large language models transition into autonomous, interacting agents, securing robustness against adversarial shifts and system-level congestion becomes increasingly important. Minimax formulations provide a principled way to reason about worst-case behavior, but in highly non-linear networks the inner maximization can be numerically brittle: gradient-based ascent is sensitive to curvature and can become unstable in practice. A common workaround is to enforce strict global smoothness (e.g., via global Lipschitz or Jacobian control), yet these blunt constraints mathematically suppress task-relevant expressivity, forcing a strictly larger approximation gap and formalizing the structural Price of Robustness This work argues that such global restrictions are not necessary to obtain stable adversarial training dynamics. By examining how perturbations propagate during minimax optimization, we highlight that worst-case adversarial updates evolve along localized, low-dimensional trajectories. Building on this observation, we introduce Adversarially-Aligned Jacobian Regularization (AAJR), which penalizes sensitivity only along the direction induced by the worst-case perturbation, while leaving orthogonal directions comparatively unconstrained. We provide theoretical guarantees showing that replacing a global Jacobian/Lipschitz constraint with an adversarially-aligned directional constraint strictly enlarges the admissible hypothesis class ( Fγ ⊂ F adaptive ). This enlargement implies that, for a fixed level of robustness, AAJR can retain more nominal capacity than globally constrained alternatives, thereby mitigating the Price of Robustness. Moreover, by directly controlling curvature along the adversarial trajectory , AAJR improves the stability of the inner maximization dynamics that drive adversarial training. Looking forward, directionally targeted stability offers a path toward continuously adapting agentic systems without sacrificing agent-level utility. While inference-time interventions can be efficient for static deployments, AAJR integrates robustness into the training process itself, which enables models to adapt under non-stationarity. However, our analysis suggests that the full realization of AAJR in large-scale ecosystems requires moving beyond current optimization constraints. Future work will explore the development of high-rank adaptation mechanisms that bypass the bottlenecks of low-rank methods like LoRA, alongside the investigation of more efficient Jacobian-vector product (JVP) estimation to stabilize unrolled minimax training in massive embedding spaces. By combining these engineering advancements with trajectory-aligned regularization, it becomes possible to produce defense-in-depth architectures that maintain both worst-case stability and high-fidelity nominal performance in complex multi-agent ecosystems. 
+
+# References 
+
+[1] Maksym Andriushchenko and Nicolas Flammarion. Agentharm: A benchmark for measuring harmfulness of LLM agents. In International Conference on Learning Representations (ICLR) , 2025. [2] Peter Belcak, Greg Heinrich, Shizhe Diao, Yonggan Fu, Xin Dong, Saurav Muralidharan, Yingyan Celine Lin, and Pavlo Molchanov. Small language models are the future of agentic ai. arXiv preprint arXiv:2506.02153 , 2025. [3] Dimitris Bertsimas and Melvyn Sim. The price of robustness. Operations research , 52(1):35–53, 2004. [4] Francesco Croce and Matthias Hein. Reliable evaluation of adversarial robustness with an ensemble of diverse parameter-free attacks. In International conference on machine learning , pages 2206–2216. PMLR, 2020. [5] Ian J Goodfellow, Jonathon Shlens, and Christian Szegedy. Explaining and harnessing adversarial examples. arXiv preprint arXiv:1412.6572 , 2014. [6] Henry Gouk, Eibe Frank, Bernhard Pfahringer, and Michael J Cree. Regularisation of neural networks by enforcing Lipschitz continuity. Machine Learning , 110(2):393–416, 2021. [7] Ishaan Gulrajani, Faruk Ahmed, Martin Arjovsky, Vincent Dumoulin, and Aaron Courville. Improved training of Wasserstein GANs. In Advances in Neural Information Processing Systems (NeurIPS) , volume 30, 2017. 10 [8] Sirui Hong, Mingchen Zhuge, Jonathan Chen, Xiawu Zheng, Yuheng Cheng, Jinlin Wang, Ceyao Zhang, Zili Wang, Steven Ka Shing Yau, Zijuan Lin, et al. Metagpt: Meta programming for a multi-agent collaborative framework. In 
+
+The twelfth international conference on learning representations , 2023. [9] Edward J Hu, Yelong Shen, Phillip Wallis, Zeyuan Allen-Zhu, Yuanzhi Li, Shean Wang, Liang Wang, Weizhu Chen, et al. Lora: Low-rank adaptation of large language models. Iclr , 1(2):3, 2022. [10] Daniel Jakubovitz and Raja Giryes. Improving DNN robustness to adversarial attacks using Jacobian regularization. In Proceedings of the European Conference on Computer Vision (ECCV) , pages 514–529, 2018. [11] Junsu Kim, Jaeyeon Kim, and Ernest K Ryu. Lora training provably converges to a low-rank global minimum or it fails loudly (but it probably won’t fail). In International Conference on Machine Learning , pages 30224–30247. PMLR, 2025. [12] Guohao Li, Hasan Hammoud, Hani Itani, Dmitrii Khizbullin, and Bernard Ghanem. Camel: Communicative agents for” mind” exploration of large language model society. Advances in Neural Information Processing Systems , 36: 51991–52008, 2023. [13] Tianyi Lin, Chi Jin, and Michael Jordan. On gradient descent ascent for nonconvex-concave minimax problems. In 
+
+International conference on machine learning , pages 6083–6093. PMLR, 2020. [14] Aleksander Madry, Aleksandar Makelov, Ludwig Schmidt, Dimitris Tsipras, and Adrian Vladu. Towards deep learning models resistant to adversarial attacks. In International Conference on Learning Representations , 2018. [15] Furkan Mumcu and Yasin Yilmaz. Sequential architecture-agnostic black-box attack design and analysis. Pattern Recognition , 147:110066, 2024. [16] Furkan Mumcu and Yasin Yilmaz. Socially-weighted alignment: A game-theoretic framework for multi-agent llm systems. arXiv preprint arXiv:2602.14471 , 2026. [17] Furkan Mumcu, Keval Doshi, and Yasin Yilmaz. Adversarial machine learning attacks against video anomaly detection systems. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 206–213, 2022. [18] Furkan Mumcu, Michael J Jones, Anoop Cherian, and Yasin Yilmaz. Llm-guided agentic object detection for open-world understanding. arXiv preprint arXiv:2507.10844 , 2025. [19] Furkan Mumcu, Lokman Bekit, Michael J Jones, Anoop Cherian, and Yasin Yilmaz. Agentic ai-empowered dynamic survey framework. arXiv preprint arXiv:2602.04071 , 2026. [20] Maher Nouiehed, Maziar Sanjabi, Tianjian Huang, Jason D Lee, and Meisam Razaviyayn. Solving a class of non-convex min-max games using iterative first order methods. Advances in Neural Information Processing Systems , 32, 2019. [21] Aman Sinha, Hongseok Namkoong, and John Duchi. Certifying some distributional robustness with principled adversarial training. In International Conference on Learning Representations , 2018. [22] Dimitris Tsipras, Shibani Santurkar, Logan Engstrom, Alexander Turner, and Aleksander Madry. Robustness may be at odds with accuracy. In International Conference on Learning Representations , 2018. [23] Jingkang Wang, Tianyun Zhang, Sijia Liu, Pin-Yu Chen, Jiacen Xu, Makan Fardad, and Bo Li. Adversarial attack generation empowered by min-max optimization. Advances in Neural Information Processing Systems , 34:16020– 16033, 2021. [24] Qingyun Wu, Gagan Bansal, Jieyu Zhang, Yiran Wu, Beibin Li, Erkang Zhu, Li Jiang, Xiaoyun Zhang, Shaokun Zhang, Jiale Liu, et al. Autogen: Enabling next-gen llm applications via multi-agent conversations. In First Conference on Language Modeling , 2024. [25] Sophie Xhonneux, Alessandro Sordoni, Stephan G ¨unnemann, Gauthier Gidel, and Leo Schwinn. Efficient adversarial training in llms with continuous attacks. Advances in Neural Information Processing Systems , 37:1502–1530, 2024. [26] Wenhan Xian, Feihu Huang, Yanfu Zhang, and Heng Huang. A faster decentralized algorithm for nonconvex minimax problems. Advances in Neural Information Processing Systems , 34:25865–25877, 2021. 11 [27] Weichen Yu, Kai Hu, Tianyu Pang, Chao Du, Min Lin, and Matt Fredrikson. Infecting LLM agents via generalizable adversarial attack. In Advances in Neural Information Processing Systems (NeurIPS) , 2024. [28] Hongyang Zhang, Yaodong Yu, Jiantao Jiao, Eric Xing, Laurent El Ghaoui, and Michael Jordan. Theoretically principled trade-off between robustness and accuracy. In International conference on machine learning , pages 7472–7482. PMLR, 2019. 12
