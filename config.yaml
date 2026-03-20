@@ -25,3 +25,38 @@ subscriptions:
     stage: A
     diff_threshold_pct: 15
   keyword_recall_mode: or
+  intent_profiles:
+    - tag: AG RL
+      description: 寻找Agentic RL（智能体强化学习）相关的学术论文
+      enabled: true
+      keywords:
+        - keyword: Agentic RL
+          keyword_cn: 智能体强化学习
+          query: Agentic Reinforcement Learning
+        - keyword: LLM Agent RL
+          keyword_cn: 基于大语言模型的强化学习智能体
+          query: Large Language Model based agents in reinforcement learning
+        - keyword: Autonomous Agents
+          keyword_cn: 自主智能体强化学习
+          query: Autonomous agents using reinforcement learning frameworks
+        - keyword: Agentic Workflow
+          keyword_cn: 智能体工作流强化学习
+          query: Agentic workflows and reinforcement learning optimization
+        - keyword: Multi-Agent RL
+          keyword_cn: 多智能体强化学习
+          query: Multi-agent reinforcement learning for agentic systems
+        - keyword: Self-evolving Agents
+          keyword_cn: 自进化智能体
+          query: Self-evolving agents via reinforcement learning
+      intent_queries:
+        - query: State of the art in Agentic Reinforcement Learning
+          query_cn: 智能体强化学习的最前沿研究
+          enabled: true
+          source: manual
+          note: ''
+        - query: Frameworks for building agentic systems with RL
+          query_cn: 构建强化学习智能体系统的框架
+          enabled: true
+          source: manual
+          note: ''
+      updated_at: '2026-03-20T02:40:49.793Z'
