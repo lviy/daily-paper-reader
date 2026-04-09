@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "extractor": "pdffigures2",
+  "figures": [
+    {
+      "url": "assets/figures/arxiv/2604.05336v1/fig-001.webp",
+      "caption": "Figure 4: Pass rate on τ2-Bench and ToolSandBox with scaling the number of rollouts.",
+      "page": 10,
+      "index": 1,
+      "width": 829,
+      "height": 304
+    },
+    {
+      "url": "assets/figures/arxiv/2604.05336v1/fig-002.webp",
+      "caption": "Figure 1: Overview of TRACE, an end-to-end system for automated environment-specific agent self-improvement. TRACE automatically identifies the specific capabilities that an agent lacks and synthesizes targeted training environments for each capability.",
+      "page": 2,
+      "index": 2,
+      "width": 748,
+      "height": 348
+    }
+  ]
+}
