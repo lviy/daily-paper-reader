@@ -1,0 +1,94 @@
+{
+  "version": 2,
+  "extractor": "pdffigures2",
+  "figures": [
+    {
+      "url": "assets/figures/arxiv/2603.10910v1/fig-001.webp",
+      "caption": "Table 1: Training Recipe for GLM-OCR across different stages.",
+      "page": 6,
+      "index": 1,
+      "width": 818,
+      "height": 206
+    },
+    {
+      "url": "assets/figures/arxiv/2603.10910v1/fig-002.webp",
+      "caption": "Table 2: Reward function design in Stage 4 RL training.",
+      "page": 6,
+      "index": 2,
+      "width": 824,
+      "height": 201
+    },
+    {
+      "url": "assets/figures/arxiv/2603.10910v1/fig-003.webp",
+      "caption": "Figure 4: Example of GLM-OCR Text Recognition.",
+      "page": 11,
+      "index": 3,
+      "width": 826,
+      "height": 400
+    },
+    {
+      "url": "assets/figures/arxiv/2603.10910v1/fig-004.webp",
+      "caption": "Figure 5: Example of GLM-OCR Table Recognition.",
+      "page": 11,
+      "index": 4,
+      "width": 826,
+      "height": 473
+    },
+    {
+      "url": "assets/figures/arxiv/2603.10910v1/fig-005.webp",
+      "caption": "Table 3: Performance comparison of various OCR models. The results of Gemini-3-Pro and GPT5.2-2025-12-11 are in gray as they are provided for reference only and excluded from the best-score ranking. The best results among the evaluated models are highlighted in bold.",
+      "page": 7,
+      "index": 5,
+      "width": 818,
+      "height": 268
+    },
+    {
+      "url": "assets/figures/arxiv/2603.10910v1/fig-006.webp",
+      "caption": "Figure 3: Example of GLM-OCR SDK for complex document parsing.",
+      "page": 10,
+      "index": 6,
+      "width": 826,
+      "height": 365
+    },
+    {
+      "url": "assets/figures/arxiv/2603.10910v1/fig-007.webp",
+      "caption": "Figure 7: Example of GLM-OCR Key Information Extraction.",
+      "page": 13,
+      "index": 7,
+      "width": 826,
+      "height": 411
+    },
+    {
+      "url": "assets/figures/arxiv/2603.10910v1/fig-008.webp",
+      "caption": "Table 4: Performance comparison with pipeline tools, general VLMs and specialized VLMs on OmniDocBench v1.5.",
+      "page": 8,
+      "index": 8,
+      "width": 827,
+      "height": 521
+    },
+    {
+      "url": "assets/figures/arxiv/2603.10910v1/fig-009.webp",
+      "caption": "Table 5: Performance comparison on custom real-world scenarios. The results of Gemini-3-Pro and GPT-5.2-2025-12-11 are in gray as they are provided for reference only and excluded from the best-score ranking. The best results among the evaluated models are highlighted in bold.",
+      "page": 8,
+      "index": 9,
+      "width": 823,
+      "height": 334
+    },
+    {
+      "url": "assets/figures/arxiv/2603.10910v1/fig-010.webp",
+      "caption": "Figure 2: Overall architecture and workflow of the GLM-OCR framework. This system supports two primary tasks: Document Parsing (Task 1), which combines layout detection and region cropping to produce structured Markdown and JSON outputs; and Key Information Extraction (Task 2), which directly extracts structured JSON data based on input visual prompts.",
+      "page": 4,
+      "index": 10,
+      "width": 826,
+      "height": 308
+    },
+    {
+      "url": "assets/figures/arxiv/2603.10910v1/fig-011.webp",
+      "caption": "Figure 6: Example of GLM-OCR Formula Recognition.",
+      "page": 12,
+      "index": 11,
+      "width": 826,
+      "height": 379
+    }
+  ]
+}

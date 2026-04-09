@@ -1,0 +1,110 @@
+{
+  "version": 2,
+  "extractor": "pdffigures2",
+  "figures": [
+    {
+      "url": "assets/figures/arxiv/2603.27027v1/fig-001.webp",
+      "caption": "Figure 3: Confidence Routing Between Specialized Trees. The MathInstruct and ShareGPT checkpoints generate separate draft trees from the same prefix, with node labels indicating draft confidence. Confidence routing selects the tree with the higher mean node confidence before verification.",
+      "page": 6,
+      "index": 1,
+      "width": 1056,
+      "height": 370
+    },
+    {
+      "url": "assets/figures/arxiv/2603.27027v1/fig-002.webp",
+      "caption": "Figure 8: Acceptance by Speculative Depth. Acceptance rate is shown by draft depth for HASS and EAGLE-2 at temperatures 0 and 1 across MT-Bench, GSM8K, MATH-500, and SVAMP. Acceptance declines with depth for all variants, while domain specialization remains visible and often sharpens on reasoning-heavy tasks.",
+      "page": 11,
+      "index": 2,
+      "width": 1056,
+      "height": 954
+    },
+    {
+      "url": "assets/figures/arxiv/2603.27027v1/fig-003.webp",
+      "caption": "Table 3: EAGLE-2 Entropy at Temperature 0. Each row reports accepted-token and rejected-token entropy for one benchmark. Positive ∆ means higher entropy for rejected tokens.",
+      "page": 15,
+      "index": 3,
+      "width": 1033,
+      "height": 448
+    },
+    {
+      "url": "assets/figures/arxiv/2603.27027v1/fig-004.webp",
+      "caption": "Table 7: HASS Acceptance by Depth at Temperature 0. Higher rows correspond to shallower draft positions in the speculative tree.",
+      "page": 21,
+      "index": 4,
+      "width": 819,
+      "height": 804
+    },
+    {
+      "url": "assets/figures/arxiv/2603.27027v1/fig-005.webp",
+      "caption": "Figure 1: Schematic of the speculative decoding pipeline. Given contextual information from the target LLM, the draft model generates latent proposed tokens, which are converted by the LM head and sampling module into multiple candidate future tokens. These candidates are provisional and are later verified by the target model. Importantly, the trainable component in this framework is the draft model, whose role is to efficiently approximate the target model’s next-token behavior while preserving the target model’s final output distribution after verification.",
+      "page": 2,
+      "index": 5,
+      "width": 659,
+      "height": 956
+    },
+    {
+      "url": "assets/figures/arxiv/2603.27027v1/fig-006.webp",
+      "caption": "Figure 4: Merged Verification Tree. The MathInstruct and ShareGPT subtrees are packed under a shared root while preserving their internal ancestry. This lets the verifier evaluate both specialists in one pass and tests whether broader proposal coverage is more useful than selecting a single specialist.",
+      "page": 7,
+      "index": 6,
+      "width": 552,
+      "height": 248
+    },
+    {
+      "url": "assets/figures/arxiv/2603.27027v1/fig-007.webp",
+      "caption": "Figure 7: Accepted vs. Rejected Token Entropy. Both panels compare draft entropy at temperature 0 for EAGLE-2 and HASS on the same benchmark suite and checkpoint families. Entropy is a useful diagnostic of rejection, but Table 2 shows that it is weaker than confidence for routing.",
+      "page": 10,
+      "index": 7,
+      "width": 1056,
+      "height": 597
+    },
+    {
+      "url": "assets/figures/arxiv/2603.27027v1/fig-008.webp",
+      "caption": "Table 1: Main Results by Research Question. Average acceptance length on MT-Bench, GSM8K, MATH-500, and SVAMP for HASS and EAGLE-2 at temperatures 0 and 1. Rows are grouped by the question they answer: RQ1 tests single-domain specialization, RQ2 mixed-data robustness, and RQ3 composition strategies. Higher is better.",
+      "page": 8,
+      "index": 8,
+      "width": 1035,
+      "height": 463
+    },
+    {
+      "url": "assets/figures/arxiv/2603.27027v1/fig-009.webp",
+      "caption": "Table 5: EAGLE-2 Acceptance by Depth at Temperature 0. Higher rows correspond to shallower draft positions in the speculative tree.",
+      "page": 19,
+      "index": 9,
+      "width": 819,
+      "height": 804
+    },
+    {
+      "url": "assets/figures/arxiv/2603.27027v1/fig-010.webp",
+      "caption": "Figure 6: Interpolation Sweep for Checkpoint Averaging. Acceptance length is plotted against the interpolation weight between the MathInstruct and ShareGPT draft checkpoints under a fixed verifier setup. Weight-space averaging is unstable and remains well below the strongest inference-time composition methods.",
+      "page": 9,
+      "index": 10,
+      "width": 1056,
+      "height": 254
+    },
+    {
+      "url": "assets/figures/arxiv/2603.27027v1/fig-011.webp",
+      "caption": "Table 6: EAGLE-2 Acceptance by Depth at Temperature 1. Higher rows correspond to shallower draft positions in the speculative tree.",
+      "page": 20,
+      "index": 11,
+      "width": 819,
+      "height": 802
+    },
+    {
+      "url": "assets/figures/arxiv/2603.27027v1/fig-012.webp",
+      "caption": "Figure 2: Two strategies for combining specialized draft models. Left: checkpoint weight merging in parameter space. Right: confidence-based routing at inference time.",
+      "page": 5,
+      "index": 12,
+      "width": 1057,
+      "height": 426
+    },
+    {
+      "url": "assets/figures/arxiv/2603.27027v1/fig-013.webp",
+      "caption": "Table 4: HASS Entropy at Temperature 0. Each row reports accepted-token and rejected-token entropy for one benchmark. Positive ∆ means higher entropy for rejected tokens.",
+      "page": 16,
+      "index": 13,
+      "width": 1033,
+      "height": 448
+    }
+  ]
+}

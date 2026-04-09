@@ -1,0 +1,110 @@
+{
+  "version": 2,
+  "extractor": "pdffigures2",
+  "figures": [
+    {
+      "url": "assets/figures/arxiv/2603.19595v1/fig-001.webp",
+      "caption": "Figure 1. Comparison of prior works and All-Mem along real-time constraints, structural drift, and safe maintenance (traceability).",
+      "page": 1,
+      "index": 1,
+      "width": 494,
+      "height": 791
+    },
+    {
+      "url": "assets/figures/arxiv/2603.19595v1/fig-002.webp",
+      "caption": "Figure 3. Accuracy–tokens sweep on LONGMEMEVAL-S. Each point corresponds to a retrieval budget setting: All-Mem and AMEM vary (K, k, L), while MEM0 varies (K, k). The x-axis reports realized generator input tokens (all prompt tokens; mean over queries; excluding output tokens), and the y-axis reports F1.",
+      "page": 6,
+      "index": 2,
+      "width": 453,
+      "height": 325
+    },
+    {
+      "url": "assets/figures/arxiv/2603.19595v1/fig-003.webp",
+      "caption": "Figure 8. Offline maintenance diagnostics. Distribution of offline consolidation wall-clock time (a) and the realized turns between offline events (b), complementing Table 12.",
+      "page": 38,
+      "index": 3,
+      "width": 1009,
+      "height": 383
+    },
+    {
+      "url": "assets/figures/arxiv/2603.19595v1/fig-004.webp",
+      "caption": "Table 6. Local glossary for complexity/efficiency analysis (cf. Table 5).",
+      "page": 30,
+      "index": 4,
+      "width": 977,
+      "height": 360
+    },
+    {
+      "url": "assets/figures/arxiv/2603.19595v1/fig-005.webp",
+      "caption": "Figure 4. Stage-1 Top-k similarity retrieval latency vs. history length N . We compare cosine-similarity retrieval over cached embeddings for the full memory bank VN and the visible surface V+ N at consolidation checkpoints. Shaded regions denote interquartile ranges (p25–p75). Searching over V+ N yields consistently lower Stage-1 latency as N increases.",
+      "page": 7,
+      "index": 5,
+      "width": 465,
+      "height": 274
+    },
+    {
+      "url": "assets/figures/arxiv/2603.19595v1/fig-006.webp",
+      "caption": "Figure 5. Budgeted recoverability analysis. Coverage Cov(H) of archived units reachable within hop budget H over EN . The dashed line marks the hop budget achieving 95% coverage (H0.95 = 4); the median distance is H = 2.",
+      "page": 7,
+      "index": 6,
+      "width": 450,
+      "height": 306
+    },
+    {
+      "url": "assets/figures/arxiv/2603.19595v1/fig-007.webp",
+      "caption": "Table 11. Structure/Efficiency on LOCOMO and LONGMEMEVAL-S. Visible ratio |V+ N |/N and recoverability bound HN are computed on the directed typed-link graph. Mem-Lat is the memory-module latency (Stage 1–3, excluding generator inference) measured per query under the boundary in App. F.5.",
+      "page": 34,
+      "index": 7,
+      "width": 869,
+      "height": 244
+    },
+    {
+      "url": "assets/figures/arxiv/2603.19595v1/fig-008.webp",
+      "caption": "Table 10. Ablation on LOCOMO and LONGMEMEVAL-S. Answer quality: 4o-J/F1; retrieval: R@5/N@5. For LONGMEMEVAL-S, retrieval is session-level; we therefore interpret retrieval metrics together with QA (App. F.1).",
+      "page": 34,
+      "index": 8,
+      "width": 725,
+      "height": 275
+    },
+    {
+      "url": "assets/figures/arxiv/2603.19595v1/fig-009.webp",
+      "caption": "Figure 2. All-Mem framework. (a) Online/offline decoupling with id-level buffering. (b) ATC performs parallel diagnosis with confidencegating and non-destructive topology edits (SPLIT→MERGE→UPDATE) while preserving versioned traceability. (c) Topology-aware retrieval anchors on the visible surface, performs budgeted typed-link expansion, and selects final memories for the agent.",
+      "page": 3,
+      "index": 9,
+      "width": 835,
+      "height": 448
+    },
+    {
+      "url": "assets/figures/arxiv/2603.19595v1/fig-010.webp",
+      "caption": "Figure 6. Case study (Update + budgeted recovery). A user first states they tried three Korean restaurants (2023/08/11), then later updates the fact to four (2023/09/30). (a) Evidence units before consolidation. (b) Topology consolidation applies UPDATE: the newer unit remains on the visible surface V+ N while the superseded unit is archived, linked via version/sibling relations (typed edges in EN ). (c) Retrieval: Stage 1 anchors on V+ N find the current fact; Stage 2 expansion (hop-bounded) can recover archived predecessors when needed; Stage 3 re-ranking prioritizes the up-to-date evidence, yielding the correct answer (four) under a strict context budget.",
+      "page": 8,
+      "index": 10,
+      "width": 921,
+      "height": 479
+    },
+    {
+      "url": "assets/figures/arxiv/2603.19595v1/fig-011.webp",
+      "caption": "Table 9. Default hyperparameters used in main experiments.",
+      "page": 32,
+      "index": 11,
+      "width": 675,
+      "height": 224
+    },
+    {
+      "url": "assets/figures/arxiv/2603.19595v1/fig-012.webp",
+      "caption": "Table 5. Global notation used throughout the paper (body + key evaluation protocol).",
+      "page": 12,
+      "index": 12,
+      "width": 977,
+      "height": 1104
+    },
+    {
+      "url": "assets/figures/arxiv/2603.19595v1/fig-013.webp",
+      "caption": "Figure 7. Efficiency diagnostics (extended). (a) The searchable visible surface |V+ N | grows slower than the append-only reference |V+ N | = N ; vertical dashed lines denote offline consolidation (SLEEP) checkpoints. (b) Per-query runtime distributions for Stage 1/2/3 and total Mem-Lat. (c) Stage-1 anchoring time when searching over the full bank VN versus the visible surface V+ N at consolidation checkpoints (bands: p25–p75).",
+      "page": 37,
+      "index": 13,
+      "width": 1016,
+      "height": 903
+    }
+  ]
+}

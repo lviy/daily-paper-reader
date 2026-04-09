@@ -1,0 +1,38 @@
+{
+  "version": 2,
+  "extractor": "pdffigures2",
+  "figures": [
+    {
+      "url": "assets/figures/arxiv/2603.19133v1/fig-001.webp",
+      "caption": "Figure 1: Comparison between (a) Cloud autoregressive decoding, (b) Cloud speculative decoding, (c) Vanilla collaborative speculative decoding, and (d) PicoSpec.",
+      "page": 1,
+      "index": 1,
+      "width": 466,
+      "height": 339
+    },
+    {
+      "url": "assets/figures/arxiv/2603.19133v1/fig-002.webp",
+      "caption": "Figure 2: System Overview of PicoSpec Framework.",
+      "page": 3,
+      "index": 2,
+      "width": 508,
+      "height": 329
+    },
+    {
+      "url": "assets/figures/arxiv/2603.19133v1/fig-003.webp",
+      "caption": "Figure 3: Asynchronous Pipeline of PicoSpec. ❶ Parallel Drafting: After the first draft, we perform multiple Pre-Draft steps consecutively. The i-th Pre-Draft on the edge is executed simultaneously with the (i-1)-th Verification in the cloud. ❷ Fast Verification: When a verification failure occurs, we immediately trigger a Pre-Verifiy step, and the subsequent Verify step quickly returns the verification result of the first token. ❸ Overlapped Communication: The sending/receiving of data stream on the edge overlaps with Draft step.",
+      "page": 4,
+      "index": 3,
+      "width": 968,
+      "height": 383
+    },
+    {
+      "url": "assets/figures/arxiv/2603.19133v1/fig-004.webp",
+      "caption": "Figure 6: (Left) Vanilla rejection sampling & (Right) Ours",
+      "page": 5,
+      "index": 4,
+      "width": 458,
+      "height": 304
+    }
+  ]
+}

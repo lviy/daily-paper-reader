@@ -1,0 +1,118 @@
+{
+  "version": 2,
+  "extractor": "pdffigures2",
+  "figures": [
+    {
+      "url": "assets/figures/arxiv/2603.17573v1/fig-001.webp",
+      "caption": "Figure 6. System Implementation of HeiSD Framework",
+      "page": 6,
+      "index": 1,
+      "width": 498,
+      "height": 298
+    },
+    {
+      "url": "assets/figures/arxiv/2603.17573v1/fig-002.webp",
+      "caption": "Figure 14. Effect of database scaling on retrieval-only performance. Adding heterogeneous data from SimplerEnv does not improve success rate on LIBERO tasks while increasing storage costs.",
+      "page": 15,
+      "index": 2,
+      "width": 918,
+      "height": 289
+    },
+    {
+      "url": "assets/figures/arxiv/2603.17573v1/fig-003.webp",
+      "caption": "Figure 1. Overview of the Proposed HeiSD Framework",
+      "page": 2,
+      "index": 3,
+      "width": 1003,
+      "height": 302
+    },
+    {
+      "url": "assets/figures/arxiv/2603.17573v1/fig-004.webp",
+      "caption": "Table 3. Simulation Results of HeiSD",
+      "page": 7,
+      "index": 4,
+      "width": 496,
+      "height": 410
+    },
+    {
+      "url": "assets/figures/arxiv/2603.17573v1/fig-005.webp",
+      "caption": "Figure 13. 3D visualization of database embedding vectors using t-SNE (van der Maaten & Hinton, 2008) dimensionality reduction. Points are colored by task identity, showing clear clustering of trajectories from the same task.",
+      "page": 14,
+      "index": 5,
+      "width": 1008,
+      "height": 295
+    },
+    {
+      "url": "assets/figures/arxiv/2603.17573v1/fig-006.webp",
+      "caption": "Figure 18. Details of the Robot Arm.",
+      "page": 18,
+      "index": 6,
+      "width": 981,
+      "height": 296
+    },
+    {
+      "url": "assets/figures/arxiv/2603.17573v1/fig-007.webp",
+      "caption": "Figure 17. Our Tabletop Operation Environment.",
+      "page": 18,
+      "index": 7,
+      "width": 1004,
+      "height": 293
+    },
+    {
+      "url": "assets/figures/arxiv/2603.17573v1/fig-008.webp",
+      "caption": "Figure 12. Representative initial scenes from the four LIBERO subsets. From left to right: LIBERO-Spatial, LIBERO-Object, LIBEROGoal, and LIBERO-Long. These MuJoCo tabletop environments, manipulated by a 7-DoF Franka Panda arm, illustrate distribution shifts across spatial configurations, object instances,and goal specifications.",
+      "page": 13,
+      "index": 8,
+      "width": 981,
+      "height": 297
+    },
+    {
+      "url": "assets/figures/arxiv/2603.17573v1/fig-009.webp",
+      "caption": "Table 4. Real-World Results of HeiSD",
+      "page": 8,
+      "index": 9,
+      "width": 491,
+      "height": 247
+    },
+    {
+      "url": "assets/figures/arxiv/2603.17573v1/fig-010.webp",
+      "caption": "Figure 3. Adaptive Verify-Skip Mechanism",
+      "page": 4,
+      "index": 10,
+      "width": 496,
+      "height": 299
+    },
+    {
+      "url": "assets/figures/arxiv/2603.17573v1/fig-011.webp",
+      "caption": "Table 11. Task Categories and Examples",
+      "page": 19,
+      "index": 11,
+      "width": 1008,
+      "height": 273
+    },
+    {
+      "url": "assets/figures/arxiv/2603.17573v1/fig-012.webp",
+      "caption": "Figure 11. Common Structure of Vision-Language-Action Models.",
+      "page": 12,
+      "index": 12,
+      "width": 979,
+      "height": 299
+    },
+    {
+      "url": "assets/figures/arxiv/2603.17573v1/fig-013.webp",
+      "caption": "Figure 15. Distribution of retrieval confidence (cosine similarity scores) across the four LIBERO task suites. The consistently high scores (>0.90 for most queries) demonstrate the reliability of our constructed database for action retrieval.",
+      "page": 16,
+      "index": 13,
+      "width": 1008,
+      "height": 302
+    },
+    {
+      "url": "assets/figures/arxiv/2603.17573v1/fig-014.webp",
+      "caption": "Figure 16. Empirical distributions of Cumulative Spatial Displacement (D[w]) and Radius of Curvature (R[w]) across the four LIBERO task suites. The dashed lines indicate the 95th percentile thresholds used for normalization.",
+      "page": 16,
+      "index": 14,
+      "width": 1004,
+      "height": 299
+    }
+  ]
+}

@@ -1,0 +1,142 @@
+{
+  "version": 2,
+  "extractor": "pdffigures2",
+  "figures": [
+    {
+      "url": "assets/figures/arxiv/2603.16867v1/fig-001.webp",
+      "caption": "Table 1: Results of the main experiments. FT data indicates the finetuning dataset. The LoRA column specifies the adapter rank, or its absence for dense finetuning. LCB refers to LiveCodeBench, and HE denotes HumanEval. R1∗ corresponds to the R1-Distill-Qwen-7B model released by DeepSeek; we evaluated this model following our standardized evaluation protocol.",
+      "page": 6,
+      "index": 1,
+      "width": 933,
+      "height": 390
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16867v1/fig-002.webp",
+      "caption": "Figure 3: Impact of theSwitchermodule onMATH500. Left: Combinedmodel accuracy as the fraction of queries routed to the reasoning adapters. Right: Average completion length versus overall accuracy across different switcher thresholds.",
+      "page": 11,
+      "index": 2,
+      "width": 975,
+      "height": 321
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16867v1/fig-003.webp",
+      "caption": "Figure 9: Qualitative comparison on number theory reasoning. Text highlighted in red denotes redundant verification and verbal parsing, while bold text identifies essential reasoning steps. We use “[... ]” as a placeholder for brevity. Top: Prompt. Middle: The Baseline trace correctly identifies the property (p2) early on but falls into extensive, redundant verification loops checking composite numbers and re-listing primes (highlighted in red). Bottom: TheBudget Forced trace directly applies the prime-square property and computes the result without unnecessary hesitation or syntactic noise.",
+      "page": 43,
+      "index": 3,
+      "width": 979,
+      "height": 575
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16867v1/fig-004.webp",
+      "caption": "Figure 6: Qualitative comparison on algebraic simplification. Middle: The Baseline trace correctly identifies the difference of squares strategy immediately but engages in excessive self-verification, re-calculating the result via expansion, direct computation, and alternative factorizations. Bottom: The Budget Forced trace recognizes the nested difference of squares structure and executes the solution linearly without redundant checking.",
+      "page": 15,
+      "index": 4,
+      "width": 979,
+      "height": 598
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16867v1/fig-005.webp",
+      "caption": "Table 10: QuantizedW4A16KV8 basemodel (Qwen2.5-7B-Instruct) results. We report Wikitext perplexity, average 0-shot CSR, and 5-shotMMLU accuracies. ‘Lp ’ denotes the use ofLp range initialization,T= using the set ofmergeable transforms, ‘train’ = end-to-end training of transformation and quantization parameters.",
+      "page": 21,
+      "index": 5,
+      "width": 844,
+      "height": 227
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16867v1/fig-006.webp",
+      "caption": "Figure 8: Function-PreservingTransformations. We use4 transform types fromFPTQuant: scale-and-rotate transformTk merged into query and key, a per-channel scalerTu merged into up and down projection, andTv that consists of invertible matrices per headmerged into value andoutputweights, anda rotationmatrixTr for rotating residuals (sharedacross layers). After training of the transforms is complete, the transformation parameters from each ‘merge group’ are merged into the original model weights W.",
+      "page": 21,
+      "index": 6,
+      "width": 979,
+      "height": 269
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16867v1/fig-007.webp",
+      "caption": "Figure 1: Overview of the proposed efficient reasoning framework for edge devices. (a) The model architecture utilizes parameter-efficient LoRA adapters and a lightweight switcher to dynamically route queries. This design allows the base model and the reasoning-activated mode to seamlessly share a reusable KV cache during prefill. (b) Parallel test-time scaling strategy, generating multiple reasoning streams concurrently to improve accuracy without severe latency penalties. (c) The end-to-end deployment pipeline, illustrating the progression from multistage training (SFT and budget-forced RL) to quantization, model export, and final on-device execution.",
+      "page": 2,
+      "index": 7,
+      "width": 910,
+      "height": 374
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16867v1/fig-008.webp",
+      "caption": "Table 11: Quantized W4A16KV8 reasoning model results (Qwen2.5-7B-Instruct base). We report AIME24/25, MATH500, GPQA, and AMC23 accuracies (higher is better). N = number of OT data examples used for training reasoningmodule.",
+      "page": 22,
+      "index": 8,
+      "width": 960,
+      "height": 228
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16867v1/fig-009.webp",
+      "caption": "Figure 4: Average Completion Length Distributions. Left: Evaluation with a forced maximum completion length of 4K tokens. Right: Evaluation with a maximum of 6K tokens. Note that distribution tails extending below zero or above the maximum budget are standard artifacts of Kernel Density Estimation (KDE) curve smoothing. The progression from the baseline (purple) through the intermediate (blue) to the final RL fine-tuned checkpoint (green) demonstrates stable, progressive learning of concise generation (βKL = 10−3).",
+      "page": 14,
+      "index": 9,
+      "width": 976,
+      "height": 336
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16867v1/fig-010.webp",
+      "caption": "Figure 5: Average Completion Length Comparison. Left: C.D.F. of the average completion length for base model, orange curve, and RL fine-tuned one, green curve, with βKL = 1.e−3. We considered a maximum completion length of 6K.Right: Reduction in completion length from the RL fine-tunedmodel. We use the samemodels in the left plot. The RL fine tuned achieved average reduction length of 2.38± 0.07.",
+      "page": 14,
+      "index": 10,
+      "width": 976,
+      "height": 322
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16867v1/fig-011.webp",
+      "caption": "Table 14: GRPO Training Hyperparameters. All experiments share these settings unless otherwise noted.",
+      "page": 42,
+      "index": 11,
+      "width": 418,
+      "height": 348
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16867v1/fig-012.webp",
+      "caption": "Figure 2: Architecture of the Hybrid Reasoning Model. The pipeline begins with a compact base LLM, which is specialized for reasoning via LoRA-based supervised fine-tuning (SFT). To enforce concise generation and prevent excessive verbosity, these adapters undergo reinforcement learning (RL)withBudget Forcing. Finally, a lightweight Switcher module is introduced to act as a reasoning-needed classifier, creating a hybrid model that dynamically routes incoming queries to either the fast base model or the specialized reasoning adapters based on task complexity.",
+      "page": 3,
+      "index": 12,
+      "width": 964,
+      "height": 261
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16867v1/fig-013.webp",
+      "caption": "Table 9: Accuracy of our lightweight verifier weighted majority voting compared to majority voting without verifier and greedy decoding on MATH500. Themean and standard deviation are computed from 20 random draws from 16 independent 4bit-weight-quantized Qwen-2.5-7B-Instruct responses.",
+      "page": 18,
+      "index": 13,
+      "width": 876,
+      "height": 218
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16867v1/fig-014.webp",
+      "caption": "Table 12: Ablation results for Qwen2.5-3B-Instruct. LR denotes learning rate and BS stands for batch size. In each learning rate subgroup, the best performance is marked in bold.",
+      "page": 40,
+      "index": 14,
+      "width": 976,
+      "height": 1195
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16867v1/fig-015.webp",
+      "caption": "Figure 10: Qualitative comparison on pattern recognition. Middle: The Baseline trace correctly identifies the formula 2n − 1 initially but spends nearly 1000 tokens validating it against alternative arithmetic formulas (a + (n − 1)d ) and hypothetical user errors (confusing term number with value, testing n2, etc.). Bottom: The Budget Forced trace directly retrieves the formula and computes the specific term requested.",
+      "page": 44,
+      "index": 15,
+      "width": 979,
+      "height": 552
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16867v1/fig-016.webp",
+      "caption": "Table 13: Ablation results for Qwen2.5-7B-Instruct. LR denotes learning rate and BS stands for batch size. In each learning rate subgroup, the best performance is marked in bold.",
+      "page": 41,
+      "index": 16,
+      "width": 977,
+      "height": 1195
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16867v1/fig-017.webp",
+      "caption": "Figure 7: Qualitative comparisononmodular arithmetic. Middle: TheBaseline trace correctly computes the sum and remainder immediately but engages in extensive, redundant verification using four different methods (stepby-step addition, digit sum rule, pairing, and re-calculation). Bottom: The Budget Forced trace performs the direct calculation and returns the result without hesitation.",
+      "page": 16,
+      "index": 17,
+      "width": 979,
+      "height": 496
+    }
+  ]
+}

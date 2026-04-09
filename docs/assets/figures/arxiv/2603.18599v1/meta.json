@@ -1,0 +1,54 @@
+{
+  "version": 2,
+  "extractor": "pdffigures2",
+  "figures": [
+    {
+      "url": "assets/figures/arxiv/2603.18599v1/fig-001.webp",
+      "caption": "Figure 1. Analysis of acceptance lengths in SJD [22]. The speedup shown in (b) is derived entirely from additionally accepted tokens (acceptance length > 1).",
+      "page": 2,
+      "index": 1,
+      "width": 482,
+      "height": 760
+    },
+    {
+      "url": "assets/figures/arxiv/2603.18599v1/fig-002.webp",
+      "caption": "Table 1. Main results comparing our SJD-PAC method against baselines on acceleration and image quality. We report Step Compression (↑), wall-clock Latency speedup (↑), FID (↓), and CLIP-Score (↑) on the Lumina-mGPT and Emu3 models. Evaluations are conducted on the MS-COCO 2017 and PartiPrompts benchmarks. Bold indicates the highest speedups in each category.",
+      "page": 7,
+      "index": 2,
+      "width": 1036,
+      "height": 752
+    },
+    {
+      "url": "assets/figures/arxiv/2603.18599v1/fig-003.webp",
+      "caption": "Figure 2. High sensitivity of AR T2I models to token perturbations. Left: Original generation. Right: Replacing a single token (0.04% of total tokens) during the autoregressive process causes a severe visual artifact (red box).",
+      "page": 3,
+      "index": 3,
+      "width": 496,
+      "height": 473
+    },
+    {
+      "url": "assets/figures/arxiv/2603.18599v1/fig-004.webp",
+      "caption": "Figure 5. Qualitative Comparison. Images generated using various prompts from the MS-COCO dataset [13]. The outputs from our accelerated method (SJD-PAC) are visually indistinguishable from those of the baseline models, corroborating our lossless guarantee.",
+      "page": 8,
+      "index": 4,
+      "width": 1036,
+      "height": 293
+    },
+    {
+      "url": "assets/figures/arxiv/2603.18599v1/fig-005.webp",
+      "caption": "Figure 6. Qualitative comparison with lossy acceleration.",
+      "page": 8,
+      "index": 5,
+      "width": 496,
+      "height": 356
+    },
+    {
+      "url": "assets/figures/arxiv/2603.18599v1/fig-006.webp",
+      "caption": "Figure 4. Total Variation distance dTV for text and image generation with respect to the perturbation offset j.",
+      "page": 5,
+      "index": 6,
+      "width": 479,
+      "height": 265
+    }
+  ]
+}

@@ -1,0 +1,1310 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-04-09T06:08:04.858388+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 24,
+    "deep_cap": 6,
+    "deep_selected": 20,
+    "quick_candidates": 26,
+    "quick_skim_target": 11,
+    "quick_selected": 11
+  },
+  "deep_dive": [
+    {
+      "id": "2603.11243v1",
+      "source": "arxiv",
+      "title": "Self-Speculative Decoding for LLM-based ASR with CTC Encoder Drafts",
+      "abstract": "We propose self-speculative decoding for speech-aware LLMs by using the CTC encoder as a draft model to accelerate auto-regressive (AR) inference and improve ASR accuracy. Our three-step procedure works as follows: (1) if the frame entropies of the CTC output distributions are below a threshold, the greedy CTC hypothesis is accepted as final; (2) otherwise, the CTC hypothesis is verified in a single LLM forward pass using a relaxed acceptance criterion based on token likelihoods; (3) if verification fails, AR decoding resumes from the accepted CTC prefix. Experiments on nine corpora and five languages show that this approach can simultaneously accelerate decoding and reduce WER. On the HuggingFace Open ASR benchmark with a 1B parameter LLM and 440M parameter CTC encoder, we achieve a record 5.58% WER and improve the inverse real time factor by a factor of 4.4 with only a 12% relative WER increase over AR search. Code and model weights are publicly available under a permissive license.",
+      "authors": [
+        "George Saon",
+        "Samuel Thomas",
+        "Takashi Fukuda",
+        "Tohru Nagano",
+        "Avihu Dekel",
+        "Luis Lastras"
+      ],
+      "primary_category": "eess.AS",
+      "categories": [
+        "eess.AS"
+      ],
+      "published": "2026-03-11T19:10:50+00:00",
+      "link": "https://arxiv.org/pdf/2603.11243v1",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "self-speculative decoding for speech-aware LLMs",
+      "llm_evidence_cn": "语音感知LLM的自投机解码",
+      "llm_evidence": "语音感知LLM的自投机解码",
+      "canonical_evidence": "语音感知LLM的自投机解码",
+      "llm_tldr_en": "Uses CTC encoder as a draft model for self-speculative decoding to accelerate speech-aware LLM inference.",
+      "llm_tldr_cn": "使用CTC编码器作为草稿模型进行自投机解码，以加速语音感知LLM推理。",
+      "llm_tldr": "使用CTC编码器作为草稿模型进行自投机解码，以加速语音感知LLM推理。",
+      "llm_tags": [
+        "query:sd-llm"
+      ],
+      "matched_query_tag": "query:sd-llm",
+      "matched_query_text": "Speculative decoding for large language models",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.12617v1",
+      "source": "arxiv",
+      "title": "When Drafts Evolve: Speculative Decoding Meets Online Learning",
+      "abstract": "Speculative decoding has emerged as a widely adopted paradigm for accelerating large language model inference, where a lightweight draft model rapidly generates candidate tokens that are then verified in parallel by a larger target model. However, due to limited model capacity, drafts often struggle to approximate the target distribution, resulting in shorter acceptance lengths and diminished speedup. A key yet under-explored observation is that speculative decoding inherently provides verification feedback that quantifies the deviation between the draft and target models at no additional cost. This process naturally forms an iterative \"draft commits-feedback provides-draft adapts\" evolving loop, which precisely matches the online learning paradigm. Motivated by this connection, we propose OnlineSpec, a unified framework that systematically leverages interactive feedback to continuously evolve draft models. Grounded in dynamic regret minimization, we establish a formal link between online learning performance and speculative system's acceleration rate, and develop novel algorithms via modern online learning techniques, including optimistic online learning that adaptively reuses historical gradients as predictive update hints, and online ensemble learning that dynamically maintains multiple draft models. Our algorithms are equipped with theoretical justifications and improved acceleration rates, achieving up to 24% speedup over seven benchmarks and three foundation models.",
+      "authors": [
+        "Yu-Yang Qian",
+        "Hao-Cong Wu",
+        "Yichao Fu",
+        "Hao Zhang",
+        "Peng Zhao"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-03-13T03:44:27+00:00",
+      "link": "https://arxiv.org/pdf/2603.12617v1",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "speculative decoding with online learning for draft model adaptation",
+      "llm_evidence_cn": "结合在线学习的投机解码用于草稿模型自适应",
+      "llm_evidence": "结合在线学习的投机解码用于草稿模型自适应",
+      "canonical_evidence": "结合在线学习的投机解码用于草稿模型自适应",
+      "llm_tldr_en": "Integrates online learning with speculative decoding to allow draft models to evolve and better match target models.",
+      "llm_tldr_cn": "将在线学习与投机解码结合，使草稿模型能够不断进化以更好地匹配目标模型分布。",
+      "llm_tldr": "将在线学习与投机解码结合，使草稿模型能够不断进化以更好地匹配目标模型分布。",
+      "llm_tags": [
+        "query:sd-llm"
+      ],
+      "matched_query_tag": "query:sd-llm",
+      "matched_query_text": "Speculative decoding for large language models",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.14989v1",
+      "source": "arxiv",
+      "title": "MMSpec: Benchmarking Speculative Decoding for Vision-Language Models",
+      "abstract": "Vision-language models (VLMs) achieve strong performance on multimodal tasks but suffer from high inference latency due to large model sizes and long multimodal contexts. Speculative decoding has recently emerged as an effective acceleration technique, yet its behavior in VLMs remains insufficiently understood. We introduce MMSpec, the first benchmark for evaluating speculative decoding in vision-language models. MMSpec contains 600 multimodal samples across six task categories and integrates ten representative speculative decoding algorithms under a unified evaluation framework. Our study reveals three key findings: (1) methods designed for text-only LLMs degrade in multimodal scenarios, (2) vision awareness becomes increasingly important at larger batch sizes, and (3) throughput speedup alone does not reliably reflect latency performance. Motivated by these findings, we propose ViSkip, a plug-and-play speculative decoding method that dynamically adapts speculation to vision tokens and achieves state-of-the-art performance.",
+      "authors": [
+        "Hui Shen",
+        "Xin Wang",
+        "Ping Zhang",
+        "Yunta Hsieh",
+        "Qi Han",
+        "Zhongwei Wan",
+        "Ziheng Zhang",
+        "Jingxuan Zhang",
+        "Jing Xiong",
+        "Ziyuan Liu",
+        "Yifan Zhang",
+        "Hangrui Cao",
+        "Chenyang Zhao",
+        "Mi Zhang"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-03-16T08:55:42+00:00",
+      "link": "https://arxiv.org/pdf/2603.14989v1",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "benchmarking speculative decoding for vision-language models",
+      "llm_evidence_cn": "视觉语言模型投机解码的基准测试",
+      "llm_evidence": "视觉语言模型投机解码的基准测试",
+      "canonical_evidence": "视觉语言模型投机解码的基准测试",
+      "llm_tldr_en": "Introduces MMSpec, a benchmark to evaluate and analyze speculative decoding algorithms for vision-language models.",
+      "llm_tldr_cn": "引入MMSpec基准，用于评估和分析视觉语言模型中的投机解码算法。",
+      "llm_tldr": "引入MMSpec基准，用于评估和分析视觉语言模型中的投机解码算法。",
+      "llm_tags": [
+        "query:sd-llm"
+      ],
+      "matched_query_tag": "query:sd-llm",
+      "matched_query_text": "Performance evaluation of different speculative decoding frameworks",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.17573v1",
+      "source": "arxiv",
+      "title": "HeiSD: Hybrid Speculative Decoding for Embodied Vision-Language-Action Models with Kinematic Awareness",
+      "abstract": "Vision-Language-Action (VLA) Models have become the mainstream solution for robot control, but suffer from slow inference speeds. Speculative Decoding (SD) is a promising acceleration method which can be divided into two categories: drafter-based SD and retrieval-based SD. Existing methods fail to analyze the advantages and disadvantages of these two types of SD in VLA models, leading to their sole application or optimization. In this paper, we analyze the trajectory patterns of robots controlled by the VLA model and derive a key insight: the two types of SD should be used in a hybrid manner. However, achieving hybrid SD in VLA models poses several challenges: (1) draft rejection and persistent errors in retrieval-based SD; (2) difficulty in determining the hybrid boundary. To address these, we propose the HeiSD framework. We propose a retrieval-based SD optimization method in HeiSD,which contains a verify-skip mechanism and a sequence-wise relaxed acceptance strategy. Moreover, we proposed a kinematic-based fused metric in HeiSD to automatically determine the hybrid boundary. Experimental results demonstrate that HeiSD attains a speedup of up to 2.45x in simulation benchmarks and 2.06x~2.41x in real-world scenarios, while sustaining a high task success rate.",
+      "authors": [
+        "Zihao Zheng",
+        "Zhihao Mao",
+        "Sicheng Tian",
+        "Maoliang Li",
+        "Jiayu Chen",
+        "Xinhao Sun",
+        "Zhaobo Zhang",
+        "Xuanzhe Liu",
+        "Donggang Cao",
+        "Hong Mei",
+        "Xiang Chen"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.DB",
+        "cs.LG"
+      ],
+      "published": "2026-03-18T10:25:08+00:00",
+      "link": "https://arxiv.org/pdf/2603.17573v1",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "Hybrid speculative decoding for vision-language-action models",
+      "llm_evidence_cn": "视觉-语言-动作模型的混合投机解码",
+      "llm_evidence": "视觉-语言-动作模型的混合投机解码",
+      "canonical_evidence": "视觉-语言-动作模型的混合投机解码",
+      "llm_tldr_en": "Analyzes and combines drafter-based and retrieval-based speculative decoding for robot control VLA models.",
+      "llm_tldr_cn": "分析并结合了基于草稿模型和基于检索的投机解码，用于加速机器人控制模型推理。",
+      "llm_tldr": "分析并结合了基于草稿模型和基于检索的投机解码，用于加速机器人控制模型推理。",
+      "llm_tags": [
+        "query:sd-llm:composite"
+      ],
+      "matched_query_tag": "query:sd-llm:composite",
+      "matched_query_text": "Papers central to 关于投机解码（Speculative Decoding）的学术论文检索, especially work that connects or combines: M; d; Speculative decoding for large language models; Accelerating LLM inference using speculative decoding; Eagle: Speculative decoding with context-aware draft models; State of the art speculative decoding methods for LLMs; Survey of speculative decoding techniques for inference optimization; Performance evaluation of different speculative decoding frameworks.",
+      "matched_requirement_id": "req-composite-sd-llm",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.18567v1",
+      "source": "arxiv",
+      "title": "SpecForge: A Flexible and Efficient Open-Source Training Framework for Speculative Decoding",
+      "abstract": "Large language models incur high inference latency due to sequential autoregressive decoding. Speculative decoding alleviates this bottleneck by using a lightweight draft model to propose multiple tokens for batched verification. However, its adoption has been limited by the lack of high-quality draft models and scalable training infrastructure. We introduce SpecForge, an open-source, production-oriented framework for training speculative decoding models with full support for EAGLE-3. SpecForge incorporates target-draft decoupling, hybrid parallelism, optimized training kernels, and integration with production-grade inference engines, enabling up to 9.9x faster EAGLE-3 training for Qwen3-235B-A22B. In addition, we release SpecBundle, a suite of production-grade EAGLE-3 draft models trained with SpecForge for mainstream open-source LLMs. Through a systematic study of speculative decoding training recipes, SpecBundle addresses the scarcity of high-quality drafts in the community, and our draft models achieve up to 4.48x end-to-end inference speedup on SGLang, establishing SpecForge as a practical foundation for real-world speculative decoding deployment.",
+      "authors": [
+        "Shenggui Li",
+        "Chao Wang",
+        "Yikai Zhu",
+        "Yubo Wang",
+        "Fan Yin",
+        "Shuai Shi",
+        "Yefei Chen",
+        "Xiaomin Dong",
+        "Qiaoling Chen",
+        "Jin Pan",
+        "Ji Li",
+        "Laixin Xie",
+        "Yineng Zhang",
+        "Lei Yu",
+        "Yonggang Wen",
+        "Ivor Tsang",
+        "Tianwei Zhang"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-03-19T07:28:56+00:00",
+      "link": "https://arxiv.org/pdf/2603.18567v1",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "Training framework for speculative decoding with full support for EAGLE-3",
+      "llm_evidence_cn": "支持EAGLE-3的投机解码模型训练框架",
+      "llm_evidence": "支持EAGLE-3的投机解码模型训练框架",
+      "canonical_evidence": "支持EAGLE-3的投机解码模型训练框架",
+      "llm_tldr_en": "SpecForge is an open-source framework for efficiently training speculative decoding models like EAGLE.",
+      "llm_tldr_cn": "SpecForge是一个用于高效训练EAGLE等投机解码模型的开源框架。",
+      "llm_tldr": "SpecForge是一个用于高效训练EAGLE等投机解码模型的开源框架。",
+      "llm_tags": [
+        "query:sd-llm"
+      ],
+      "matched_query_tag": "query:sd-llm",
+      "matched_query_text": "Eagle: Speculative decoding with context-aware draft models",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.19133v1",
+      "source": "arxiv",
+      "title": "A Pipelined Collaborative Speculative Decoding Framework for Efficient Edge-Cloud LLM Inference",
+      "abstract": "Recent advancements and widespread adoption of Large Language Models (LLMs) in both industry and academia have catalyzed significant demand for LLM serving. However, traditional cloud services incur high costs, while on-device inference alone faces challenges due to limited resources. Edge-cloud collaboration emerges as a key research direction to combine the strengths of both paradigms, yet efficiently utilizing limited network bandwidth while fully leveraging and balancing the computational capabilities of edge devices and the cloud remains an open problem. To address these challenges, we propose Pipelined Collaborative Speculative Decoding Framework (PicoSpec), a novel, general-purpose, and training-free speculative decoding framework for LLM edge-cloud collaborative inference. We design an asynchronous pipeline that resolves the mutual waiting problem inherent in vanilla speculative decoding within edge collaboration scenarios, which concurrently executes a Small Language Model (SLM) on the edge device and a LLM in the cloud. Meanwhile, to mitigate the significant communication latency caused by transmitting vocabulary distributions, we introduce separate rejection sampling with sparse compression, which completes the rejection sampling with only a one-time cost of transmitting the compressed vocabulary. Experimental results demonstrate that our solution outperforms baseline and existing methods, achieving up to 2.9 speedup.",
+      "authors": [
+        "Yida Zhang",
+        "Zhiyong Gao",
+        "Shuaibing Yue",
+        "Jie Li",
+        "Rui Wang"
+      ],
+      "primary_category": "cs.DC",
+      "categories": [
+        "cs.DC"
+      ],
+      "published": "2026-03-19T16:51:32+00:00",
+      "link": "https://arxiv.org/pdf/2603.19133v1",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "Pipelined Collaborative Speculative Decoding Framework",
+      "llm_evidence_cn": "流水线协作投机解码框架",
+      "llm_evidence": "流水线协作投机解码框架",
+      "canonical_evidence": "流水线协作投机解码框架",
+      "llm_tldr_en": "Introduces PicoSpec, a training-free speculative decoding framework for efficient edge-cloud LLM serving.",
+      "llm_tldr_cn": "引入PicoSpec，一种无需训练的投机解码框架，用于高效的云边协作LLM服务。",
+      "llm_tldr": "引入PicoSpec，一种无需训练的投机解码框架，用于高效的云边协作LLM服务。",
+      "llm_tags": [
+        "query:sd-llm:composite"
+      ],
+      "matched_query_tag": "query:sd-llm:composite",
+      "matched_query_text": "Papers central to 关于投机解码（Speculative Decoding）的学术论文检索, especially work that connects or combines: M; d; Speculative decoding for large language models; Accelerating LLM inference using speculative decoding; Eagle: Speculative decoding with context-aware draft models; State of the art speculative decoding methods for LLMs; Survey of speculative decoding techniques for inference optimization; Performance evaluation of different speculative decoding frameworks.",
+      "matched_requirement_id": "req-composite-sd-llm",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.19610v1",
+      "source": "arxiv",
+      "title": "ParallelVLM: Lossless Video-LLM Acceleration with Visual Alignment Aware Parallel Speculative Decoding",
+      "abstract": "Although current Video-LLMs achieve impressive performance in video understanding tasks, their autoregressive decoding efficiency remains constrained by the massive number of video tokens. Visual token pruning can partially ease this bottleneck, yet existing approaches still suffer from information loss and yield only modest acceleration in decoding. In this paper, we propose ParallelVLM, a training-free draft-then-verify speculative decoding framework that overcomes both mutual waiting and limited speedup-ratio problems between draft and target models in long-video settings. ParallelVLM features two parallelized stages that maximize hardware utilization and incorporate an Unbiased Verifier-Guided Pruning strategy to better align the draft and target models by eliminating the positional bias in attention-guided pruning. Extensive experiments demonstrate that ParallelVLM effectively expands the draft window by $1.6\\sim1.8\\times$ with high accepted lengths, and accelerates various video understanding benchmarks by 3.36$\\times$ on LLaVA-Onevision-72B and 2.42$\\times$ on Qwen2.5-VL-32B compared with vanilla autoregressive decoding.",
+      "authors": [
+        "Quan Kong",
+        "Yuhao Shen",
+        "Yicheng Ji",
+        "Huan Li",
+        "Cong Wang"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-03-20T03:30:32+00:00",
+      "link": "https://arxiv.org/pdf/2603.19610v1",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "parallel speculative decoding framework for Video-LLM acceleration",
+      "llm_evidence_cn": "用于视频LLM加速的并行投机解码框架",
+      "llm_evidence": "用于视频LLM加速的并行投机解码框架",
+      "canonical_evidence": "用于视频LLM加速的并行投机解码框架",
+      "llm_tldr_en": "ParallelVLM is a training-free parallel speculative decoding framework for lossless Video-LLM acceleration.",
+      "llm_tldr_cn": "ParallelVLM是一种无需训练的并行投机解码框架，用于无损视频LLM加速。",
+      "llm_tldr": "ParallelVLM是一种无需训练的并行投机解码框架，用于无损视频LLM加速。",
+      "llm_tags": [
+        "query:sd-llm"
+      ],
+      "matched_query_tag": "query:sd-llm",
+      "matched_query_text": "Accelerating LLM inference using speculative decoding",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.19610v2",
+      "source": "arxiv",
+      "title": "ParallelVLM: Lossless Video-LLM Acceleration with Visual Alignment Aware Parallel Speculative Decoding",
+      "abstract": "Although current Video-LLMs achieve impressive performance in video understanding tasks, their autoregressive decoding efficiency remains constrained by the massive number of video tokens. Visual token pruning can partially ease this bottleneck, yet existing approaches still suffer from information loss and yield only modest acceleration in decoding. In this paper, we propose ParallelVLM, a training-free draft-then-verify speculative decoding framework that overcomes both mutual waiting and limited speedup-ratio problems between draft and target models in long-video settings. ParallelVLM features two parallelized stages that maximize hardware utilization and incorporate an Unbiased Verifier-Guided Pruning strategy to better align the draft and target models by eliminating the positional bias in attention-guided pruning. Extensive experiments demonstrate that ParallelVLM effectively expands the draft window by $1.6\\sim1.8\\times$ with high accepted lengths, and accelerates various video understanding benchmarks by 3.36$\\times$ on LLaVA-Onevision-72B and 2.42$\\times$ on Qwen2.5-VL-32B compared with vanilla autoregressive decoding.",
+      "authors": [
+        "Quan Kong",
+        "Yuhao Shen",
+        "Yicheng Ji",
+        "Huan Li",
+        "Cong Wang"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-03-20T03:30:32+00:00",
+      "link": "https://arxiv.org/pdf/2603.19610v2",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "Parallel speculative decoding for Video-LLM acceleration",
+      "llm_evidence_cn": "用于视频LLM加速的并行投机解码",
+      "llm_evidence": "用于视频LLM加速的并行投机解码",
+      "canonical_evidence": "用于视频LLM加速的并行投机解码",
+      "llm_tldr_en": "Introduces ParallelVLM, a parallel speculative decoding framework to accelerate Video-LLM inference.",
+      "llm_tldr_cn": "引入ParallelVLM，一种并行投机解码框架，用于加速视频大语言模型的推理。",
+      "llm_tldr": "引入ParallelVLM，一种并行投机解码框架，用于加速视频大语言模型的推理。",
+      "llm_tags": [
+        "query:sd-llm:composite"
+      ],
+      "matched_query_tag": "query:sd-llm:composite",
+      "matched_query_text": "Papers central to 关于投机解码（Speculative Decoding）的学术论文检索, especially work that connects or combines: M; d; Speculative decoding for large language models; Accelerating LLM inference using speculative decoding; Eagle: Speculative decoding with context-aware draft models; State of the art speculative decoding methods for LLMs; Survey of speculative decoding techniques for inference optimization; Performance evaluation of different speculative decoding frameworks.",
+      "matched_requirement_id": "req-composite-sd-llm",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.27027v1",
+      "source": "arxiv",
+      "title": "TAPS: Task Aware Proposal Distributions for Speculative Sampling",
+      "abstract": "Speculative decoding accelerates autoregressive generation by letting a lightweight draft model propose future tokens that a larger target model then verifies in parallel. In practice, however, draft models are usually trained on broad generic corpora, which leaves it unclear how much speculative decoding quality depends on the draft training distribution. We study this question with lightweight HASS and EAGLE-2 drafters trained on MathInstruct, ShareGPT, and mixed-data variants, evaluated on MT-Bench, GSM8K, MATH-500, and SVAMP. Measured by acceptance length, task-specific training yields clear specialization: MathInstruct-trained drafts are strongest on reasoning benchmarks, while ShareGPT-trained drafts are strongest on MT-Bench. Mixed-data training improves robustness, but larger mixtures do not dominate across decoding temperatures. We also study how to combine specialized drafters at inference time. Naive checkpoint averaging performs poorly, whereas confidence-based routing improves over single-domain drafts and merged-tree verification yields the highest acceptance length overall for both backbones. Finally, confidence is a more useful routing signal than entropy: rejected tokens tend to have higher entropy, but confidence produces much clearer benchmark-level routing decisions. These results show that speculative decoding quality depends not only on draft architecture, but also on the match between draft training data and downstream workload, and that specialized drafters are better combined at inference time than in weight space.",
+      "authors": [
+        "Mohamad Zbib",
+        "Mohamad Bazzi",
+        "Ammar Mohanna",
+        "Hasan Abed Al Kader Hammoud",
+        "Bernard Ghanem"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI"
+      ],
+      "published": "2026-03-27T22:34:20+00:00",
+      "link": "https://arxiv.org/pdf/2603.27027v1",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "Evaluates EAGLE-2 drafters for speculative decoding",
+      "llm_evidence_cn": "评估用于投机解码的EAGLE-2草稿模型",
+      "llm_evidence": "评估用于投机解码的EAGLE-2草稿模型",
+      "canonical_evidence": "评估用于投机解码的EAGLE-2草稿模型",
+      "llm_tldr_en": "TAPS investigates how task-specific training of draft models like EAGLE-2 affects speculative decoding performance.",
+      "llm_tldr_cn": "TAPS研究了EAGLE-2等草稿模型的任务特定训练如何影响投机解码性能。",
+      "llm_tldr": "TAPS研究了EAGLE-2等草稿模型的任务特定训练如何影响投机解码性能。",
+      "llm_tags": [
+        "query:sd-llm"
+      ],
+      "matched_query_tag": "query:sd-llm",
+      "matched_query_text": "Eagle: Speculative decoding with context-aware draft models",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2604.02047v1",
+      "source": "arxiv",
+      "title": "Goose: Anisotropic Speculation Trees for Training-Free Speculative Decoding",
+      "abstract": "Speculative decoding accelerates large language model inference by drafting multiple candidate tokens and verifying them in a single forward pass. Candidates are organized as a tree: deeper trees accept more tokens per step, but adding depth requires sacrificing breadth (fallback options) under a fixed verification budget. Existing training-free methods draft from a single token source and shape their trees without distinguishing candidate quality across origins. We observe that two common training-free token sources - n-gram matches copied from the input context, and statistical predictions from prior forward passes - differ dramatically in acceptance rate (~6x median gap, range 2-18x across five models and five benchmarks). We prove that when such a quality gap exists, the optimal tree is anisotropic (asymmetric): reliable tokens should form a deep chain while unreliable tokens spread as wide branches, breaking through the depth limit of balanced trees. We realize this structure in GOOSE, a training-free framework that builds an adaptive spine tree - a deep chain of high-acceptance context-matched tokens with wide branches of low-acceptance alternatives at each node. We prove that the number of tokens accepted per step is at least as large as that of either source used alone. On five LLMs (7B-33B) and five benchmarks, GOOSE achieves 1.9-4.3x lossless speedup, outperforming balanced-tree baselines by 12-33% under the same budget.",
+      "authors": [
+        "Tao Jin",
+        "Phuong Minh Nguyen",
+        "Naoya Inoue"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI"
+      ],
+      "published": "2026-04-02T13:48:42+00:00",
+      "link": "https://arxiv.org/pdf/2604.02047v1",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "Anisotropic Speculation Trees for Training-Free Speculative Decoding",
+      "llm_evidence_cn": "用于无需训练投机解码的各向异性投机树",
+      "llm_evidence": "用于无需训练投机解码的各向异性投机树",
+      "canonical_evidence": "用于无需训练投机解码的各向异性投机树",
+      "llm_tldr_en": "Goose optimizes speculative decoding by using anisotropic trees to balance candidate quality from different sources.",
+      "llm_tldr_cn": "Goose通过各向异性投机树优化无需训练的投机解码，提升验证效率。",
+      "llm_tldr": "Goose通过各向异性投机树优化无需训练的投机解码，提升验证效率。",
+      "llm_tags": [
+        "query:sd-llm:composite"
+      ],
+      "matched_query_tag": "query:sd-llm:composite",
+      "matched_query_text": "Papers central to 关于投机解码（Speculative Decoding）的学术论文检索, especially work that connects or combines: M; d; Speculative decoding for large language models; Accelerating LLM inference using speculative decoding; Eagle: Speculative decoding with context-aware draft models; State of the art speculative decoding methods for LLMs; Survey of speculative decoding techniques for inference optimization; Performance evaluation of different speculative decoding frameworks.",
+      "matched_requirement_id": "req-composite-sd-llm",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2604.04987v1",
+      "source": "arxiv",
+      "title": "Cactus: Accelerating Auto-Regressive Decoding with Constrained Acceptance Speculative Sampling",
+      "abstract": "Speculative sampling (SpS) has been successful in accelerating the decoding throughput of auto-regressive large language models by leveraging smaller draft models. SpS strictly enforces the generated distribution to match that of the verifier LLM. This is unnecessarily restrictive as slight variations of the verifier's distribution, such as sampling with top-$k$ or temperature, would also be acceptable. Typical acceptance sampling (TAS) alleviates this issue by accepting more tokens using entropy-based heuristics. However, this approach distorts the verifier distribution, potentially degrading output quality when the verifier encodes critical information. In this work, we formalize the speculative sampling algorithm through the lens of constrained optimization. Based on this formulation, we propose Cactus (constrained acceptance speculative sampling), a method that guarantees controlled divergence from the verifier distribution and increasing acceptance rates. Empirical results across a wide range of benchmarks confirm the effectiveness of our approach.",
+      "authors": [
+        "Yongchang Hao",
+        "Lili Mou"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "math.OC",
+        "stat.ML"
+      ],
+      "published": "2026-04-05T03:37:30+00:00",
+      "link": "https://arxiv.org/pdf/2604.04987v1",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "Accelerating auto-regressive decoding with speculative sampling",
+      "llm_evidence_cn": "利用投机采样加速自回归解码",
+      "llm_evidence": "利用投机采样加速自回归解码",
+      "canonical_evidence": "利用投机采样加速自回归解码",
+      "llm_tldr_en": "Cactus introduces constrained acceptance speculative sampling to accelerate LLM decoding while maintaining quality.",
+      "llm_tldr_cn": "Cactus引入约束接受投机采样，在保持质量的同时加速大语言模型解码。",
+      "llm_tldr": "Cactus引入约束接受投机采样，在保持质量的同时加速大语言模型解码。",
+      "llm_tags": [
+        "query:sd-llm"
+      ],
+      "matched_query_tag": "query:sd-llm",
+      "matched_query_text": "Speculative decoding for large language models",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2604.05417v1",
+      "source": "arxiv",
+      "title": "Multi-Drafter Speculative Decoding with Alignment Feedback",
+      "abstract": "Speculative decoding (SD) accelerates large language model (LLM) inference by using a smaller model to draft future tokens, which are then verified by the target LLM. This preserves generation quality by accepting only aligned tokens. However, individual drafters, often trained for specific tasks or domains, exhibit limited effectiveness across diverse applications. To address this, we introduce \\textsc{MetaSD}, a unified framework that integrates multiple drafters into the SD process. MetaSD dynamically allocates computational resources to heterogeneous drafters by leveraging alignment feedback and framing drafter selection as a multi-armed bandit problem. Extensive experiments show MetaSD consistently outperforms single-drafter approaches.",
+      "authors": [
+        "Taehyeon Kim",
+        "Hojung Jung",
+        "Se-Young Yun"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-04-07T04:25:26+00:00",
+      "link": "https://arxiv.org/pdf/2604.05417v1",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "multi-drafter speculative decoding framework",
+      "llm_evidence_cn": "多草稿模型投机解码框架",
+      "llm_evidence": "多草稿模型投机解码框架",
+      "canonical_evidence": "多草稿模型投机解码框架",
+      "llm_tldr_en": "MetaSD integrates multiple drafters using alignment feedback to enhance speculative decoding performance.",
+      "llm_tldr_cn": "MetaSD利用对齐反馈整合多个草稿模型，以增强投机解码的性能。",
+      "llm_tldr": "MetaSD利用对齐反馈整合多个草稿模型，以增强投机解码的性能。",
+      "llm_tags": [
+        "query:sd-llm:composite"
+      ],
+      "matched_query_tag": "query:sd-llm:composite",
+      "matched_query_text": "Papers central to 关于投机解码（Speculative Decoding）的学术论文检索, especially work that connects or combines: M; d; Speculative decoding for large language models; Accelerating LLM inference using speculative decoding; Eagle: Speculative decoding with context-aware draft models; State of the art speculative decoding methods for LLMs; Survey of speculative decoding techniques for inference optimization; Performance evaluation of different speculative decoding frameworks.",
+      "matched_requirement_id": "req-composite-sd-llm",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2604.05650v1",
+      "source": "arxiv",
+      "title": "See the Forest for the Trees: Loosely Speculative Decoding via Visual-Semantic Guidance for Efficient Inference of Video LLMs",
+      "abstract": "Video Large Language Models (Video-LLMs) excel in video understanding but suffer from high inference latency during autoregressive generation. Speculative Decoding (SD) mitigates this by applying a draft-and-verify paradigm, yet existing methods are constrained by rigid exact-match rules, severely limiting the acceleration potential. To bridge this gap, we propose LVSpec, the first training-free loosely SD framework tailored for Video-LLMs. Grounded in the insight that generation is governed by sparse visual-relevant anchors (mandating strictness) amidst abundant visual-irrelevant fillers (permitting loose verification), LVSpec employs a lightweight visual-relevant token identification scheme to accurately pinpoint the former. To further maximize acceptance, we augment this with a position-shift tolerant mechanism that effectively salvages positionally mismatched but semantically equivalent tokens. Experiments demonstrate that LVSpec achieves high fidelity and speed: it preserves >99.8 of target performance while accelerating Qwen2.5-VL-32B by 2.70x and LLaVA-OneVision-72B by 2.94x. Notably, it boosts the mean accepted length and speedup ratio by 136% and 35% compared to SOTA training-free SD methods for Video-LLMs.",
+      "authors": [
+        "Yicheng Ji",
+        "Jun Zhang",
+        "Jinpeng Chen",
+        "Cong Wang",
+        "Lidan Shou",
+        "Gang Chen",
+        "Huan Li"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-04-07T09:54:33+00:00",
+      "link": "https://arxiv.org/pdf/2604.05650v1",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "loosely speculative decoding via visual-semantic guidance",
+      "llm_evidence_cn": "通过视觉语义引导的松散投机解码",
+      "llm_evidence": "通过视觉语义引导的松散投机解码",
+      "canonical_evidence": "通过视觉语义引导的松散投机解码",
+      "llm_tldr_en": "LVSpec is a training-free loosely speculative decoding framework tailored for efficient Video-LLM inference.",
+      "llm_tldr_cn": "LVSpec是一个无需训练的松散投机解码框架，专为高效视频LLM推理设计。",
+      "llm_tldr": "LVSpec是一个无需训练的松散投机解码框架，专为高效视频LLM推理设计。",
+      "llm_tags": [
+        "query:sd-llm"
+      ],
+      "matched_query_tag": "query:sd-llm",
+      "matched_query_text": "Speculative decoding for large language models",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.11397v1",
+      "source": "arxiv",
+      "title": "Edge-Cloud Collaborative Speech Emotion Captioning via Token-Level Speculative Decoding in Audio-Language Models",
+      "abstract": "Speech Emotion Captioning (SEC) leverages large audio-language models to generate rich, context-aware affective descriptions from speech. However, real-world deployment remains challenging due to the substantial computational demands on resource-constrained edge devices and the privacy risks of transmitting biometric audio. While smaller audio-language models enable efficient on-device SEC, their limited capacity often weakens subtle paralinguistic modeling and fine-grained affective grounding. We propose an edge-cloud collaborative framework based on Uncertainty-Guided Speculative Decoding (UGSD). A lightweight edge model drafts captions locally, and only high-uncertainty token blocks are selectively escalated to a stronger cloud verifier for validation. Experiments on the MER2024 benchmark demonstrate substantial BLEU improvements up to 62.7%. UGSD further achieves 1.4x lower latency and 8.5x higher token throughput compared to an edge-only model. These results empirically characterize the quality-efficiency-privacy trade-off in deployable SEC systems.",
+      "authors": [
+        "Xiangyuan Xue",
+        "Jiajun Lu",
+        "Yan Gao",
+        "Gongping Huang",
+        "Ting Dang",
+        "Hong Jia"
+      ],
+      "primary_category": "cs.SD",
+      "categories": [
+        "cs.SD"
+      ],
+      "published": "2026-03-12T00:19:02+00:00",
+      "link": "https://arxiv.org/pdf/2603.11397v1",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Token-level speculative decoding in audio-language models",
+      "llm_evidence_cn": "音频语言模型中的Token级投机解码",
+      "llm_evidence": "音频语言模型中的Token级投机解码",
+      "canonical_evidence": "音频语言模型中的Token级投机解码",
+      "llm_tldr_en": "Proposes an edge-cloud framework using speculative decoding to accelerate speech emotion captioning.",
+      "llm_tldr_cn": "提出一种利用投机解码加速语音情感描述生成的边缘-云协作框架。",
+      "llm_tldr": "提出一种利用投机解码加速语音情感描述生成的边缘-云协作框架。",
+      "llm_tags": [
+        "query:sd-llm:composite"
+      ],
+      "matched_query_tag": "query:sd-llm:composite",
+      "matched_query_text": "Papers central to 关于投机解码（Speculative Decoding）的学术论文检索, especially work that connects or combines: M; d; Speculative decoding for large language models; Accelerating LLM inference using speculative decoding; Eagle: Speculative decoding with context-aware draft models; State of the art speculative decoding methods for LLMs; Survey of speculative decoding techniques for inference optimization; Performance evaluation of different speculative decoding frameworks.",
+      "matched_requirement_id": "req-composite-sd-llm",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.16219v1",
+      "source": "arxiv",
+      "title": "SpecSteer: Synergizing Local Context and Global Reasoning for Efficient Personalized Generation",
+      "abstract": "Realizing personalized intelligence faces a core dilemma: sending user history to centralized large language models raises privacy concerns, while on-device small language models lack the reasoning capacity required for high-quality generation. Our pilot study shows that purely local enhancements remain insufficient to reliably bridge this gap. We therefore propose SpecSteer, an asymmetric collaborative inference framework that synergizes private on-device context with cloud-scale reasoning. SpecSteer casts collaboration as Bayesian knowledge fusion and repurposes speculative decoding as a distributed alignment protocol, yielding a Draft--Verify--Recover pipeline: the on-device model drafts personalized sequences; the cloud validates via a ratio-based mechanism that decouples reasoning verification from private context, filtering logical flaws without accessing raw user context; upon rejection, a steering recovery injects local intent during correction. Experiments demonstrate that SpecSteer successfully closes the reasoning gap and achieves superior personalized generation performance, while delivering a 2.36x speedup over standard baselines.",
+      "authors": [
+        "Hang Lv",
+        "Sheng Liang",
+        "Hao Wang",
+        "Yongyue Zhang",
+        "Hongchao Gu",
+        "Wei Guo",
+        "Defu Lian",
+        "Yong Liu",
+        "Enhong Chen"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-03-17T07:51:29+00:00",
+      "link": "https://arxiv.org/pdf/2603.16219v1",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Repurposes speculative decoding as a distributed alignment protocol",
+      "llm_evidence_cn": "将投机解码重新利用为分布式对齐协议",
+      "llm_evidence": "将投机解码重新利用为分布式对齐协议",
+      "canonical_evidence": "将投机解码重新利用为分布式对齐协议",
+      "llm_tldr_en": "SpecSteer uses speculative decoding for collaborative inference between on-device and cloud-scale models.",
+      "llm_tldr_cn": "SpecSteer利用投机解码实现端侧与云端模型之间的协作推理。",
+      "llm_tldr": "SpecSteer利用投机解码实现端侧与云端模型之间的协作推理。",
+      "llm_tags": [
+        "query:sd-llm"
+      ],
+      "matched_query_tag": "query:sd-llm",
+      "matched_query_text": "Speculative decoding for large language models",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.17942v1",
+      "source": "arxiv",
+      "title": "Efficient Training-Free Multi-Token Prediction via Embedding-Space Probing",
+      "abstract": "Large language models (LLMs) exhibit latent multi-token prediction (MTP) capabilities despite being trained solely for next-token generation. We propose a simple, training-free MTP approach that probes an LLM using on-the-fly mask tokens drawn from its embedding space, enabling parallel prediction of future tokens without modifying model weights or relying on auxiliary draft models. Our method constructs a speculative token tree by sampling top-K candidates from mask-token logits and applies a lightweight pruning strategy to retain high-probability continuations. During decoding, candidate predictions are verified in parallel, resulting in lossless generation while substantially reducing the number of model calls and improving token throughput. Across benchmarks, our probing-based MTP consistently outperforms existing training-free baselines, increasing acceptance length by approximately 12\\% on LLaMA3 and 8--12\\% on Qwen3, and achieving throughput gains of up to 15--19\\%. Finally, we provide theoretical insights and empirical evidence showing that decoder layers naturally align mask-token representations with next-token states, enabling accurate multi-step prediction without retraining or auxiliary models.",
+      "authors": [
+        "Raghavv Goel",
+        "Mukul Gagrani",
+        "Mingu Lee",
+        "Chris Lott"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-03-18T17:14:01+00:00",
+      "link": "https://arxiv.org/pdf/2603.17942v1",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "training-free MTP approach constructs a speculative token tree",
+      "llm_evidence_cn": "无需训练的多标记预测方法构建投机标记树",
+      "llm_evidence": "无需训练的多标记预测方法构建投机标记树",
+      "canonical_evidence": "无需训练的多标记预测方法构建投机标记树",
+      "llm_tldr_en": "Proposes a training-free multi-token prediction method using embedding-space probing for parallel verification.",
+      "llm_tldr_cn": "提出一种基于嵌入空间探测的无需训练多标记预测方法，实现并行验证加速。",
+      "llm_tldr": "提出一种基于嵌入空间探测的无需训练多标记预测方法，实现并行验证加速。",
+      "llm_tags": [
+        "query:sd-llm:composite"
+      ],
+      "matched_query_tag": "query:sd-llm:composite",
+      "matched_query_text": "Papers central to 关于投机解码（Speculative Decoding）的学术论文检索, especially work that connects or combines: M; d; Speculative decoding for large language models; Accelerating LLM inference using speculative decoding; Eagle: Speculative decoding with context-aware draft models; State of the art speculative decoding methods for LLMs; Survey of speculative decoding techniques for inference optimization; Performance evaluation of different speculative decoding frameworks.",
+      "matched_requirement_id": "req-composite-sd-llm",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.18599v1",
+      "source": "arxiv",
+      "title": "SJD-PAC: Accelerating Speculative Jacobi Decoding via Proactive Drafting and Adaptive Continuation",
+      "abstract": "Speculative Jacobi Decoding (SJD) offers a draft-model-free approach to accelerate autoregressive text-to-image synthesis. However, the high-entropy nature of visual generation yields low draft-token acceptance rates in complex regions, creating a bottleneck that severely limits overall throughput. To overcome this, we introduce SJD-PAC, an enhanced SJD framework. First, SJD-PAC employs a proactive drafting strategy to improve local acceptance rates in these challenging high-entropy regions. Second, we introduce an adaptive continuation mechanism that sustains sequence validation after an initial rejection, bypassing the need for full resampling. Working in tandem, these optimizations significantly increase the average acceptance length per step, boosting inference speed while strictly preserving the target distribution. Experiments on standard text-to-image benchmarks demonstrate that SJD-PAC achieves a $3.8\\times$ speedup with lossless image quality.",
+      "authors": [
+        "Jialiang Kang",
+        "Han Shu",
+        "Wenshuo Li",
+        "Yingjie Zhai",
+        "Xinghao Chen"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-03-19T08:15:18+00:00",
+      "link": "https://arxiv.org/pdf/2603.18599v1",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Accelerating Speculative Jacobi Decoding via Proactive Drafting",
+      "llm_evidence_cn": "通过主动草拟加速投机雅可比解码",
+      "llm_evidence": "通过主动草拟加速投机雅可比解码",
+      "canonical_evidence": "通过主动草拟加速投机雅可比解码",
+      "llm_tldr_en": "SJD-PAC enhances Speculative Jacobi Decoding for faster text-to-image synthesis via proactive drafting.",
+      "llm_tldr_cn": "SJD-PAC通过主动草拟和自适应持续机制加速投机雅可比解码。",
+      "llm_tldr": "SJD-PAC通过主动草拟和自适应持续机制加速投机雅可比解码。",
+      "llm_tags": [
+        "query:sd-llm:composite"
+      ],
+      "matched_query_tag": "query:sd-llm:composite",
+      "matched_query_text": "Papers central to 关于投机解码（Speculative Decoding）的学术论文检索, especially work that connects or combines: M; d; Speculative decoding for large language models; Accelerating LLM inference using speculative decoding; Eagle: Speculative decoding with context-aware draft models; State of the art speculative decoding methods for LLMs; Survey of speculative decoding techniques for inference optimization; Performance evaluation of different speculative decoding frameworks.",
+      "matched_requirement_id": "req-composite-sd-llm",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.23483v1",
+      "source": "arxiv",
+      "title": "SpecEyes: Accelerating Agentic Multimodal LLMs via Speculative Perception and Planning",
+      "abstract": "Agentic multimodal large language models (MLLMs) (e.g., OpenAI o3 and Gemini Agentic Vision) achieve remarkable reasoning capabilities through iterative visual tool invocation. However, the cascaded perception, reasoning, and tool-calling loops introduce significant sequential overhead. This overhead, termed agentic depth, incurs prohibitive latency and seriously limits system-level concurrency. To this end, we propose SpecEyes, an agentic-level speculative acceleration framework that breaks this sequential bottleneck. Our key insight is that a lightweight, tool-free MLLM can serve as a speculative planner to predict the execution trajectory, enabling early termination of expensive tool chains without sacrificing accuracy. To regulate this speculative planning, we introduce a cognitive gating mechanism based on answer separability, which quantifies the model's confidence for self-verification without requiring oracle labels. Furthermore, we design a heterogeneous parallel funnel that exploits the stateless concurrency of the small model to mask the stateful serial execution of the large model, maximizing system throughput. Extensive experiments on V* Bench, HR-Bench, and POPE demonstrate that SpecEyes achieves 1.1-3.35x speedup over the agentic baseline while preserving or even improving accuracy (up to +6.7%), thereby boosting serving throughput under concurrent workloads.",
+      "authors": [
+        "Haoyu Huang",
+        "Jinfa Huang",
+        "Zhongwei Wan",
+        "Xiawu Zheng",
+        "Rongrong Ji",
+        "Jiebo Luo"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.CL"
+      ],
+      "published": "2026-03-24T17:45:47+00:00",
+      "link": "https://arxiv.org/pdf/2603.23483v1",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Speculative acceleration for agentic multimodal LLMs and planning",
+      "llm_evidence_cn": "针对智能体多模态LLM和规划的投机加速",
+      "llm_evidence": "针对智能体多模态LLM和规划的投机加速",
+      "canonical_evidence": "针对智能体多模态LLM和规划的投机加速",
+      "llm_tldr_en": "SpecEyes uses speculative planning to break sequential bottlenecks in agentic multimodal LLM tool-calling loops.",
+      "llm_tldr_cn": "SpecEyes利用投机规划打破智能体多模态大模型工具调用循环中的串行瓶颈。",
+      "llm_tldr": "SpecEyes利用投机规划打破智能体多模态大模型工具调用循环中的串行瓶颈。",
+      "llm_tags": [
+        "query:ag-rl:composite"
+      ],
+      "matched_query_tag": "query:ag-rl:composite",
+      "matched_query_text": "Papers central to 寻找Agentic RL（智能体强化学习）相关的学术论文, especially work that connects or combines: Agentic Reinforcement Learning; Large Language Model based agents in reinforcement learning; Autonomous agents using reinforcement learning frameworks; Agentic workflows and reinforcement learning optimization; Multi-agent reinforcement learning for agentic systems; Self-evolving agents via reinforcement learning; State of the art in Agentic Reinforcement Learning; Frameworks for building agentic systems with RL.",
+      "matched_requirement_id": "req-composite-ag-rl",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.25702v1",
+      "source": "arxiv",
+      "title": "S2D2: Fast Decoding for Diffusion LLMs via Training-Free Self-Speculation",
+      "abstract": "Block-diffusion language models offer a promising path toward faster-than-autoregressive generation by combining block-wise autoregressive decoding with within-block parallel denoising. However, in the few-step regime needed for practical acceleration, standard confidence-thresholded decoding is often brittle: aggressive thresholds hurt quality, while conservative thresholds require unnecessary denoising steps. Existing approaches that address this issue either require additional training or incur extra test-time compute. We present S2D2, a training-free self-speculative decoding framework for block-diffusion language models. Our key observation is that a block-diffusion model becomes autoregressive when the block size is reduced to one, allowing the same pretrained model to act as both drafter and verifier. S2D2 inserts a speculative verification step into standard block-diffusion decoding and uses lightweight routing policies to decide when verification is worth its cost. This yields a hybrid decoding trajectory in which diffusion proposes tokens in parallel, while the autoregressive mode acts as a local sequence-level critic. Across three mainstream block-diffusion families, S2D2 consistently improves the accuracy-speed tradeoff over strong confidence-thresholding baselines. On SDAR, we observe up to $4.7\\times$ speedup over autoregressive decoding, and up to $1.57\\times$ over a tuned dynamic decoding baseline while improving accuracy by up to $4.5$ points. On LLaDA2.1-Mini, S2D2 remains complementary to built-in self-correction, including a conservative setting where it is $4.4\\times$ faster than the static baseline with slightly higher accuracy.",
+      "authors": [
+        "Ligong Han",
+        "Hao Wang",
+        "Han Gao",
+        "Kai Xu",
+        "Akash Srivastava"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-03-26T17:48:50+00:00",
+      "link": "https://arxiv.org/pdf/2603.25702v1",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "training-free self-speculative decoding framework for block-diffusion language models",
+      "llm_evidence_cn": "块扩散语言模型的无需训练自投机解码框架",
+      "llm_evidence": "块扩散语言模型的无需训练自投机解码框架",
+      "canonical_evidence": "块扩散语言模型的无需训练自投机解码框架",
+      "llm_tldr_en": "S2D2 provides a training-free self-speculative decoding method to accelerate diffusion-based LLMs.",
+      "llm_tldr_cn": "S2D2为块扩散语言模型提供了一种无需训练的自投机解码加速方案。",
+      "llm_tldr": "S2D2为块扩散语言模型提供了一种无需训练的自投机解码加速方案。",
+      "llm_tags": [
+        "query:sd-llm:composite"
+      ],
+      "matched_query_tag": "query:sd-llm:composite",
+      "matched_query_text": "Papers central to 关于投机解码（Speculative Decoding）的学术论文检索, especially work that connects or combines: M; d; Speculative decoding for large language models; Accelerating LLM inference using speculative decoding; Eagle: Speculative decoding with context-aware draft models; State of the art speculative decoding methods for LLMs; Survey of speculative decoding techniques for inference optimization; Performance evaluation of different speculative decoding frameworks.",
+      "matched_requirement_id": "req-composite-sd-llm",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2604.05250v1",
+      "source": "arxiv",
+      "title": "DualDiffusion: A Speculative Decoding Strategy for Masked Diffusion Models",
+      "abstract": "Masked Diffusion Models (MDMs) offer a promising alternative to autoregressive language models by enabling parallel token generation and bidirectional context modeling. However, their inference speed is significantly limited by the inability to cache key-value pairs due to bidirectional attention, requiring $O(N^2)$ computations at each generation step. While recent methods like FastDLLM and DkvCache improve inference speed through attention approximations and caching strategies, they achieve speedups at the cost of generation quality. We propose DualDiffusion, a speculative decoding framework for MDMs that combines fast drafter models (using efficient approximations) with slower, more accurate verifier models. By running multiple steps of a lightweight drafter followed by a single verification step, DualDiffusion achieves a superior Pareto frontier between generation steps and accuracy compared to existing approaches. We evaluate our method on MMLU and GSM8K, demonstrating that DualDiffusion maintains high accuracy while reducing the number of generation steps required, effectively pushing the quality-efficiency trade-off curve for masked diffusion language models.",
+      "authors": [
+        "Satyam Goyal",
+        "Kushal Patel",
+        "Tanush Mittal",
+        "Arjun Laxman"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.CL"
+      ],
+      "published": "2026-04-06T23:23:57+00:00",
+      "link": "https://arxiv.org/pdf/2604.05250v1",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Speculative decoding framework for Masked Diffusion Models using drafter and verifier models",
+      "llm_evidence_cn": "针对掩码扩散模型的投机解码框架，结合了草稿模型与验证模型",
+      "llm_evidence": "针对掩码扩散模型的投机解码框架，结合了草稿模型与验证模型",
+      "canonical_evidence": "针对掩码扩散模型的投机解码框架，结合了草稿模型与验证模型",
+      "llm_tldr_en": "DualDiffusion applies speculative decoding to Masked Diffusion Models to accelerate inference speed.",
+      "llm_tldr_cn": "DualDiffusion将投机解码应用于掩码扩散模型，以提高推理速度。",
+      "llm_tldr": "DualDiffusion将投机解码应用于掩码扩散模型，以提高推理速度。",
+      "llm_tags": [
+        "query:sd-llm:composite"
+      ],
+      "matched_query_tag": "query:sd-llm:composite",
+      "matched_query_text": "Papers central to 关于投机解码（Speculative Decoding）的学术论文检索, especially work that connects or combines: M; d; Speculative decoding for large language models; Accelerating LLM inference using speculative decoding; Eagle: Speculative decoding with context-aware draft models; State of the art speculative decoding methods for LLMs; Survey of speculative decoding techniques for inference optimization; Performance evaluation of different speculative decoding frameworks.",
+      "matched_requirement_id": "req-composite-sd-llm",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2604.02945v1",
+      "source": "arxiv",
+      "title": "MSAO: Adaptive Modality Sparsity-Aware Offloading with Edge-Cloud Collaboration for Efficient Multimodal LLM Inference",
+      "abstract": "Multimodal large language models (MLLMs) enable powerful cross-modal reasoning capabilities but impose substantial computational and latency burdens, posing critical challenges for deployment on resource-constrained edge devices. In this paper, we propose MSAO, an adaptive modality sparsity-aware offloading framework with edge-cloud collaboration for efficient MLLM Inference. First, a lightweight heterogeneous modality-aware via fine-grained sparsity module performs spatial-temporal-modal joint analysis to compute the Modality Activation Sparsity (MAS) metric, which quantifies the necessity of each modality with minimal computational overhead. Second, an adaptive speculative edge-cloud collaborative offloading mechanism dynamically schedules workloads between edge and cloud based on the derived MAS scores and real-time system states, leveraging confidence-guided speculative execution to hide communication latency. Extensive experiments on VQAv2 and MMBench benchmarks demonstrate that MSAO achieves a 30% reduction in end-to-end latency and 30%-65% decrease in resource overhead, while delivering a throughput improvement of 1.5x to 2.3x compared to traditional approaches, all without compromising competitive accuracy.",
+      "authors": [
+        "Zheming Yang",
+        "Qi Guo",
+        "Jun Wan",
+        "Jiarui Ruan",
+        "Yunqing Hu",
+        "Chang Zhao",
+        "Xiangyang Li"
+      ],
+      "primary_category": "cs.DC",
+      "categories": [
+        "cs.DC"
+      ],
+      "published": "2026-04-03T10:24:53+00:00",
+      "link": "https://arxiv.org/pdf/2604.02945v1",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 8.5,
+      "llm_evidence_en": "adaptive speculative edge-cloud collaborative offloading",
+      "llm_evidence_cn": "自适应投机边缘云协作卸载",
+      "llm_evidence": "自适应投机边缘云协作卸载",
+      "canonical_evidence": "自适应投机边缘云协作卸载",
+      "llm_tldr_en": "Proposes MSAO, an adaptive speculative offloading framework for efficient multimodal LLM inference.",
+      "llm_tldr_cn": "提出MSAO，一种用于高效多模态LLM推理的自适应投机卸载框架。",
+      "llm_tldr": "提出MSAO，一种用于高效多模态LLM推理的自适应投机卸载框架。",
+      "llm_tags": [
+        "query:sd-llm:composite"
+      ],
+      "matched_query_tag": "query:sd-llm:composite",
+      "matched_query_text": "Papers central to 关于投机解码（Speculative Decoding）的学术论文检索, especially work that connects or combines: M; d; Speculative decoding for large language models; Accelerating LLM inference using speculative decoding; Eagle: Speculative decoding with context-aware draft models; State of the art speculative decoding methods for LLMs; Survey of speculative decoding techniques for inference optimization; Performance evaluation of different speculative decoding frameworks.",
+      "matched_requirement_id": "req-composite-sd-llm",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.10910v1",
+      "source": "arxiv",
+      "title": "GLM-OCR Technical Report",
+      "abstract": "GLM-OCR is an efficient 0.9B-parameter compact multimodal model designed for real-world document understanding. It combines a 0.4B-parameter CogViT visual encoder with a 0.5B-parameter GLM language decoder, achieving a strong balance between computational efficiency and recognition performance. To address the inefficiency of standard autoregressive decoding in deterministic OCR tasks, GLM-OCR introduces a Multi-Token Prediction (MTP) mechanism that predicts multiple tokens per step, significantly improving decoding throughput while keeping memory overhead low through shared parameters. At the system level, a two-stage pipeline is adopted: PP-DocLayout-V3 first performs layout analysis, followed by parallel region-level recognition. Extensive evaluations on public benchmarks and industrial scenarios show that GLM-OCR achieves competitive or state-of-the-art performance in document parsing, text and formula transcription, table structure recovery, and key information extraction. Its compact architecture and structured generation make it suitable for both resource-constrained edge deployment and large-scale production systems.",
+      "authors": [
+        "Shuaiqi Duan",
+        "Yadong Xue",
+        "Weihan Wang",
+        "Zhe Su",
+        "Huan Liu",
+        "Sheng Yang",
+        "Guobing Gan",
+        "Guo Wang",
+        "Zihan Wang",
+        "Shengdong Yan",
+        "Dexin Jin",
+        "Yuxuan Zhang",
+        "Guohong Wen",
+        "Yanfeng Wang",
+        "Yutao Zhang",
+        "Xiaohan Zhang",
+        "Wenyi Hong",
+        "Yukuo Cen",
+        "Da Yin",
+        "Bin Chen",
+        "Wenmeng Yu",
+        "Xiaotao Gu",
+        "Jie Tang"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-03-11T15:55:47+00:00",
+      "link": "https://arxiv.org/pdf/2603.10910v1",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 7.5,
+      "llm_evidence_en": "Multi-Token Prediction mechanism for decoding throughput",
+      "llm_evidence_cn": "多Token预测机制提升解码吞吐量",
+      "llm_evidence": "多Token预测机制提升解码吞吐量",
+      "canonical_evidence": "多Token预测机制提升解码吞吐量",
+      "llm_tldr_en": "Introduces Multi-Token Prediction to accelerate decoding in OCR tasks, similar to speculative decoding goals.",
+      "llm_tldr_cn": "引入多Token预测机制以加速OCR任务中的解码，与投机解码目标相似。",
+      "llm_tldr": "引入多Token预测机制以加速OCR任务中的解码，与投机解码目标相似。",
+      "llm_tags": [
+        "query:sd-llm:composite"
+      ],
+      "matched_query_tag": "query:sd-llm:composite",
+      "matched_query_text": "Papers central to 关于投机解码（Speculative Decoding）的学术论文检索, especially work that connects or combines: M; d; Speculative decoding for large language models; Accelerating LLM inference using speculative decoding; Eagle: Speculative decoding with context-aware draft models; State of the art speculative decoding methods for LLMs; Survey of speculative decoding techniques for inference optimization; Performance evaluation of different speculative decoding frameworks.",
+      "matched_requirement_id": "req-composite-sd-llm",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.16867v1",
+      "source": "arxiv",
+      "title": "Efficient Reasoning on the Edge",
+      "abstract": "Large language models (LLMs) with chain-of-thought reasoning achieve state-of-the-art performance across complex problem-solving tasks, but their verbose reasoning traces and large context requirements make them impractical for edge deployment. These challenges include high token generation costs, large KV-cache footprints, and inefficiencies when distilling reasoning capabilities into smaller models for mobile devices. Existing approaches often rely on distilling reasoning traces from larger models into smaller models, which are verbose and stylistically redundant, undesirable for on-device inference. In this work, we propose a lightweight approach to enable reasoning in small LLMs using LoRA adapters combined with supervised fine-tuning. We further introduce budget forcing via reinforcement learning on these adapters, significantly reducing response length with minimal accuracy loss. To address memory-bound decoding, we exploit parallel test-time scaling, improving accuracy at minor latency increase. Finally, we present a dynamic adapter-switching mechanism that activates reasoning only when needed and a KV-cache sharing strategy during prompt encoding, reducing time-to-first-token for on-device inference. Experiments on Qwen2.5-7B demonstrate that our method achieves efficient, accurate reasoning under strict resource constraints, making LLM reasoning practical for mobile scenarios. Videos demonstrating our solution running on mobile devices are available on our project page.",
+      "authors": [
+        "Yelysei Bondarenko",
+        "Thomas Hehn",
+        "Rob Hesselink",
+        "Romain Lepert",
+        "Fabio Valerio Massoli",
+        "Evgeny Mironov",
+        "Leyla Mirvakhabova",
+        "Tribhuvanesh Orekondy",
+        "Spyridon Stasis",
+        "Andrey Kuzmin",
+        "Anna Kuzina",
+        "Markus Nagel",
+        "Ankita Nayak",
+        "Corrado Rainone",
+        "Ork de Rooij",
+        "Paul N Whatmough",
+        "Arash Behboodi",
+        "Babak Ehteshami Bejnordi"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.CL"
+      ],
+      "published": "2026-03-17T17:59:51+00:00",
+      "link": "https://arxiv.org/pdf/2603.16867v1",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 6.5,
+      "llm_evidence_en": "budget forcing via reinforcement learning for reasoning",
+      "llm_evidence_cn": "通过强化学习进行预算强制推理",
+      "llm_evidence": "通过强化学习进行预算强制推理",
+      "canonical_evidence": "通过强化学习进行预算强制推理",
+      "llm_tldr_en": "Proposes a lightweight approach for edge reasoning using LoRA and reinforcement learning for budget control.",
+      "llm_tldr_cn": "提出一种结合LoRA和强化学习的轻量级边缘推理方法，用于预算控制。",
+      "llm_tldr": "提出一种结合LoRA和强化学习的轻量级边缘推理方法，用于预算控制。",
+      "llm_tags": [
+        "query:ag-rl:composite"
+      ],
+      "matched_query_tag": "query:ag-rl:composite",
+      "matched_query_text": "Papers central to 寻找Agentic RL（智能体强化学习）相关的学术论文, especially work that connects or combines: Agentic Reinforcement Learning; Large Language Model based agents in reinforcement learning; Autonomous agents using reinforcement learning frameworks; Agentic workflows and reinforcement learning optimization; Multi-agent reinforcement learning for agentic systems; Self-evolving agents via reinforcement learning; State of the art in Agentic Reinforcement Learning; Frameworks for building agentic systems with RL.",
+      "matched_requirement_id": "req-composite-ag-rl",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.18428v1",
+      "source": "arxiv",
+      "title": "Adaptive Decoding via Test-Time Policy Learning for Self-Improving Generation",
+      "abstract": "Decoding strategies largely determine the quality of Large Language Model (LLM) outputs, yet widely used heuristics such as greedy or fixed temperature/top-p decoding are static and often task-agnostic, leading to suboptimal or inconsistent generation quality across domains that demand stylistic or structural flexibility. We introduce a reinforcement learning-based decoder sampler that treats decoding as sequential decision-making and learns a lightweight policy to adjust sampling parameters at test-time while keeping LLM weights frozen. We evaluated summarization datasets including BookSum, arXiv, and WikiHow using Granite-3.3-2B and Qwen-2.5-0.5B. Our policy sampler consistently outperforms greedy and static baselines, achieving relative gains of up to +88% (BookSum, Granite) and +79% (WikiHow, Qwen). Reward ablations show that overlap-only objectives underperform compared to composite rewards, while structured shaping terms (length, coverage, repetition, completeness) enable stable and sustained improvements. These findings highlight reinforcement learning as a practical mechanism for test-time adaptation in decoding, enabling domain-aware and user-controllable generation without retraining large models.",
+      "authors": [
+        "Asmita Bhardwaj",
+        "Yuya Jeremy Ong",
+        "Eelaaf Zahid",
+        "Basel Shbita"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI"
+      ],
+      "published": "2026-03-19T02:44:42+00:00",
+      "link": "https://arxiv.org/pdf/2603.18428v1",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "reinforcement learning-based decoder sampler for sequential decision-making",
+      "llm_evidence_cn": "基于强化学习的解码采样器，用于序列决策",
+      "llm_evidence": "基于强化学习的解码采样器，用于序列决策",
+      "canonical_evidence": "基于强化学习的解码采样器，用于序列决策",
+      "llm_tldr_en": "Learns a lightweight RL policy to adjust decoding parameters at test-time for self-improving generation.",
+      "llm_tldr_cn": "学习轻量级强化学习策略，在测试时调整解码参数以实现自我改进生成。",
+      "llm_tldr": "学习轻量级强化学习策略，在测试时调整解码参数以实现自我改进生成。",
+      "llm_tags": [
+        "query:ag-rl:composite"
+      ],
+      "matched_query_tag": "query:ag-rl:composite",
+      "matched_query_text": "Papers central to 寻找Agentic RL（智能体强化学习）相关的学术论文, especially work that connects or combines: Agentic Reinforcement Learning; Large Language Model based agents in reinforcement learning; Autonomous agents using reinforcement learning frameworks; Agentic workflows and reinforcement learning optimization; Multi-agent reinforcement learning for agentic systems; Self-evolving agents via reinforcement learning; State of the art in Agentic Reinforcement Learning; Frameworks for building agentic systems with RL.",
+      "matched_requirement_id": "req-composite-ag-rl",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.10910v2",
+      "source": "arxiv",
+      "title": "GLM-OCR Technical Report",
+      "abstract": "GLM-OCR is an efficient 0.9B-parameter compact multimodal model designed for real-world document understanding. It combines a 0.4B-parameter CogViT visual encoder with a 0.5B-parameter GLM language decoder, achieving a strong balance between computational efficiency and recognition performance. To address the inefficiency of standard autoregressive decoding in deterministic OCR tasks, GLM-OCR introduces a Multi-Token Prediction (MTP) mechanism that predicts multiple tokens per step, significantly improving decoding throughput while keeping memory overhead low through shared parameters. At the system level, a two-stage pipeline is adopted: PP-DocLayout-V3 first performs layout analysis, followed by parallel region-level recognition. Extensive evaluations on public benchmarks and industrial scenarios show that GLM-OCR achieves competitive or state-of-the-art performance in document parsing, text and formula transcription, table structure recovery, and key information extraction. Its compact architecture and structured generation make it suitable for both resource-constrained edge deployment and large-scale production systems.",
+      "authors": [
+        "Shuaiqi Duan",
+        "Yadong Xue",
+        "Weihan Wang",
+        "Zhe Su",
+        "Huan Liu",
+        "Sheng Yang",
+        "Guobing Gan",
+        "Guo Wang",
+        "Zihan Wang",
+        "Shengdong Yan",
+        "Dexin Jin",
+        "Yuxuan Zhang",
+        "Guohong Wen",
+        "Yanfeng Wang",
+        "Yutao Zhang",
+        "Xiaohan Zhang",
+        "Wenyi Hong",
+        "Yukuo Cen",
+        "Da Yin",
+        "Bin Chen",
+        "Wenmeng Yu",
+        "Xiaotao Gu",
+        "Jie Tang"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-03-11T15:55:47+00:00",
+      "link": "https://arxiv.org/pdf/2603.10910v2",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 7.5,
+      "llm_evidence_en": "Multi-Token Prediction mechanism for decoding throughput",
+      "llm_evidence_cn": "多Token预测机制提升解码吞吐量",
+      "llm_evidence": "多Token预测机制提升解码吞吐量",
+      "canonical_evidence": "多Token预测机制提升解码吞吐量",
+      "llm_tldr_en": "Introduces Multi-Token Prediction to accelerate decoding in OCR tasks, similar to speculative decoding goals.",
+      "llm_tldr_cn": "引入多Token预测机制以加速OCR任务中的解码，与投机解码目标相似。",
+      "llm_tldr": "引入多Token预测机制以加速OCR任务中的解码，与投机解码目标相似。",
+      "llm_tags": [
+        "query:sd-llm:composite"
+      ],
+      "matched_query_tag": "query:sd-llm:composite",
+      "matched_query_text": "Papers central to 关于投机解码（Speculative Decoding）的学术论文检索, especially work that connects or combines: M; d; Speculative decoding for large language models; Accelerating LLM inference using speculative decoding; Eagle: Speculative decoding with context-aware draft models; State of the art speculative decoding methods for LLMs; Survey of speculative decoding techniques for inference optimization; Performance evaluation of different speculative decoding frameworks.",
+      "matched_requirement_id": "req-composite-sd-llm",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.23701v1",
+      "source": "arxiv",
+      "title": "The Diminishing Returns of Early-Exit Decoding in Modern LLMs",
+      "abstract": "In Large Language Model (LLM) inference, early-exit refers to stopping computation at an intermediate layer once the prediction is sufficiently confident, thereby reducing latency and cost. However, recent LLMs adopt improved pretraining recipes and architectures that reduce layer redundancy, potentially limiting early-exit opportunities. We re-evaluate layer-wise early-exit in modern LLMs and analyze how intermediate representations evolve during training. We introduce a metric to quantify a model's intrinsic suitability for early-exit and propose a benchmark for researchers to explore the potential early-exit benefits on different models and workloads. Our results show a diminishing trend in early-exit effectiveness across newer model generations. We further find that dense transformers generally offer greater early-exit potential than Mixture-of-Experts and State Space Models. In addition, larger models, particularly those with more than 20 billion parameters, and base pretrained models without specialized tuning tend to exhibit higher early-exit potential.",
+      "authors": [
+        "Rui Wei",
+        "Rui Du",
+        "Hanfei Yu",
+        "Devesh Tiwari",
+        "Jian Li",
+        "Zhaozhuo Xu",
+        "Hao Wang"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI"
+      ],
+      "published": "2026-03-24T20:38:17+00:00",
+      "link": "https://arxiv.org/pdf/2603.23701v1",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 6.5,
+      "llm_evidence_en": "Evaluates early-exit decoding as a latency reduction technique in modern LLMs",
+      "llm_evidence_cn": "评估早期退出解码作为现代LLM降低延迟技术的有效性",
+      "llm_evidence": "评估早期退出解码作为现代LLM降低延迟技术的有效性",
+      "canonical_evidence": "评估早期退出解码作为现代LLM降低延迟技术的有效性",
+      "llm_tldr_en": "This paper re-evaluates the effectiveness of early-exit decoding in modern LLM architectures.",
+      "llm_tldr_cn": "本文重新评估了早期退出解码在现代LLM架构中的有效性。",
+      "llm_tldr": "本文重新评估了早期退出解码在现代LLM架构中的有效性。",
+      "llm_tags": [
+        "query:sd-llm:composite"
+      ],
+      "matched_query_tag": "query:sd-llm:composite",
+      "matched_query_text": "Papers central to 关于投机解码（Speculative Decoding）的学术论文检索, especially work that connects or combines: M; d; Speculative decoding for large language models; Accelerating LLM inference using speculative decoding; Eagle: Speculative decoding with context-aware draft models; State of the art speculative decoding methods for LLMs; Survey of speculative decoding techniques for inference optimization; Performance evaluation of different speculative decoding frameworks.",
+      "matched_requirement_id": "req-composite-sd-llm",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.19595v1",
+      "source": "arxiv",
+      "title": "All-Mem: Agentic Lifelong Memory via Dynamic Topology Evolution",
+      "abstract": "Lifelong interactive agents are expected to assist users over months or years, which requires continually writing long term memories while retrieving the right evidence for each new query under fixed context and latency budgets. Existing memory systems often degrade as histories grow, yielding redundant, outdated, or noisy retrieved contexts. We present All-Mem, an online/offline lifelong memory framework that maintains a topology structured memory bank via explicit, non destructive consolidation, avoiding the irreversible information loss typical of summarization based compression. In online operation, it anchors retrieval on a bounded visible surface to keep coarse search cost bounded. Periodically offline, an LLM diagnoser proposes confidence scored topology edits executed with gating using three operators: SPLIT, MERGE, and UPDATE, while preserving immutable evidence for traceability. At query time, typed links enable hop bounded, budgeted expansion from active anchors to archived evidence when needed. Experiments on LOCOMO and LONGMEMEVAL show improved retrieval and QA over representative baselines.",
+      "authors": [
+        "Can Lv",
+        "Heng Chang",
+        "Yuchen Guo",
+        "Shengyu Tao",
+        "Shiji Zhou"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.CL"
+      ],
+      "published": "2026-03-20T03:14:40+00:00",
+      "link": "https://arxiv.org/pdf/2603.19595v1",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "agentic lifelong memory framework for interactive agents",
+      "llm_evidence_cn": "用于交互式智能体的智能体终身记忆框架",
+      "llm_evidence": "用于交互式智能体的智能体终身记忆框架",
+      "canonical_evidence": "用于交互式智能体的智能体终身记忆框架",
+      "llm_tldr_en": "All-Mem is a lifelong memory framework for agents that maintains structured memory via topology evolution.",
+      "llm_tldr_cn": "All-Mem是一个通过拓扑演化维护结构化记忆的智能体终身记忆框架。",
+      "llm_tldr": "All-Mem是一个通过拓扑演化维护结构化记忆的智能体终身记忆框架。",
+      "llm_tags": [
+        "query:ag-rl:composite"
+      ],
+      "matched_query_tag": "query:ag-rl:composite",
+      "matched_query_text": "Papers central to 寻找Agentic RL（智能体强化学习）相关的学术论文, especially work that connects or combines: Agentic Reinforcement Learning; Large Language Model based agents in reinforcement learning; Autonomous agents using reinforcement learning frameworks; Agentic workflows and reinforcement learning optimization; Multi-agent reinforcement learning for agentic systems; Self-evolving agents via reinforcement learning; State of the art in Agentic Reinforcement Learning; Frameworks for building agentic systems with RL.",
+      "matched_requirement_id": "req-composite-ag-rl",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.26557v1",
+      "source": "arxiv",
+      "title": "MemBoost: A Memory-Boosted Framework for Cost-Aware LLM Inference",
+      "abstract": "Large Language Models (LLMs) deliver strong performance but incur high inference cost in real-world services, especially under workloads with repeated or near-duplicate queries across users and sessions. In this work, we propose MemBoost, a memory-boosted LLM serving framework that enables a lightweight model to reuse previously generated answers and retrieve relevant supporting information for cheap inference, while selectively escalating difficult or uncertain queries to a stronger model. Unlike standard retrieval-augmented generation, which primarily grounds a single response, MemBoost is designed for interactive settings by supporting answer reuse, continual memory growth, and cost-aware routing. Experiments across multiple models under simulated workloads show that MemBoost substantially reduces expensive large-model invocations and overall inference cost, while maintaining high answer quality comparable to the strong model baseline.",
+      "authors": [
+        "Joris Köster",
+        "Zixuan Liu",
+        "Siavash Khajavi",
+        "Zizhan Zheng"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-03-27T16:16:48+00:00",
+      "link": "https://arxiv.org/pdf/2603.26557v1",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 7.5,
+      "llm_evidence_en": "Accelerates LLM inference by reusing generated answers and routing to lightweight models",
+      "llm_evidence_cn": "通过重用生成的答案并将请求路由到轻量级模型来加速LLM推理",
+      "llm_evidence": "通过重用生成的答案并将请求路由到轻量级模型来加速LLM推理",
+      "canonical_evidence": "通过重用生成的答案并将请求路由到轻量级模型来加速LLM推理",
+      "llm_tldr_en": "MemBoost reduces LLM inference costs by reusing prior answers and employing cost-aware model routing.",
+      "llm_tldr_cn": "MemBoost通过重用先前的答案和采用成本感知的模型路由来降低LLM推理成本。",
+      "llm_tldr": "MemBoost通过重用先前的答案和采用成本感知的模型路由来降低LLM推理成本。",
+      "llm_tags": [
+        "query:sd-llm:composite"
+      ],
+      "matched_query_tag": "query:sd-llm:composite",
+      "matched_query_text": "Papers central to 关于投机解码（Speculative Decoding）的学术论文检索, especially work that connects or combines: M; d; Speculative decoding for large language models; Accelerating LLM inference using speculative decoding; Eagle: Speculative decoding with context-aware draft models; State of the art speculative decoding methods for LLMs; Survey of speculative decoding techniques for inference optimization; Performance evaluation of different speculative decoding frameworks.",
+      "matched_requirement_id": "req-composite-sd-llm",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2604.01621v1",
+      "source": "arxiv",
+      "title": "DWDP: Distributed Weight Data Parallelism for High-Performance LLM Inference on NVL72",
+      "abstract": "Large language model (LLM) inference increasingly depends on multi-GPU execution, yet existing inference parallelization strategies require layer-wise inter-rank synchronization, making end-to-end performance sensitive to workload imbalance. We present DWDP (Distributed Weight Data Parallelism), an inference parallelization strategy that preserves data-parallel execution while offloading MoE weights across peer GPUs and fetching missing experts on demand. By removing collective inter-rank synchronization, DWDP allows each GPU to progress independently. We further address the practical overheads of this design with two optimizations for split-weight management and asynchronous remote-weight prefetch. Implemented in TensorRT-LLM and evaluated with DeepSeek-R1 on GB200 NVL72, DWDP improves end-to-end output TPS/GPU by 8.8% at comparable TPS/user in the 20-100 TPS/user serving range under 8K input sequence length and 1K output sequence length.",
+      "authors": [
+        "Wanqian Li",
+        "Jintao Peng",
+        "Zongfei Jing",
+        "Tianyu Zhang",
+        "Ze Long",
+        "Xianjie Qiao",
+        "Xiaoming Chen",
+        "Dongxu Yang",
+        "Kefeng Duan",
+        "June Yang"
+      ],
+      "primary_category": "cs.DC",
+      "categories": [
+        "cs.DC",
+        "cs.AI"
+      ],
+      "published": "2026-04-02T05:00:08+00:00",
+      "link": "https://arxiv.org/pdf/2604.01621v1",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 6.5,
+      "llm_evidence_en": "Optimizes LLM inference performance by removing inter-rank synchronization",
+      "llm_evidence_cn": "通过消除秩间同步来优化LLM推理性能",
+      "llm_evidence": "通过消除秩间同步来优化LLM推理性能",
+      "canonical_evidence": "通过消除秩间同步来优化LLM推理性能",
+      "llm_tldr_en": "DWDP is a parallelization strategy that improves LLM inference efficiency by allowing independent GPU progress.",
+      "llm_tldr_cn": "DWDP是一种并行化策略，通过允许GPU独立运行来提高LLM推理效率。",
+      "llm_tldr": "DWDP是一种并行化策略，通过允许GPU独立运行来提高LLM推理效率。",
+      "llm_tags": [
+        "query:sd-llm:composite"
+      ],
+      "matched_query_tag": "query:sd-llm:composite",
+      "matched_query_text": "Papers central to 关于投机解码（Speculative Decoding）的学术论文检索, especially work that connects or combines: M; d; Speculative decoding for large language models; Accelerating LLM inference using speculative decoding; Eagle: Speculative decoding with context-aware draft models; State of the art speculative decoding methods for LLMs; Survey of speculative decoding techniques for inference optimization; Performance evaluation of different speculative decoding frameworks.",
+      "matched_requirement_id": "req-composite-sd-llm",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.27115v1",
+      "source": "arxiv",
+      "title": "SJD-VP: Speculative Jacobi Decoding with Verification Prediction for Autoregressive Image Generation",
+      "abstract": "Speculative Jacobi Decoding (SJD) has emerged as a promising method for accelerating autoregressive image generation. Despite its potential, existing SJD approaches often suffer from the low acceptance rate issue of speculative tokens due to token selection ambiguity. Recent works attempt to mitigate this issue primarily from the relaxed token verification perspective but fail to fully exploit the iterative dynamics of decoding. In this paper, we conduct an in-depth analysis and make a novel observation that tokens whose probabilities increase are more likely to match the verification-accepted and correct token. Based on this, we propose a novel Speculative Jacobi Decoding with Verification Prediction (SJD-VP). The key idea is to leverage the change in token probabilities across iterations to guide sampling, favoring tokens whose probabilities increase. This effectively predicts which tokens are likely to pass subsequent verification, boosting the acceptance rate. In particular, our SJD-VP is plug-and-play and can be seamlessly integrated into existing SJD methods. Extensive experiments on standard benchmarks demonstrate that our SJD-VP method consistently accelerates autoregressive decoding while improving image generation quality.",
+      "authors": [
+        "Bingqi Shan",
+        "Baoquan Zhang",
+        "Xiaochen Qi",
+        "Xutao Li",
+        "Yunming Ye",
+        "Liqiang Nie"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-03-28T03:59:03+00:00",
+      "link": "https://arxiv.org/pdf/2603.27115v1",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Speculative Jacobi Decoding for accelerating autoregressive generation",
+      "llm_evidence_cn": "用于加速自回归生成的投机雅可比解码",
+      "llm_evidence": "用于加速自回归生成的投机雅可比解码",
+      "canonical_evidence": "用于加速自回归生成的投机雅可比解码",
+      "llm_tldr_en": "Introduces SJD-VP to improve acceptance rates in speculative decoding for image generation using verification prediction.",
+      "llm_tldr_cn": "引入SJD-VP，通过验证预测提高图像生成中投机解码的接受率。",
+      "llm_tldr": "引入SJD-VP，通过验证预测提高图像生成中投机解码的接受率。",
+      "llm_tags": [
+        "query:sd-llm:composite"
+      ],
+      "matched_query_tag": "query:sd-llm:composite",
+      "matched_query_text": "Papers central to 关于投机解码（Speculative Decoding）的学术论文检索, especially work that connects or combines: M; d; Speculative decoding for large language models; Accelerating LLM inference using speculative decoding; Eagle: Speculative decoding with context-aware draft models; State of the art speculative decoding methods for LLMs; Survey of speculative decoding techniques for inference optimization; Performance evaluation of different speculative decoding frameworks.",
+      "matched_requirement_id": "req-composite-sd-llm",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2604.00235v1",
+      "source": "arxiv",
+      "title": "MAC-Attention: a Match-Amend-Complete Scheme for Fast and Accurate Attention Computation",
+      "abstract": "Long-context decoding in LLMs is IO-bound: each token re-reads an ever-growing KV cache. Prior accelerations cut bytes via compression, which lowers fidelity, or selection/eviction, which restricts what remains accessible, and both can degrade delayed recall and long-form generation. We introduce MAC-Attention, a fidelity- and access-preserving alternative that accelerates decoding by reusing prior attention computations for semantically similar recent queries. It starts with a match stage that performs pre-RoPE L2 matching over a short local window; an amend stage rectifies the reused attention by recomputing a small band near the match boundary; and a complete stage fuses the rectified results with fresh attention computed on the KV tail through a numerically stable merge. On a match hit, the compute and bandwidth complexity is constant regardless of context length. The method is model-agnostic and composes with IO-aware kernels, paged-KV managers, and MQA/GQA. Across LongBench v2 (120K), RULER (120K), and LongGenBench (16K continuous generation), compared to the latest FlashInfer library, MAC-Attention reduces KV accesses by up to 99%, cuts token generation latency by over 60% at 128K, and achieves over 14.3x attention-phase speedups, up to 2.6x end-to-end, while maintaining full-attention quality. By reusing computation, MAC-Attention delivers long-context inference that is both fast and faithful. Code is available here: https://github.com/YJHMITWEB/MAC-Attention.git",
+      "authors": [
+        "Jinghan Yao",
+        "Sam Adé Jacobs",
+        "Walid Krichene",
+        "Masahiro Tanaka",
+        "Dhabaleswar K Panda"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.DC"
+      ],
+      "published": "2026-03-31T20:57:23+00:00",
+      "link": "https://arxiv.org/pdf/2604.00235v1",
+      "tags": [
+        "keyword:SD LLM",
+        "query:SD LLM"
+      ],
+      "llm_score": 7.5,
+      "llm_evidence_en": "Accelerates LLM decoding by reusing prior attention computations for similar queries",
+      "llm_evidence_cn": "通过重用相似查询的先前注意力计算来加速LLM解码",
+      "llm_evidence": "通过重用相似查询的先前注意力计算来加速LLM解码",
+      "canonical_evidence": "通过重用相似查询的先前注意力计算来加速LLM解码",
+      "llm_tldr_en": "MAC-Attention speeds up long-context LLM decoding by reusing and rectifying prior attention computations.",
+      "llm_tldr_cn": "MAC-Attention通过重用和修正先前的注意力计算，加速了长上下文LLM的解码过程。",
+      "llm_tldr": "MAC-Attention通过重用和修正先前的注意力计算，加速了长上下文LLM的解码过程。",
+      "llm_tags": [
+        "query:sd-llm:composite"
+      ],
+      "matched_query_tag": "query:sd-llm:composite",
+      "matched_query_text": "Papers central to 关于投机解码（Speculative Decoding）的学术论文检索, especially work that connects or combines: M; d; Speculative decoding for large language models; Accelerating LLM inference using speculative decoding; Eagle: Speculative decoding with context-aware draft models; State of the art speculative decoding methods for LLMs; Survey of speculative decoding techniques for inference optimization; Performance evaluation of different speculative decoding frameworks.",
+      "matched_requirement_id": "req-composite-sd-llm",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    }
+  ]
+}

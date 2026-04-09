@@ -1,0 +1,70 @@
+{
+  "version": 2,
+  "extractor": "pdffigures2",
+  "figures": [
+    {
+      "url": "assets/figures/arxiv/2603.23701v1/fig-001.webp",
+      "caption": "Figure 1: Layer-wise early-exit decoding in LLMs.",
+      "page": 1,
+      "index": 1,
+      "width": 431,
+      "height": 315
+    },
+    {
+      "url": "assets/figures/arxiv/2603.23701v1/fig-002.webp",
+      "caption": "Table 1: Oracle early-exit performance under a maximum skip ratio, with accuracy loss within to 5%. We report the full-depth accuracy (Full Acc.↑), early-exit accuracy (Acc.↑), skip ratio (Skip↑), and the mean early-exit score (↑).",
+      "page": 6,
+      "index": 2,
+      "width": 858,
+      "height": 230
+    },
+    {
+      "url": "assets/figures/arxiv/2603.23701v1/fig-003.webp",
+      "caption": "Figure 3: Workflow illustration of the paper.",
+      "page": 2,
+      "index": 3,
+      "width": 448,
+      "height": 344
+    },
+    {
+      "url": "assets/figures/arxiv/2603.23701v1/fig-004.webp",
+      "caption": "Figure 8: The layer-to-final similarity of Pythia-12B across different training stages.",
+      "page": 7,
+      "index": 4,
+      "width": 445,
+      "height": 352
+    },
+    {
+      "url": "assets/figures/arxiv/2603.23701v1/fig-005.webp",
+      "caption": "Figure 7: The layer-to-final similarity and the mean EAS of three different LLM architectures: (a) dense (Qwen3-8B), (b) MoE (Qwen3-30B-A3B), and (c) SSM (Mamba-Codestral-7B).",
+      "page": 7,
+      "index": 5,
+      "width": 377,
+      "height": 395
+    },
+    {
+      "url": "assets/figures/arxiv/2603.23701v1/fig-006.webp",
+      "caption": "Figure 10: The effect of workloads on the model’s earlyexit adaptability.",
+      "page": 8,
+      "index": 6,
+      "width": 445,
+      "height": 352
+    },
+    {
+      "url": "assets/figures/arxiv/2603.23701v1/fig-007.webp",
+      "caption": "Table 2: Categorization of Selected LLM Families.",
+      "page": 12,
+      "index": 7,
+      "width": 948,
+      "height": 284
+    },
+    {
+      "url": "assets/figures/arxiv/2603.23701v1/fig-008.webp",
+      "caption": "Figure 4: The layer-to-final similarity results of eight different models aggregated across four datasets.",
+      "page": 5,
+      "index": 8,
+      "width": 911,
+      "height": 358
+    }
+  ]
+}

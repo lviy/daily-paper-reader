@@ -1,0 +1,46 @@
+{
+  "version": 2,
+  "extractor": "pdffigures2",
+  "figures": [
+    {
+      "url": "assets/figures/arxiv/2603.11243v1/fig-001.webp",
+      "caption": "Table 1: Comparing full AR and self-speculative decoding for granite-speech-4.0-1b. High accuracy: τCTC=0.7, τSLM=0.2. High RTFx: τCTC=3.0, τSLM=0.1. %C/%L = CTC/LLM acceptance rates at each verification stage. RTFx are measured on 1 H100. ∗p < 0.0001, †p < 0.05 (Statistical significance was assessed using two-proportion z-test).",
+      "page": 3,
+      "index": 1,
+      "width": 460,
+      "height": 261
+    },
+    {
+      "url": "assets/figures/arxiv/2603.11243v1/fig-002.webp",
+      "caption": "Figure 2: Run times and breakdown for the different passes in the high accuracy SSD regime for granite-speech-4.0-1b.",
+      "page": 3,
+      "index": 2,
+      "width": 467,
+      "height": 442
+    },
+    {
+      "url": "assets/figures/arxiv/2603.11243v1/fig-003.webp",
+      "caption": "Figure 4: Ablation study of verification passes: green = CTC followed by LLM; blue = LLM verification; red = CTC verification. Results are reported on the ESB/Open ASR test sets.",
+      "page": 4,
+      "index": 3,
+      "width": 467,
+      "height": 272
+    },
+    {
+      "url": "assets/figures/arxiv/2603.11243v1/fig-004.webp",
+      "caption": "Figure 5: WER and RTFx comparison between granite-speech and leading SLMs on the Open ASR test sets (all on 1 H100).",
+      "page": 4,
+      "index": 4,
+      "width": 466,
+      "height": 272
+    },
+    {
+      "url": "assets/figures/arxiv/2603.11243v1/fig-005.webp",
+      "caption": "Figure 1: Overview of the proposed self-speculative decoding method for speech-aware LLMs.",
+      "page": 2,
+      "index": 5,
+      "width": 987,
+      "height": 386
+    }
+  ]
+}

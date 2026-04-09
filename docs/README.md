@@ -6,188 +6,115 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-02-19 ~ 2026-03-20
-- 运行时间：2026-03-20 02:50:55 UTC
+- 最新运行日期：2026-03-11 ~ 2026-04-09
+- 运行时间：2026-04-09 06:16:52 UTC
 - 运行状态：成功
-- 本次总论文数：55
-- 精读区：0
-- 速读区：55
+- 本次总论文数：31
+- 精读区：20
+- 速读区：11
 
 ### 今日简报（AI）
-- 今日共生成 55 篇推荐（精读 0 篇，速读 55 篇）
-- 速读：《Phase-Aware Mixture of Experts for Agentic Reinforcement Learning》（10.0/10）, 《PyVision-RL: Forging Open Agentic Vision Models via RL》（10.0/10）, 《Tool-R0: Self-Evolving LLM Agents for Tool-Learning from Zero Data》（10.0/10）
-- 这些结果覆盖了当下较热的方向，建议先看精读区论文的关键问题与方法。
-- 详情：[/20260219-20260320/README](/20260219-20260320/README)
+本期深度研读 31 篇前沿成果，重点攻克投机采样（Speculative Decoding）在语音识别与在线学习中的效率瓶颈。
+满分论文揭示了利用 CTC 编码器实现 ASR 自投机解码及草稿模型在线演进的新范式，实现了推理性能的跨越式提升。
+建议优先关注多模态边缘协作与智能体长效记忆技术，探索大模型在复杂场景下的自适应优化路径。
+- 详情：[/20260311-20260409/README](/20260311-20260409/README)
 
 ### 精读区论文标签
-- 本次无精读推荐。
+1. [Self-Speculative Decoding for LLM-based ASR with CTC Encoder Drafts](/20260311-20260409/2603.11243v1-self-speculative-decoding-for-llm-based-asr-with-ctc-encoder-drafts)  
+   标签：评分：10.0/10、query:sd-llm
+   evidence：语音感知LLM的自投机解码
+2. [When Drafts Evolve: Speculative Decoding Meets Online Learning](/20260311-20260409/2603.12617v1-when-drafts-evolve-speculative-decoding-meets-online-learning)  
+   标签：评分：10.0/10、query:sd-llm
+   evidence：结合在线学习的投机解码用于草稿模型自适应
+3. [MMSpec: Benchmarking Speculative Decoding for Vision-Language Models](/20260311-20260409/2603.14989v1-mmspec-benchmarking-speculative-decoding-for-vision-language-models)  
+   标签：评分：10.0/10、query:sd-llm
+   evidence：视觉语言模型投机解码的基准测试
+4. [HeiSD: Hybrid Speculative Decoding for Embodied Vision-Language-Action Models with Kinematic Awareness](/20260311-20260409/2603.17573v1-heisd-hybrid-speculative-decoding-for-embodied-vision-language-action-models-with-kinematic-awareness)  
+   标签：评分：10.0/10、query:sd-llm
+   evidence：视觉-语言-动作模型的混合投机解码
+5. [SpecForge: A Flexible and Efficient Open-Source Training Framework for Speculative Decoding](/20260311-20260409/2603.18567v1-specforge-a-flexible-and-efficient-open-source-training-framework-for-speculative-decoding)  
+   标签：评分：10.0/10、query:sd-llm
+   evidence：支持EAGLE-3的投机解码模型训练框架
+6. [A Pipelined Collaborative Speculative Decoding Framework for Efficient Edge-Cloud LLM Inference](/20260311-20260409/2603.19133v1-a-pipelined-collaborative-speculative-decoding-framework-for-efficient-edge-cloud-llm-inference)  
+   标签：评分：10.0/10、query:sd-llm
+   evidence：流水线协作投机解码框架
+7. [ParallelVLM: Lossless Video-LLM Acceleration with Visual Alignment Aware Parallel Speculative Decoding](/20260311-20260409/2603.19610v1-parallelvlm-lossless-video-llm-acceleration-with-visual-alignment-aware-parallel-speculative-decoding)  
+   标签：评分：10.0/10、query:sd-llm
+   evidence：用于视频LLM加速的并行投机解码框架
+8. [ParallelVLM: Lossless Video-LLM Acceleration with Visual Alignment Aware Parallel Speculative Decoding](/20260311-20260409/2603.19610v2-parallelvlm-lossless-video-llm-acceleration-with-visual-alignment-aware-parallel-speculative-decoding)  
+   标签：评分：10.0/10、query:sd-llm
+   evidence：用于视频LLM加速的并行投机解码
+9. [TAPS: Task Aware Proposal Distributions for Speculative Sampling](/20260311-20260409/2603.27027v1-taps-task-aware-proposal-distributions-for-speculative-sampling)  
+   标签：评分：10.0/10、query:sd-llm
+   evidence：评估用于投机解码的EAGLE-2草稿模型
+10. [Goose: Anisotropic Speculation Trees for Training-Free Speculative Decoding](/20260311-20260409/2604.02047v1-goose-anisotropic-speculation-trees-for-training-free-speculative-decoding)  
+   标签：评分：10.0/10、query:sd-llm
+   evidence：用于无需训练投机解码的各向异性投机树
+11. [Cactus: Accelerating Auto-Regressive Decoding with Constrained Acceptance Speculative Sampling](/20260311-20260409/2604.04987v1-cactus-accelerating-auto-regressive-decoding-with-constrained-acceptance-speculative-sampling)  
+   标签：评分：10.0/10、query:sd-llm
+   evidence：利用投机采样加速自回归解码
+12. [Multi-Drafter Speculative Decoding with Alignment Feedback](/20260311-20260409/2604.05417v1-multi-drafter-speculative-decoding-with-alignment-feedback)  
+   标签：评分：10.0/10、query:sd-llm
+   evidence：多草稿模型投机解码框架
+13. [See the Forest for the Trees: Loosely Speculative Decoding via Visual-Semantic Guidance for Efficient Inference of Video LLMs](/20260311-20260409/2604.05650v1-see-the-forest-for-the-trees-loosely-speculative-decoding-via-visual-semantic-guidance-for-efficient-inference-of-video-llms)  
+   标签：评分：10.0/10、query:sd-llm
+   evidence：通过视觉语义引导的松散投机解码
+14. [Edge-Cloud Collaborative Speech Emotion Captioning via Token-Level Speculative Decoding in Audio-Language Models](/20260311-20260409/2603.11397v1-edge-cloud-collaborative-speech-emotion-captioning-via-token-level-speculative-decoding-in-audio-language-models)  
+   标签：评分：9.0/10、query:sd-llm
+   evidence：音频语言模型中的Token级投机解码
+15. [SpecSteer: Synergizing Local Context and Global Reasoning for Efficient Personalized Generation](/20260311-20260409/2603.16219v1-specsteer-synergizing-local-context-and-global-reasoning-for-efficient-personalized-generation)  
+   标签：评分：9.0/10、query:sd-llm
+   evidence：将投机解码重新利用为分布式对齐协议
+16. [Efficient Training-Free Multi-Token Prediction via Embedding-Space Probing](/20260311-20260409/2603.17942v1-efficient-training-free-multi-token-prediction-via-embedding-space-probing)  
+   标签：评分：9.0/10、query:sd-llm
+   evidence：无需训练的多标记预测方法构建投机标记树
+17. [SJD-PAC: Accelerating Speculative Jacobi Decoding via Proactive Drafting and Adaptive Continuation](/20260311-20260409/2603.18599v1-sjd-pac-accelerating-speculative-jacobi-decoding-via-proactive-drafting-and-adaptive-continuation)  
+   标签：评分：9.0/10、query:sd-llm
+   evidence：通过主动草拟加速投机雅可比解码
+18. [SpecEyes: Accelerating Agentic Multimodal LLMs via Speculative Perception and Planning](/20260311-20260409/2603.23483v1-speceyes-accelerating-agentic-multimodal-llms-via-speculative-perception-and-planning)  
+   标签：评分：9.0/10、query:ag-rl
+   evidence：针对智能体多模态LLM和规划的投机加速
+19. [S2D2: Fast Decoding for Diffusion LLMs via Training-Free Self-Speculation](/20260311-20260409/2603.25702v1-s2d2-fast-decoding-for-diffusion-llms-via-training-free-self-speculation)  
+   标签：评分：9.0/10、query:sd-llm
+   evidence：块扩散语言模型的无需训练自投机解码框架
+20. [DualDiffusion: A Speculative Decoding Strategy for Masked Diffusion Models](/20260311-20260409/2604.05250v1-dualdiffusion-a-speculative-decoding-strategy-for-masked-diffusion-models)  
+   标签：评分：9.0/10、query:sd-llm
+   evidence：针对掩码扩散模型的投机解码框架，结合了草稿模型与验证模型
 
 ### 速读区论文标签
-1. [Phase-Aware Mixture of Experts for Agentic Reinforcement Learning](/20260219-20260320/2602.17038v1-phase-aware-mixture-of-experts-for-agentic-reinforcement-learning)  
-   标签：评分：10.0/10、query:ag-rl
-   evidence：用于智能体强化学习的混合专家模型
-2. [PyVision-RL: Forging Open Agentic Vision Models via RL](/20260219-20260320/2602.20739v1-pyvision-rl-forging-open-agentic-vision-models-via-rl)  
-   标签：评分：10.0/10、query:ag-rl
-   evidence：用于智能体多模态模型的强化学习框架
-3. [Tool-R0: Self-Evolving LLM Agents for Tool-Learning from Zero Data](/20260219-20260320/2602.21320v1-tool-r0-self-evolving-llm-agents-for-tool-learning-from-zero-data)  
-   标签：评分：10.0/10、query:ag-rl
-   evidence：利用强化学习进行工具学习的自我进化 LLM 智能体
-4. [ARLArena: A Unified Framework for Stable Agentic Reinforcement Learning](/20260219-20260320/2602.21534v1-arlarena-a-unified-framework-for-stable-agentic-reinforcement-learning)  
-   标签：评分：10.0/10、query:ag-rl
-   evidence：智能体强化学习的系统分析框架与稳定训练方案
-5. [Exploratory Memory-Augmented LLM Agent via Hybrid On- and Off-Policy Optimization](/20260219-20260320/2602.23008v1-exploratory-memory-augmented-llm-agent-via-hybrid-on--and-off-policy-optimization)  
-   标签：评分：10.0/10、query:ag-rl
-   evidence：具有记忆增强探索功能的LLM智能体混合强化学习框架
-6. [Qwen3-Coder-Next Technical Report](/20260219-20260320/2603.00729v1-qwen3-coder-next-technical-report)  
-   标签：评分：10.0/10、query:ag-rl
-   evidence：通过环境反馈强化学习对大模型进行智能体化训练
-7. [HiMAC: Hierarchical Macro-Micro Learning for Long-Horizon LLM Agents](/20260219-20260320/2603.00977v1-himac-hierarchical-macro-micro-learning-for-long-horizon-llm-agents)  
-   标签：评分：10.0/10、query:ag-rl
-   evidence：用于长周期LLM智能体的分层智能体强化学习框架
-8. [RAPO: Expanding Exploration for LLM Agents via Retrieval-Augmented Policy Optimization](/20260219-20260320/2603.03078v1-rapo-expanding-exploration-for-llm-agents-via-retrieval-augmented-policy-optimization)  
-   标签：评分：10.0/10、query:ag-rl
-   evidence：针对大语言模型智能体的智能体强化学习
-9. [KARL: Knowledge Agents via Reinforcement Learning](/20260219-20260320/2603.05218v1-karl-knowledge-agents-via-reinforcement-learning)  
-   标签：评分：10.0/10、query:ag-rl
-   evidence：通过强化学习训练企业搜索智能体
-10. [RetroAgent: From Solving to Evolving via Retrospective Dual Intrinsic Feedback](/20260219-20260320/2603.08561v1-retroagent-from-solving-to-evolving-via-retrospective-dual-intrinsic-feedback)  
-   标签：评分：10.0/10、query:ag-rl
-   evidence：利用LLM和内在反馈实现自进化智能体的在线强化学习框架
-11. [RetroAgent: From Solving to Evolving via Retrospective Dual Intrinsic Feedback](/20260219-20260320/2603.08561v2-retroagent-from-solving-to-evolving-via-retrospective-dual-intrinsic-feedback)  
-   标签：评分：10.0/10、query:ag-rl
-   evidence：通过演化使智能体掌握环境的在线强化学习框架
-12. [RetroAgent: From Solving to Evolving via Retrospective Dual Intrinsic Feedback](/20260219-20260320/2603.08561v3-retroagent-from-solving-to-evolving-via-retrospective-dual-intrinsic-feedback)  
-   标签：评分：10.0/10、query:ag-rl
-   evidence：通过回顾性反馈使LLM智能体进化的在线强化学习框架
-13. [Agentic Critical Training](/20260219-20260320/2603.08706v1-agentic-critical-training)  
-   标签：评分：10.0/10、query:ag-rl
-   evidence：将大语言模型训练为自主智能体的强化学习范式
-14. [OpenClaw-RL: Train Any Agent Simply by Talking](/20260219-20260320/2603.10165v1-openclaw-rl-train-any-agent-simply-by-talking)  
-   标签：评分：10.0/10、query:ag-rl
-   evidence：从通用信号训练任何智能体强化学习系统的框架
-15. [Meta-Reinforcement Learning with Self-Reflection for Agentic Search](/20260219-20260320/2603.11327v1-meta-reinforcement-learning-with-self-reflection-for-agentic-search)  
-   标签：评分：10.0/10、query:ag-rl
-   evidence：具有自我反思功能的智能体搜索元强化学习
-16. [Meta-Reinforcement Learning with Self-Reflection for Agentic Search](/20260219-20260320/2603.11327v2-meta-reinforcement-learning-with-self-reflection-for-agentic-search)  
-   标签：评分：10.0/10、query:ag-rl
-   evidence：用于智能体搜索的带有自我反思的上下文元强化学习
-17. [ARL-Tangram: Unleash the Resource Efficiency in Agentic Reinforcement Learning](/20260219-20260320/2603.13019v1-arl-tangram-unleash-the-resource-efficiency-in-agentic-reinforcement-learning)  
-   标签：评分：10.0/10、query:ag-rl
-   evidence：针对智能体强化学习工作负载的统一资源管理系统
-18. [SQL-ASTRA: Alleviating Sparse Feedback in Agentic SQL via Column-Set Matching and Trajectory Aggregation](/20260219-20260320/2603.16161v1-sql-astra-alleviating-sparse-feedback-in-agentic-sql-via-column-set-matching-and-trajectory-aggregation)  
-   标签：评分：10.0/10、query:ag-rl
-   evidence：提出Agentic SQL框架，利用智能体强化学习解决多轮任务中的信用分配问题
-19. [Retrospective In-Context Learning for Temporal Credit Assignment with Large Language Models](/20260219-20260320/2602.17497v1-retrospective-in-context-learning-for-temporal-credit-assignment-with-large-language-models)  
-   标签：评分：9.0/10、query:ag-rl
-   evidence：利用LLM和回顾式语境学习为自进化智能体提供强化学习信号
-20. [MIRA: Memory-Integrated Reinforcement Learning Agent with Limited LLM Guidance](/20260219-20260320/2602.17930v1-mira-memory-integrated-reinforcement-learning-agent-with-limited-llm-guidance)  
-   标签：评分：9.0/10、query:ag-rl
-   evidence：利用大模型指导和记忆图谱的强化学习智能体
-21. [Reinforcing Real-world Service Agents: Balancing Utility and Cost in Task-oriented Dialogue](/20260219-20260320/2602.22697v1-reinforcing-real-world-service-agents-balancing-utility-and-cost-in-task-oriented-dialogue)  
-   标签：评分：9.0/10、query:ag-rl
-   evidence：基于大语言模型的任务导向对话智能体强化学习
-22. [The Auton Agentic AI Framework](/20260219-20260320/2602.23720v1-the-auton-agentic-ai-framework)  
-   标签：评分：9.0/10、query:ag-rl
-   evidence：标准化自主智能体系统创建与执行的框架
-23. [RUMAD: Reinforcement-Unifying Multi-Agent Debate](/20260219-20260320/2602.23864v1-rumad-reinforcement-unifying-multi-agent-debate)  
-   标签：评分：9.0/10、query:ag-rl
-   evidence：用于优化多智能体辩论系统的强化学习
-24. [WirelessAgent++: Automated Agentic Workflow Design and Benchmarking for Wireless Networks](/20260219-20260320/2603.00501v1-wirelessagent-automated-agentic-workflow-design-and-benchmarking-for-wireless-networks)  
-   标签：评分：9.0/10、query:ag-rl
-   evidence：使用MCTS程序搜索自动设计智能体工作流
-25. [RLAR: An Agentic Reward System for Multi-task Reinforcement Learning on Large Language Models](/20260219-20260320/2603.00724v1-rlar-an-agentic-reward-system-for-multi-task-reinforcement-learning-on-large-language-models)  
-   标签：评分：9.0/10、query:ag-rl
-   evidence：通过强化学习进行大模型对齐的智能体奖励系统
-26. [MOSAIC: A Unified Platform for Cross-Paradigm Comparison and Evaluation of Homogeneous and Heterogeneous Multi-Agent RL, LLM, VLM, and Human Decision-Makers](/20260219-20260320/2603.01260v1-mosaic-a-unified-platform-for-cross-paradigm-comparison-and-evaluation-of-homogeneous-and-heterogeneous-multi-agent-rl-llm-vlm-and-human-decision-makers)  
-   标签：评分：9.0/10、query:ag-rl
-   evidence：在多智能体设置中评估 RL 和 LLM 智能体的统一平台
-27. [Agentic Self-Evolutionary Replanning for Embodied Navigation](/20260219-20260320/2603.02772v1-agentic-self-evolutionary-replanning-for-embodied-navigation)  
-   标签：评分：9.0/10、query:ag-rl
-   evidence：通过运行时学习实现的智能体自进化动作模型
-28. [MAGE: Meta-Reinforcement Learning for Language Agents toward Strategic Exploration and Exploitation](/20260219-20260320/2603.03680v1-mage-meta-reinforcement-learning-for-language-agents-toward-strategic-exploration-and-exploitation)  
-   标签：评分：9.0/10、query:ag-rl
-   evidence：多智能体环境下针对LLM智能体的元强化学习框架
-29. [AutoResearch-RL: Perpetual Self-Evaluating Reinforcement Learning Agents for Autonomous Neural Architecture Discovery](/20260219-20260320/2603.07300v1-autoresearch-rl-perpetual-self-evaluating-reinforcement-learning-agents-for-autonomous-neural-architecture-discovery)  
-   标签：评分：9.0/10、query:ag-rl
-   evidence：用于自主发现的永久自我评估强化学习智能体
-30. [Improving Search Agent with One Line of Code](/20260219-20260320/2603.10069v1-improving-search-agent-with-one-line-of-code)  
-   标签：评分：9.0/10、query:ag-rl
-   evidence：基于工具的智能体强化学习工作流优化
-31. [A Control-Theoretic Foundation for Agentic Systems](/20260219-20260320/2603.10779v1-a-control-theoretic-foundation-for-agentic-systems)  
-   标签：评分：9.0/10、query:ag-rl
-   evidence：智能体系统与决策权限的控制理论基础
-32. [A Control-Theoretic Foundation for Agentic Systems](/20260219-20260320/2603.10779v2-a-control-theoretic-foundation-for-agentic-systems)  
-   标签：评分：9.0/10、query:ag-rl
-   evidence：用于分析智能体系统的控制理论框架
-33. [Towards Cold-Start Drafting and Continual Refining: A Value-Driven Memory Approach with Application to NPU Kernel Synthesis](/20260219-20260320/2603.10846v1-towards-cold-start-drafting-and-continual-refining-a-value-driven-memory-approach-with-application-to-npu-kernel-synthesis)  
-   标签：评分：9.0/10、query:ag-rl
-   evidence：基于记忆强化学习的自我进化智能体框架
-34. [On Information Self-Locking in Reinforcement Learning for Active Reasoning of LLM agents](/20260219-20260320/2603.12109v1-on-information-self-locking-in-reinforcement-learning-for-active-reasoning-of-llm-agents)  
-   标签：评分：9.0/10、query:ag-rl
-   evidence：用于LLM智能体主动推理以获取任务相关信息的强化学习
-35. [SAGE: Multi-Agent Self-Evolution for LLM Reasoning](/20260219-20260320/2603.15255v1-sage-multi-agent-self-evolution-for-llm-reasoning)  
-   标签：评分：9.0/10、query:ag-rl
-   evidence：基于强化学习的LLM推理多智能体自我进化框架
-36. [SAGE: Multi-Agent Self-Evolution for LLM Reasoning](/20260219-20260320/2603.15255v2-sage-multi-agent-self-evolution-for-llm-reasoning)  
-   标签：评分：9.0/10、query:ag-rl
-   evidence：大模型推理的多智能体自我进化
-37. [Agentic AI for SAGIN Resource Management_Semantic Awareness, Orchestration, and Optimization](/20260219-20260320/2603.16458v1-agentic-ai-for-sagin-resource-managementsemantic-awareness-orchestration-and-optimization)  
-   标签：评分：9.0/10、query:ag-rl
-   evidence：将基于大模型的智能体嵌入控制层进行优化
-38. [Anticipatory Planning for Multimodal AI Agents](/20260219-20260320/2603.16777v1-anticipatory-planning-for-multimodal-ai-agents)  
-   标签：评分：9.0/10、query:ag-rl
-   evidence：用于多模态AI智能体规划的强化学习框架
-39. [Complementary Reinforcement Learning](/20260219-20260320/2603.17621v1-complementary-reinforcement-learning)  
-   标签：评分：9.0/10、query:ag-rl
-   evidence：利用历史经验训练基于LLM的智能体的强化学习范式
-40. [Action-Graph Policies: Learning Action Co-dependencies in Multi-Agent Reinforcement Learning](/20260219-20260320/2602.17009v2-action-graph-policies-learning-action-co-dependencies-in-multi-agent-reinforcement-learning)  
+1. [MSAO: Adaptive Modality Sparsity-Aware Offloading with Edge-Cloud Collaboration for Efficient Multimodal LLM Inference](/20260311-20260409/2604.02945v1-msao-adaptive-modality-sparsity-aware-offloading-with-edge-cloud-collaboration-for-efficient-multimodal-llm-inference)  
+   标签：评分：8.5/10、query:sd-llm
+   evidence：自适应投机边缘云协作卸载
+2. [Adaptive Decoding via Test-Time Policy Learning for Self-Improving Generation](/20260311-20260409/2603.18428v1-adaptive-decoding-via-test-time-policy-learning-for-self-improving-generation)  
    标签：评分：8.0/10、query:ag-rl
-   evidence：用于协调动作和依赖关系的多智能体强化学习
-41. [Alignment in Time: Peak-Aware Orchestration for Long-Horizon Agentic Systems](/20260219-20260320/2602.17910v1-alignment-in-time-peak-aware-orchestration-for-long-horizon-agentic-systems)  
+   evidence：基于强化学习的解码采样器，用于序列决策
+3. [All-Mem: Agentic Lifelong Memory via Dynamic Topology Evolution](/20260311-20260409/2603.19595v1-all-mem-agentic-lifelong-memory-via-dynamic-topology-evolution)  
    标签：评分：8.0/10、query:ag-rl
-   evidence：长程智能体系统与工作流的编排
-42. [SkillOrchestra: Learning to Route Agents via Skill Transfer](/20260219-20260320/2602.19672v1-skillorchestra-learning-to-route-agents-via-skill-transfer)  
-   标签：评分：8.0/10、query:ag-rl
-   evidence：用于智能体工作流的强化学习训练编排器
-43. [Descent-Guided Policy Gradient for Scalable Cooperative Multi-Agent Learning](/20260219-20260320/2602.20078v1-descent-guided-policy-gradient-for-scalable-cooperative-multi-agent-learning)  
-   标签：评分：8.0/10、query:ag-rl
-   evidence：可扩展的协作式多智能体学习框架
-44. [Hierarchical Lead Critic based Multi-Agent Reinforcement Learning](/20260219-20260320/2602.21680v1-hierarchical-lead-critic-based-multi-agent-reinforcement-learning)  
-   标签：评分：8.0/10、query:ag-rl
-   evidence：多智能体强化学习的分层架构
-45. [Search More, Think Less: Rethinking Long-Horizon Agentic Search for Efficiency and Generalization](/20260219-20260320/2602.22675v1-search-more-think-less-rethinking-long-horizon-agentic-search-for-efficiency-and-generalization)  
-   标签：评分：8.0/10、query:ag-rl
-   evidence：长周期智能体搜索与工作流优化
-46. [Foundation World Models for Agents that Learn, Verify, and Adapt Reliably Beyond Static Environments](/20260219-20260320/2602.23997v1-foundation-world-models-for-agents-that-learn-verify-and-adapt-reliably-beyond-static-environments)  
-   标签：评分：8.0/10、query:ag-rl
-   evidence：使用强化学习的自主智能体基础世界模型
-47. [Heterogeneous Agent Collaborative Reinforcement Learning](/20260219-20260320/2603.02604v1-heterogeneous-agent-collaborative-reinforcement-learning)  
-   标签：评分：8.0/10、query:ag-rl
-   evidence：异构智能体的协作强化学习
-48. [Generalized Per-Agent Advantage Estimation for Multi-Agent Policy Optimization](/20260219-20260320/2603.02654v1-generalized-per-agent-advantage-estimation-for-multi-agent-policy-optimization)  
-   标签：评分：8.0/10、query:ag-rl
-   evidence：用于协作的多智能体强化学习
-49. [Robustness of Agentic AI Systems via Adversarially-Aligned Jacobian Regularization](/20260219-20260320/2603.04378v1-robustness-of-agentic-ai-systems-via-adversarially-aligned-jacobian-regularization)  
-   标签：评分：8.0/10、query:ag-rl
-   evidence：自主多智能体生态系统的鲁棒性
-50. [Act-Observe-Rewrite: Multimodal Coding Agents as In-Context Policy Learners for Robot Manipulation](/20260219-20260320/2603.04466v1-act-observe-rewrite-multimodal-coding-agents-as-in-context-policy-learners-for-robot-manipulation)  
-   标签：评分：8.0/10、query:ag-rl
-   evidence：LLM智能体通过上下文学习改进策略，无需梯度更新
-51. [Multi-Agent Reinforcement Learning with Submodular Reward](/20260219-20260320/2603.06810v1-multi-agent-reinforcement-learning-with-submodular-reward)  
-   标签：评分：8.0/10、query:ag-rl
-   evidence：具有子模奖励的协作式多智能体强化学习正式框架
-52. [Fibration Policy Optimization](/20260219-20260320/2603.08239v1-fibration-policy-optimization)  
-   标签：评分：8.0/10、query:ag-rl
-   evidence：针对智能体流水线和强化学习数据的分层稳定性优化目标
-53. [Code-Space Response Oracles: Generating Interpretable Multi-Agent Policies with Large Language Models](/20260219-20260320/2603.10098v1-code-space-response-oracles-generating-interpretable-multi-agent-policies-with-large-language-models)  
-   标签：评分：8.0/10、query:ag-rl
-   evidence：在多智能体策略生成中用LLM取代强化学习Oracle
-54. [Adaptive RAN Slicing Control via Reward-Free Self-Finetuning Agents](/20260219-20260320/2603.10564v1-adaptive-ran-slicing-control-via-reward-free-self-finetuning-agents)  
-   标签：评分：8.0/10、query:ag-rl
-   evidence：智能体系统持续学习的自我微调框架
-55. [AGMARL-DKS: An Adaptive Graph-Enhanced Multi-Agent Reinforcement Learning for Dynamic Kubernetes Scheduling](/20260219-20260320/2603.12031v1-agmarl-dks-an-adaptive-graph-enhanced-multi-agent-reinforcement-learning-for-dynamic-kubernetes-scheduling)  
-   标签：评分：8.0/10、query:ag-rl
-   evidence：用于智能调度智能体的多智能体强化学习
+   evidence：用于交互式智能体的智能体终身记忆框架
+4. [SJD-VP: Speculative Jacobi Decoding with Verification Prediction for Autoregressive Image Generation](/20260311-20260409/2603.27115v1-sjd-vp-speculative-jacobi-decoding-with-verification-prediction-for-autoregressive-image-generation)  
+   标签：评分：8.0/10、query:sd-llm
+   evidence：用于加速自回归生成的投机雅可比解码
+5. [GLM-OCR Technical Report](/20260311-20260409/2603.10910v1-glm-ocr-technical-report)  
+   标签：评分：7.5/10、query:sd-llm
+   evidence：多Token预测机制提升解码吞吐量
+6. [GLM-OCR Technical Report](/20260311-20260409/2603.10910v2-glm-ocr-technical-report)  
+   标签：评分：7.5/10、query:sd-llm
+   evidence：多Token预测机制提升解码吞吐量
+7. [MemBoost: A Memory-Boosted Framework for Cost-Aware LLM Inference](/20260311-20260409/2603.26557v1-memboost-a-memory-boosted-framework-for-cost-aware-llm-inference)  
+   标签：评分：7.5/10、query:sd-llm
+   evidence：通过重用生成的答案并将请求路由到轻量级模型来加速LLM推理
+8. [MAC-Attention: a Match-Amend-Complete Scheme for Fast and Accurate Attention Computation](/20260311-20260409/2604.00235v1-mac-attention-a-match-amend-complete-scheme-for-fast-and-accurate-attention-computation)  
+   标签：评分：7.5/10、query:sd-llm
+   evidence：通过重用相似查询的先前注意力计算来加速LLM解码
+9. [Efficient Reasoning on the Edge](/20260311-20260409/2603.16867v1-efficient-reasoning-on-the-edge)  
+   标签：评分：6.5/10、query:ag-rl
+   evidence：通过强化学习进行预算强制推理
+10. [The Diminishing Returns of Early-Exit Decoding in Modern LLMs](/20260311-20260409/2603.23701v1-the-diminishing-returns-of-early-exit-decoding-in-modern-llms)  
+   标签：评分：6.5/10、query:sd-llm
+   evidence：评估早期退出解码作为现代LLM降低延迟技术的有效性
+11. [DWDP: Distributed Weight Data Parallelism for High-Performance LLM Inference on NVL72](/20260311-20260409/2604.01621v1-dwdp-distributed-weight-data-parallelism-for-high-performance-llm-inference-on-nvl72)  
+   标签：评分：6.5/10、query:sd-llm
+   evidence：通过消除秩间同步来优化LLM推理性能
 
 
 <div class="dpr-home-promo-card">

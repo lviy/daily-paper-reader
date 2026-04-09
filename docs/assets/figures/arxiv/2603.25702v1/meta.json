@@ -1,0 +1,102 @@
+{
+  "version": 2,
+  "extractor": "pdffigures2",
+  "figures": [
+    {
+      "url": "assets/figures/arxiv/2603.25702v1/fig-001.webp",
+      "caption": "Figure 4: Drafting and caching with autoregressive attention masks.",
+      "page": 15,
+      "index": 1,
+      "width": 827,
+      "height": 222
+    },
+    {
+      "url": "assets/figures/arxiv/2603.25702v1/fig-002.webp",
+      "caption": "Table 8: Ablation of score-threshold policies with margin-based token acceptance estimator. Static score uses s = K̂− c; dynamic score uses s = K̂− c · Nhi.",
+      "page": 21,
+      "index": 2,
+      "width": 830,
+      "height": 319
+    },
+    {
+      "url": "assets/figures/arxiv/2603.25702v1/fig-003.webp",
+      "caption": "Table 9: Ablation of hysteresis policies with entropy-based token acceptance estimator. We use dynamic score only, with fixed c = 1.",
+      "page": 21,
+      "index": 3,
+      "width": 830,
+      "height": 321
+    },
+    {
+      "url": "assets/figures/arxiv/2603.25702v1/fig-004.webp",
+      "caption": "Figure 2: AR-ness (@k, k = 2) and decoding-confidence statistics on GSM8K and MBPP. Top row: local and global AR-ness for SDAR-8B-Chat and LLaDA 2.1. Bottom row: normalized decoded-token confidence under static and dynamic diffusion decoding; dashed curves in dynamic decoding indicate the number of decoded tokens per step. Reference accuracies (GSM8K, MBPP): SDAR-8B-Chat, AR (89.3%, 64.4%) and diffusion (89.6%, 61.0%); LLaDA 2.1, AR (90.8%, 65.8%) and diffusion (90.8%, 67.8%).",
+      "page": 7,
+      "index": 4,
+      "width": 826,
+      "height": 410
+    },
+    {
+      "url": "assets/figures/arxiv/2603.25702v1/fig-005.webp",
+      "caption": "Figure 3: Accuracy versus wall-clock time for SDAR-8B-Chat on GSM8K and MBPP. ITS denotes inference-time scaling, the ITS trend curve is fitted on points with accuracy > 30%. Across block sizes, denoising steps, and decoding schedules, S2D2 generally achieves a better accuracy–speed frontier than BD3.",
+      "page": 7,
+      "index": 5,
+      "width": 805,
+      "height": 379
+    },
+    {
+      "url": "assets/figures/arxiv/2603.25702v1/fig-006.webp",
+      "caption": "Table 10: Ablation of contextual-bandit UCB policies. The context tuple (a, b, c) denotes the numbers of bins for mask span length, decoding progress, and entropy, respectively. We report results for different UCB exploration coefficients β.",
+      "page": 22,
+      "index": 6,
+      "width": 829,
+      "height": 513
+    },
+    {
+      "url": "assets/figures/arxiv/2603.25702v1/fig-007.webp",
+      "caption": "Figure 5: AR-ness and decoding confidence statistics for SDAR-8B-Chat. Top row: local/global AR-ness on GSM8K and MBPP. Bottom row: normalized confidence statistics under static and dynamic decoding on GSM8K and MBPP.",
+      "page": 22,
+      "index": 7,
+      "width": 826,
+      "height": 410
+    },
+    {
+      "url": "assets/figures/arxiv/2603.25702v1/fig-008.webp",
+      "caption": "Table 11: Ablation of rejection-sampling ratio tempering for SSD on SDAR-8B-Chat. We vary the tempering factor γ in the acceptance ratio (qi/pi) γ and report accuracy (speedup relative to γ=1).",
+      "page": 23,
+      "index": 8,
+      "width": 768,
+      "height": 198
+    },
+    {
+      "url": "assets/figures/arxiv/2603.25702v1/fig-009.webp",
+      "caption": "Figure 6: AR-ness and decoding confidence statistics for LLaDA-2.1-Mini. Top row: local/global AR-ness on GSM8K and MBPP. Bottom row: normalized confidence statistics under static and dynamic decoding on GSM8K and MBPP.",
+      "page": 23,
+      "index": 9,
+      "width": 822,
+      "height": 409
+    },
+    {
+      "url": "assets/figures/arxiv/2603.25702v1/fig-010.webp",
+      "caption": "Table 2: Main accuracy and speedup results on Fast-dLLM v2. We fix block size B = 32 and vary the sub-block size SB. Speedups are measured relative to the autoregressive-style baseline B = 4, SB = 1. Config-C corresponds to the normal BD3 without sub-blocks.",
+      "page": 8,
+      "index": 10,
+      "width": 748,
+      "height": 225
+    },
+    {
+      "url": "assets/figures/arxiv/2603.25702v1/fig-011.webp",
+      "caption": "Figure 1: Overview of S2D2. (a) Standard block-diffusion decoding accepts drafted tokens by confidence thresholding. (b) S2D2 inserts a self-speculative verification step: the same model under block-size-1 autoregressive masking verifies the first contiguous masked span, accepts tokens by rejection sampling, and falls back to standard diffusion decoding when verification is not invoked or terminates early. (c) Verification-mode attention masks for right-shifted and standard position-aligned diffusion LLMs; we draw the full-block mask for illustration, though in practice only Ct is verified. (d) Lightweight routing policies decide when verification is worth its additional cost.",
+      "page": 4,
+      "index": 11,
+      "width": 826,
+      "height": 456
+    },
+    {
+      "url": "assets/figures/arxiv/2603.25702v1/fig-012.webp",
+      "caption": "Table 3: Accuracy and speedup results on LLaDA2.1-Mini. Speedups are measured relative to the AR baseline. We compare the built-in editing-based diffusion decoder against S2D2 under two threshold settings.",
+      "page": 9,
+      "index": 12,
+      "width": 748,
+      "height": 195
+    }
+  ]
+}

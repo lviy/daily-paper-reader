@@ -1,0 +1,102 @@
+{
+  "version": 2,
+  "extractor": "pdffigures2",
+  "figures": [
+    {
+      "url": "assets/figures/arxiv/2603.12617v1/fig-001.webp",
+      "caption": "Figure 9: Performance comparison of EAGLE-3, OSD-EAGLE-3, and Ens-EAGLE-3 on (a) GSM8K, (b) Spider, (c) Code-Search, and (d) Alpaca-Finance using meta-llama/Llama-2-7B-Chat as the foundation model. We report the average accepted length (AVGLEN, top row) and tokens per second (TPS, bottom row) over time.",
+      "page": 18,
+      "index": 1,
+      "width": 827,
+      "height": 336
+    },
+    {
+      "url": "assets/figures/arxiv/2603.12617v1/fig-002.webp",
+      "caption": "Figure 10: Performance comparison of LR, OSD-LR, and Online-LR on (a) GSM8K, (b) MBPP, (c) MATH, and (d) MMLU using Qwen/Qwen3-8B paired with Qwen3-0.6B-Base as the draft model. We report the average accepted length (AVGLEN, top row) and tokens per second (TPS, bottom row) over time.",
+      "page": 18,
+      "index": 2,
+      "width": 779,
+      "height": 245
+    },
+    {
+      "url": "assets/figures/arxiv/2603.12617v1/fig-003.webp",
+      "caption": "Table 1: Comparison of generation-refinement acceleration methods across different benchmark datasets. For each method, we report the average accepted length (AVGLEN ↑) and wall-clock speedup ratio (SPEEDUP ↑). Results are averaged over three runs with standard deviations. The best results are highlighted in bold.",
+      "page": 8,
+      "index": 3,
+      "width": 825,
+      "height": 404
+    },
+    {
+      "url": "assets/figures/arxiv/2603.12617v1/fig-004.webp",
+      "caption": "Figure 5: Performance comparison of EAGLE, OSD-EAGLE, and Ens-EAGLE on (a) GSM8K, (b) Spider, (c) Code-Search, and (d) Alpaca-Finance using lmsys/Vicuna-7B-v1.3 as the foundation model. We report the average accepted length (AVGLEN, top row) and tokens per second (TPS, bottom row) over time.",
+      "page": 17,
+      "index": 4,
+      "width": 827,
+      "height": 318
+    },
+    {
+      "url": "assets/figures/arxiv/2603.12617v1/fig-005.webp",
+      "caption": "Figure 8: Performance comparison of EAGLE, OSD-EAGLE, and Ens-EAGLE on (a) GSM8K, (b) Spider, (c) Code-Search, and (d) Alpaca-Finance using meta-llama/Llama-2-7B-Chat as the foundation model. We report the average accepted length (AVGLEN, top row) and tokens per second (TPS, bottom row) over time.",
+      "page": 17,
+      "index": 5,
+      "width": 779,
+      "height": 245
+    },
+    {
+      "url": "assets/figures/arxiv/2603.12617v1/fig-006.webp",
+      "caption": "Figure 6: Performance comparison of EAGLE-3, OSD-EAGLE-3, and Ens-EAGLE-3 on (a) GSM8K, (b) Spider, (c) Code-Search, and (d) Alpaca-Finance using lmsys/Vicuna-7B-v1.3 as the foundation model. We report the average accepted length (AVGLEN, top row) and tokens per second (TPS, bottom row) over time.",
+      "page": 17,
+      "index": 6,
+      "width": 778,
+      "height": 245
+    },
+    {
+      "url": "assets/figures/arxiv/2603.12617v1/fig-007.webp",
+      "caption": "Figure 7: Performance comparison of Hydra, OSD-Hydra, and Opt-Hydra on (a) GSM8K, (b) Spider, (c) Code-Search, and (d) Alpaca-Finance using meta-llama/Llama-2-7B-Chat as the foundation model. We report the average accepted length (AVGLEN, top row) and tokens per second (TPS, bottom row) over time.",
+      "page": 17,
+      "index": 7,
+      "width": 779,
+      "height": 245
+    },
+    {
+      "url": "assets/figures/arxiv/2603.12617v1/fig-008.webp",
+      "caption": "Table 3: Hyperparameter analysis on GSM8K. We report average accepted length (AVGLEN ↑), and wall-clock speedup ratio (SPEEDUP ↑). (i) Varying learning rate on OSD-Hydra vs. Opt-Hydra. (ii) Varying learning rate on OSD-EAGLE vs Ens-EAGLE. (iii) Varying total steps T .",
+      "page": 9,
+      "index": 8,
+      "width": 422,
+      "height": 375
+    },
+    {
+      "url": "assets/figures/arxiv/2603.12617v1/fig-009.webp",
+      "caption": "Figure 3: Evolution of tokens per second (TPS) on the GSM8K dataset: (a) Opt-Hydra with lmsys/Vicuna7B-v1.3, (b) Ens-EAGLE with lmsys/Vicuna-7B-v1.3, (c) Ens-EAGLE-3 with lmsys/Vicuna-7B-v1.3, and (d) Online-LR with Qwen/Qwen3-8B. This demonstrates consistent performance improvements via online learning, validating the effectiveness of our ONLINESPEC during deployment.",
+      "page": 9,
+      "index": 9,
+      "width": 827,
+      "height": 217
+    },
+    {
+      "url": "assets/figures/arxiv/2603.12617v1/fig-010.webp",
+      "caption": "Table 5: Prompt template used for semantic alignment verification in reasoning. We use Qwen2.5-7B-Instruct as judge (temperature=0.0).",
+      "page": 20,
+      "index": 10,
+      "width": 814,
+      "height": 488
+    },
+    {
+      "url": "assets/figures/arxiv/2603.12617v1/fig-011.webp",
+      "caption": "Figure 2: A comprehensive 3D-visualization illustrates generation-refinement approaches across three dimensions: draft level, token level, and incorporating interactive feedback. Our OnlineSPEC framework provides a unified perspective for integrating interactive feedback and can be seamlessly combined with existing methods to further enhance the acceleration rate.",
+      "page": 5,
+      "index": 11,
+      "width": 793,
+      "height": 316
+    },
+    {
+      "url": "assets/figures/arxiv/2603.12617v1/fig-012.webp",
+      "caption": "Figure 4: Performance comparison of Hydra, OSD-Hydra, and Opt-Hydra on (a) GSM8K, (b) Spider, (c) Code-Search, and (d) Alpaca-Finance using lmsys/Vicuna-7B-v1.3 as the foundation model. We report the average accepted length (AVGLEN, top row) and tokens per second (TPS, bottom row) over time.",
+      "page": 16,
+      "index": 12,
+      "width": 779,
+      "height": 259
+    }
+  ]
+}

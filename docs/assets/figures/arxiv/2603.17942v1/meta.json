@@ -1,0 +1,118 @@
+{
+  "version": 2,
+  "extractor": "pdffigures2",
+  "figures": [
+    {
+      "url": "assets/figures/arxiv/2603.17942v1/fig-001.webp",
+      "caption": "Figure 6. Example of dynamic token tree expansion for block complexity (BC) = 30 using two mask tokens. As the tree expands, each child node inherits the probability of its parent, resulting in a multiplicative score. We denote the last accepted token (root) as 0, the Top-9 tokens from the output logits of the first mask token as t̂1,1:9, and the Top-8 tokens from the second mask token as t̂2,1:8.",
+      "page": 15,
+      "index": 1,
+      "width": 917,
+      "height": 349
+    },
+    {
+      "url": "assets/figures/arxiv/2603.17942v1/fig-002.webp",
+      "caption": "Figure 4. Evaluation on Spec-Bench using LLaMA3.1-8B-Instruct across block complexities (BC = 10, 30, 60). Our method (green) consistently achieves the highest average accepted tokens across most tasks and BC settings.",
+      "page": 7,
+      "index": 2,
+      "width": 952,
+      "height": 425
+    },
+    {
+      "url": "assets/figures/arxiv/2603.17942v1/fig-003.webp",
+      "caption": "Figure 1. (Left) Standard next-token prediction setup for autoregressive models, (middle) multi-token prediction during prefill-stage by probing mask tokens which are appended to prompt tokens, (right) multi-token prediction with parallel verification and generation. Mask tokens are associated with last generated token (xs) and future tokens (x̂s+1, x̂s+2) through custom tree attention mask.",
+      "page": 3,
+      "index": 3,
+      "width": 1017,
+      "height": 321
+    },
+    {
+      "url": "assets/figures/arxiv/2603.17942v1/fig-004.webp",
+      "caption": "Figure 2. We use Dolly-Databricks (creative-writing) (Conover et al., 2023) samples (100) to measure average cosine similarity across layers for mask and true-future token hidden-states. For Llama3.2-3B-Instruct, higher cosine similarity in later layers (15 onwards) correlates with token acceptance (green), while lower similarity correlates with rejection (red).",
+      "page": 3,
+      "index": 4,
+      "width": 492,
+      "height": 293
+    },
+    {
+      "url": "assets/figures/arxiv/2603.17942v1/fig-005.webp",
+      "caption": "Table 7. Block-efficiency with temperature=1.0 for Llama3.2-3B-Instruct across SpecBench tasks for BC = 30 and BC = 60. Task acronyms: WRIT (writing), ROLE (roleplay), CODE (coding), TRANS (translation), SUMM (summarization), QA (question answering), RAG (retrieval-augmented generation), M/R (math/reasoning).",
+      "page": 18,
+      "index": 5,
+      "width": 765,
+      "height": 212
+    },
+    {
+      "url": "assets/figures/arxiv/2603.17942v1/fig-006.webp",
+      "caption": "Figure 8. Block efficiency across SpecBench tasks for LLaMA3.2-3B-Instruct and QWen3-8B at block complexity (BC) = 60. Our method consistently outperforms baselines across most tasks, demonstrating strong performance in both open-ended and closed-ended settings.",
+      "page": 18,
+      "index": 6,
+      "width": 1005,
+      "height": 309
+    },
+    {
+      "url": "assets/figures/arxiv/2603.17942v1/fig-007.webp",
+      "caption": "Table 6. Comparison of multi-token prediction reduction in model forward calls performance across models and methods averaged on Spec-bench tasks for block complexity BC = 30 and BC = 60",
+      "page": 18,
+      "index": 7,
+      "width": 1017,
+      "height": 200
+    },
+    {
+      "url": "assets/figures/arxiv/2603.17942v1/fig-008.webp",
+      "caption": "Figure 5. Evaluation on SpecBench using Qwen3-32B across block complexities (BC = 10, 30, 60). Our method (green) consistently achieves the highest average accepted token across most tasks and BC settings.",
+      "page": 8,
+      "index": 8,
+      "width": 956,
+      "height": 425
+    },
+    {
+      "url": "assets/figures/arxiv/2603.17942v1/fig-009.webp",
+      "caption": "Table 4. Efficient inference implementation comparison for different LLaMA models. For two mask (m1,m2) tokens static trees are used with branches [7, 2] for BC=30 and [15, 4] for BC=60.",
+      "page": 8,
+      "index": 9,
+      "width": 492,
+      "height": 256
+    },
+    {
+      "url": "assets/figures/arxiv/2603.17942v1/fig-010.webp",
+      "caption": "Table 8. Block-efficiency with temperature=1.0 for LLama3.1-8B-Instruct across tasks for BC = 30 and BC = 60. Task acronyms: WRIT (writing), ROLE (roleplay), CODE (coding), TRANS (translation), SUMM (summarization), QA (question answering), RAG (retrieval-augmented generation), M/R (math/reasoning).",
+      "page": 19,
+      "index": 10,
+      "width": 765,
+      "height": 211
+    },
+    {
+      "url": "assets/figures/arxiv/2603.17942v1/fig-011.webp",
+      "caption": "Table 9. Block-efficiency across different tasks for BC=30 with different mask tokens probed (single mask: m1, two mask tokens: m1,m2). Task acronyms are WRIT: writing, ROLE: roleplay, CODE: coding, TRANS: translation, SUMM: summarization, M/R: math/reasoning",
+      "page": 19,
+      "index": 11,
+      "width": 765,
+      "height": 242
+    },
+    {
+      "url": "assets/figures/arxiv/2603.17942v1/fig-012.webp",
+      "caption": "Table 10. Block-efficiency across different tasks for BC=60 comparing different mask tokens probed. Task acronyms are WRIT: writing, ROLE: roleplay, CODE: coding, TRANS: translation, SUMM: summarization, M/R: math/reasoning",
+      "page": 19,
+      "index": 12,
+      "width": 765,
+      "height": 243
+    },
+    {
+      "url": "assets/figures/arxiv/2603.17942v1/fig-013.webp",
+      "caption": "Table 11. Impact of tree pruning for different LLaMA models",
+      "page": 20,
+      "index": 13,
+      "width": 765,
+      "height": 292
+    },
+    {
+      "url": "assets/figures/arxiv/2603.17942v1/fig-014.webp",
+      "caption": "Figure 7. Attention mask and position index for the current (top) and next (bottom) LLM forward pass in our method with static branch configuration [3,2]. The tokens in blue are part of key-value cache, green token is the last generated token which will be inputted to the model to generate next token, orange tokens are future tokens, and purple tokens are mask tokens. Position IDs of each token is mentioned above it. The structure of the attention mask remains unchanged except for the addition of BE columns filled with zeros (assuming non-attended positions are represented by −∞). Similarly, the position indices are preserved in order but uniformly incremented by BE.",
+      "page": 16,
+      "index": 14,
+      "width": 870,
+      "height": 1186
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "version": 2,
+  "extractor": "pdffigures2",
+  "figures": [
+    {
+      "url": "assets/figures/arxiv/2603.19610v1/fig-001.webp",
+      "caption": "Table 1. Comparison of lossless speculative decoding methods on multiple video understanding tasks. The default window size γ of the baselines is set to 5, except for STD [50] with γ = 9. ParallelVLM achieves adaptive draft length [29], and we dynamically adjust the γ according to the speed ratio c = Tp/Tq to mitigate mutual waiting. From up to bottom, γ = {3, 9, 5, 2, 2} at the pruning ratio α = 0.9.",
+      "page": 6,
+      "index": 1,
+      "width": 1031,
+      "height": 616
+    },
+    {
+      "url": "assets/figures/arxiv/2603.19610v1/fig-002.webp",
+      "caption": "Table 5. Sensitivity of speed ratio c = Tp/Tq with the increase of pruning ratio α. The forward time is reported in ms.",
+      "page": 11,
+      "index": 2,
+      "width": 491,
+      "height": 273
+    },
+    {
+      "url": "assets/figures/arxiv/2603.19610v1/fig-003.webp",
+      "caption": "Table 6. Peak memory usage (GB) and latency breakdown of LLaVA-OV-7B/72B (s). The output length is set to 512.",
+      "page": 11,
+      "index": 3,
+      "width": 475,
+      "height": 273
+    },
+    {
+      "url": "assets/figures/arxiv/2603.19610v1/fig-004.webp",
+      "caption": "Figure 11. Case study for Qwen2.5-VL-7B/32B.",
+      "page": 15,
+      "index": 4,
+      "width": 1026,
+      "height": 587
+    },
+    {
+      "url": "assets/figures/arxiv/2603.19610v1/fig-005.webp",
+      "caption": "Figure 10. Case study for LLaVA-OV-7B/72B.",
+      "page": 15,
+      "index": 5,
+      "width": 1026,
+      "height": 589
+    },
+    {
+      "url": "assets/figures/arxiv/2603.19610v1/fig-006.webp",
+      "caption": "Figure 2. Comparison of different training-free speculative decoding frameworks for Video-LLMs. (a) Vanilla SD: sequential in both prefilling and decoding stages, achieving speedup only with the draft-then-verify design. (b) SpecVLM [18]: inherits vanilla SD and enables faster draft model execution via attention-guided pruning. (c) ParallelVLM: adopts a parallel pipeline to mitigate idling time in vanilla SD, co-designed with UV-Prune strategy to expand the draft window size meanwhile preserving draft/target alignment.",
+      "page": 2,
+      "index": 6,
+      "width": 859,
+      "height": 237
+    },
+    {
+      "url": "assets/figures/arxiv/2603.19610v1/fig-007.webp",
+      "caption": "Figure 6. Ablation study of the pruning ratio α. ParallelVLM strikes a trade-off between speedup and acceptance at α = 0.9.",
+      "page": 7,
+      "index": 7,
+      "width": 489,
+      "height": 246
+    },
+    {
+      "url": "assets/figures/arxiv/2603.19610v1/fig-008.webp",
+      "caption": "Table 2. Comparison of lossy visual token pruning methods on multiple video understanding tasks. ParallelVLM achieves a superior speedup ratio losslessly. (The minor drops stem from the inherent uncertainty of LLMs and the precision limits of hardware numerics.)",
+      "page": 7,
+      "index": 8,
+      "width": 1026,
+      "height": 350
+    },
+    {
+      "url": "assets/figures/arxiv/2603.19610v1/fig-009.webp",
+      "caption": "Figure 7. Ablation Study of UV-Prune. (a) Visualizations of selected tokens across frames. (b) Impact of UV-Prune’s verifier-guidance and similarity-variation. With the joint effort of the two components, ParallelVLM achieves robust acceptance, exceeding existing baselines.",
+      "page": 8,
+      "index": 9,
+      "width": 1021,
+      "height": 240
+    },
+    {
+      "url": "assets/figures/arxiv/2603.19610v1/fig-010.webp",
+      "caption": "Figure 5. The proposed ParallelVLM consists of Parallel Prefilling (PP), Parallel Decoding (PD) and the Unbiased Verifier-guided Pruning (UV-Prune). (a) During PP stage: draft model prefilling and pruning executes in parallel with target model prefilling, where UV-Prune transfers salient alignment semantics from the target model to the draft model without “positional bias”. (b) During PD stage: the reduced draft decoding time Tq enables an enlarged window size γ in parallel with verification, meanwhile maintaining high acceptance rates τ .",
+      "page": 4,
+      "index": 10,
+      "width": 1010,
+      "height": 346
+    },
+    {
+      "url": "assets/figures/arxiv/2603.19610v1/fig-011.webp",
+      "caption": "Figure 8. An illustrative example of decoding “The video uses ParallelVLM for speedup” is provided to demonstrate the verification mode switching of the parallel pipeline, as well as its advancement and rollback mechanisms. Here t denotes the one single forward time of the draft model and the window size γ is set to 3.",
+      "page": 12,
+      "index": 11,
+      "width": 1023,
+      "height": 234
+    }
+  ]
+}
