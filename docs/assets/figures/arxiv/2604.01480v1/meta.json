@@ -1,0 +1,46 @@
+{
+  "version": 2,
+  "extractor": "pdffigures2",
+  "figures": [
+    {
+      "url": "assets/figures/arxiv/2604.01480v1/fig-001.webp",
+      "caption": "Figure 4: Behavior and cost analysis across training rounds of skill evolution. Panel (a) shows the average tool-call composition per task across IID/OOD train and validation splits, together with reference lines from the fixed starter-skill baseline evaluated on the test split. Panel (b) shows the corresponding cost per task across the same rounds and splits, with the same test-baseline reference lines.",
+      "page": 7,
+      "index": 1,
+      "width": 972,
+      "height": 448
+    },
+    {
+      "url": "assets/figures/arxiv/2604.01480v1/fig-002.webp",
+      "caption": "Figure 3: Error-type composition across training rounds of skill evolution. Panel (a) shows IID and panel (b) shows OOD. Infrastructure failures, such as connection errors and timeouts, are excluded so that the figure reflects code-level errors more directly tied to skill quality.",
+      "page": 7,
+      "index": 2,
+      "width": 960,
+      "height": 386
+    },
+    {
+      "url": "assets/figures/arxiv/2604.01480v1/fig-003.webp",
+      "caption": "Figure 2: Attempt-efficiency analysis before and after skill evolution. Panels (a)–(c) show IID behavior, and panels (d)–(f) show OOD behavior on the held-out test tasks. Pass@K captures how quickly tasks reach SG= 1, the transition plots summarize task-level fail/pass changes between the starter-skill baseline and the post-training evaluation, and the box plots show total attempts per task.",
+      "page": 6,
+      "index": 3,
+      "width": 972,
+      "height": 593
+    },
+    {
+      "url": "assets/figures/arxiv/2604.01480v1/fig-004.webp",
+      "caption": "Table 1: Test set performance: baseline (starter initial skill) vs. post-train (evolved skills).",
+      "page": 5,
+      "index": 4,
+      "width": 848,
+      "height": 185
+    },
+    {
+      "url": "assets/figures/arxiv/2604.01480v1/fig-005.webp",
+      "caption": "Figure 1: Overview of the self-evolving agentic framework for metasurface inverse design. Left: Skill evolution panel showing four successive versions of the SKILL.md file as they are refined by the MCE optimizer across iterations, with success goal (SG) rates indicating progressive improvement. The meta-agent analyzes rollout outcomes and evolves skills via agentic crossover. Center: Coding agent panel illustrating how the decoupled code-generation component consumes evolved skill files and produces a candidate optimization program using generic tools. The program parameterizes the design, defines a loss function, and invokes gradient-based optimization through TorchRDIT [8]. The CodegenEval block shows a two-level Ralph-style retry structure. Within an outer round, inner attempts preserve local contextual feedback while revising the same candidate program, whereas outer rounds reset the coding-agent session and carry forward only the best prior candidate together with compact feedback. Red dashed arrows indicate the retry loop between code generation and evaluation. Right: Physics panel depicting the differentiable TorchRDIT pipeline, from the target spectrum Ttarget(λ) and metasurface geometry parameterization through gradient-based optimization (θt+1 = θt − η∇L) to the achieved spectrum evaluated against physical criteria (SG, CPF, BM).",
+      "page": 3,
+      "index": 5,
+      "width": 932,
+      "height": 518
+    }
+  ]
+}

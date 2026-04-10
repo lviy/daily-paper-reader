@@ -1,0 +1,118 @@
+{
+  "version": 2,
+  "extractor": "pdffigures2",
+  "figures": [
+    {
+      "url": "assets/figures/arxiv/2604.07622v1/fig-001.webp",
+      "caption": "Figure 2: Compared with classic speculative decoding (shown in (a) rigid verification), our Diversed (c) achieves a higher acceptance rate, comparable accuracy, and lower wall-clock time. Compared with static ensemble (b), Diversed (c) attains higher accuracy via a tunable ensemble weight that adapts to the task and the context.",
+      "page": 2,
+      "index": 1,
+      "width": 987,
+      "height": 284
+    },
+    {
+      "url": "assets/figures/arxiv/2604.07622v1/fig-002.webp",
+      "caption": "Figure 4: Normalized total time (lower is better) versus acceptance rate (higher is better) under speculative decoding with draft length N=5. Model pairs with higher acceptance achieve lower decoding time. Results on the CNNDM, XSUM, MBPP, and GSM8K datasets for three target/draft pairs. Additional results for draft lengths N=3 and N=7 are provided in Appendix Figures 8 and 9.",
+      "page": 7,
+      "index": 2,
+      "width": 1016,
+      "height": 304
+    },
+    {
+      "url": "assets/figures/arxiv/2604.07622v1/fig-003.webp",
+      "caption": "Table 1: Benchmark acceptance rate and generation quality. Columns group results by task while panels (a)–(c) correspond to different Target/Draft model pairs. All experiments use temperature 1 and draft length N = 5. Our Diversed achieves a higher acceptance rate and also maintains comparable quality. Additional results for temperatures 0 and 0.1 are reported in Appendix Tables 6 and 7.",
+      "page": 7,
+      "index": 3,
+      "width": 1016,
+      "height": 604
+    },
+    {
+      "url": "assets/figures/arxiv/2604.07622v1/fig-004.webp",
+      "caption": "Table 4: List of notations and their definitions.",
+      "page": 14,
+      "index": 4,
+      "width": 806,
+      "height": 302
+    },
+    {
+      "url": "assets/figures/arxiv/2604.07622v1/fig-005.webp",
+      "caption": "Table 7: Reported acceptance rate and generation quality, under different temperature. Columns are grouped by task. Each block compares three baselines and our method for a given Target/Draft pair. All results use a temperature of 0.1 and a draft length N = 5. Our Diversed enjoys a higher acceptance rate and also maintains comparable quality to baselines.",
+      "page": 18,
+      "index": 5,
+      "width": 1016,
+      "height": 595
+    },
+    {
+      "url": "assets/figures/arxiv/2604.07622v1/fig-006.webp",
+      "caption": "Table 6: Reported acceptance rate and generation quality. Columns are grouped by task. Each block compares three baselines and our method for a given Target/Draft pair. All results use temperature 0 and draft length N = 5. Our Diversed enjoys a higher acceptance rate and also maintains comparable quality to baselines.",
+      "page": 18,
+      "index": 6,
+      "width": 1016,
+      "height": 470
+    },
+    {
+      "url": "assets/figures/arxiv/2604.07622v1/fig-007.webp",
+      "caption": "Figure 5: Diversed consistently accepts a larger average number of draft tokens per verification round than all baselines (draft length N=5, temperature 1). Appendix Figure 7 shows result for temperature 0.1.",
+      "page": 8,
+      "index": 7,
+      "width": 480,
+      "height": 261
+    },
+    {
+      "url": "assets/figures/arxiv/2604.07622v1/fig-008.webp",
+      "caption": "Table 2: Comparison of finetuned draft vs. Diversed at temperature 1. Fine-tuned draft model yields higher acceptance rates but lower task performance.",
+      "page": 8,
+      "index": 8,
+      "width": 491,
+      "height": 510
+    },
+    {
+      "url": "assets/figures/arxiv/2604.07622v1/fig-009.webp",
+      "caption": "Figure 3: Examples of speculative-decoding verification with accepted mismatches, illustrating not all draft– target mismatches are equally harmful. Black marks tokens both models agree on; green marks accepted mismatches that still yield the correct answer; red marks accepted mismatches that lead to an incorrect answer.",
+      "page": 4,
+      "index": 9,
+      "width": 1014,
+      "height": 293
+    },
+    {
+      "url": "assets/figures/arxiv/2604.07622v1/fig-010.webp",
+      "caption": "Figure 8: Results on the CNNDM, XSUM, MBPP, and GSM8k datasets for three target/draft pairs: normalized total time (lower is better) versus acceptance rate (higher is better) under speculative decoding with N=3. Model pairs with higher acceptance achieve lower decoding time.",
+      "page": 19,
+      "index": 10,
+      "width": 1005,
+      "height": 288
+    },
+    {
+      "url": "assets/figures/arxiv/2604.07622v1/fig-011.webp",
+      "caption": "Figure 7: Average number of tokens accepted per verification round (temperature = 0.1, draft length N = 5) across three target/draft model pairs. Our Diversed consistently surpasses all baselines by achieving a higher number of accepted tokens.",
+      "page": 19,
+      "index": 11,
+      "width": 597,
+      "height": 339
+    },
+    {
+      "url": "assets/figures/arxiv/2604.07622v1/fig-012.webp",
+      "caption": "Figure 9: Results on the CNNDM, XSUM, MBPP, and GSM8k datasets for three target/draft pairs: normalized total time (lower is better) versus acceptance rate (higher is better) under speculative decoding with N=7. Model pairs with higher acceptance achieve lower decoding time.",
+      "page": 19,
+      "index": 12,
+      "width": 1005,
+      "height": 288
+    },
+    {
+      "url": "assets/figures/arxiv/2604.07622v1/fig-013.webp",
+      "caption": "Table 5: Hyper-parameter configuration for each benchmark dataset.",
+      "page": 17,
+      "index": 13,
+      "width": 722,
+      "height": 617
+    },
+    {
+      "url": "assets/figures/arxiv/2604.07622v1/fig-014.webp",
+      "caption": "Figure 10: Our Diversed outperforms the Pareto front of the static ensemble and other baselines. Results are reported on the CNNDM dataset using the target/draft model pair: Qwen3-8B/Qwen3-0.6B and Gemma-3-12bit/Gemma-3-4b-it, with temperature set to 0.",
+      "page": 20,
+      "index": 14,
+      "width": 1013,
+      "height": 382
+    }
+  ]
+}
