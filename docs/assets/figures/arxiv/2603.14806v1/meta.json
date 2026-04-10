@@ -1,0 +1,94 @@
+{
+  "version": 2,
+  "extractor": "pdffigures2",
+  "figures": [
+    {
+      "url": "assets/figures/arxiv/2603.14806v1/fig-001.webp",
+      "caption": "Table 1: Complexity of distributed modules and the scaling factors. N : number of tokens; P : GPU count; B: batch size; S: number of MSA sequences; H: number of attention heads; D: feature dimension (per-head dimension for attention-based modules); A: number of atoms. Shard-wise complexity absorbs constant window and key-span sizes into O(·); atoms are partitioned into fixed-size windows with overlapping key neighborhoods. All ring patterns use√ P steps with double-buffered overlap. For Window Batching, the serial column reflects the pre-Toeplitz baseline; the CP column includes both the Toeplitz optimization and distribution (see Section 3.7).",
+      "page": 6,
+      "index": 1,
+      "width": 975,
+      "height": 233
+    },
+    {
+      "url": "assets/figures/arxiv/2603.14806v1/fig-002.webp",
+      "caption": "Figure 3: Boltz-2 CP scalability on NVIDIA B300 GPUs via maximum context length. For a given GPU count P , maximum context length reached is plotted. Linear trend lines are used to inform with respect to number of GPUs in a CP rank, √ P , due to the square topology requirement of Fold-CP. (Left) Inference scaling performance: The maximum context length scales linearly at a rate of approximately 4,000 tokens/ √ P , with runtime annotated accordingly. (Right) Training scaling performance: The training follows a similar scaling with a approximately half the slope of that of inference.",
+      "page": 11,
+      "index": 2,
+      "width": 950,
+      "height": 440
+    },
+    {
+      "url": "assets/figures/arxiv/2603.14806v1/fig-003.webp",
+      "caption": "Figure 2: Distributed forward-pass flow for the three core ring-communication modules. (a) Triangle Attention: cross-axis transpose of triangular bias followed by a 1D ring rotation of keys, values, and bias with tiled-softmax merge. (b) Triangle Multiplication: Cannonstyle 2D ring where projections shift along orthogonal axes with additive accumulation. (c) Ring Attention Pair Bias: 1D ring rotation of keys, values, and pair bias with tiled-softmax merge. Pair Weighted Averaging (Section 3.4) shares the softmax-merge archetype of (a)/(c) over a 2D ring; Outer Product Mean (Section 3.5) shares the Cannon accumulation archetype of (b), replacing matrix multiplication with outer products.",
+      "page": 7,
+      "index": 3,
+      "width": 950,
+      "height": 327
+    },
+    {
+      "url": "assets/figures/arxiv/2603.14806v1/fig-004.webp",
+      "caption": "Figure 7: Enrichment of different methods for identifying protein complexes, using Boltz-1 CP for structural validation. From left to right: Rezo, Complexes predicted by Rezo’s Network AI; CORUM, CORUM protein complexes; STRING Clique, High-confidence STRING interactions that form cliques; and STRING Baseline, High-confidence STRING interactions that form connected components but not cliques. To ensure comparability, all evaluated sets were restricted to complexes containing three or four proteins.",
+      "page": 14,
+      "index": 4,
+      "width": 619,
+      "height": 517
+    },
+    {
+      "url": "assets/figures/arxiv/2603.14806v1/fig-005.webp",
+      "caption": "Figure 10: Structural artifacts in long-context homomeric assemblies. Boltz-1 CP predicted structures exhibit chain overlap and clumping. Experiment structures are in gray. Confidence scale (pLDDT): 90–100 (dark blue), 70–90 (light blue), 50–70 (yellow), 0–50 (orange).",
+      "page": 18,
+      "index": 5,
+      "width": 673,
+      "height": 331
+    },
+    {
+      "url": "assets/figures/arxiv/2603.14806v1/fig-006.webp",
+      "caption": "Figure 6: Boltz-2 prediction of the TTC7A/PI4KA/FAM126A/EFR3A(700–823) complex (3,605 residues). PI4KA (green), TTC7A (cyan), FAM126A (magenta), and the intrinsically disordered EFR3A C-terminus (yellow). The prediction was generated in a single inference pass using Fold-CP across 4 NVIDIA H100 80GB GPUs.",
+      "page": 13,
+      "index": 6,
+      "width": 477,
+      "height": 477
+    },
+    {
+      "url": "assets/figures/arxiv/2603.14806v1/fig-007.webp",
+      "caption": "Figure 1: Software Architecture of the Fold-CP Framework. Fold-CP design takes a bottom-up approach starting with foundational torch.distributed APIs, making module-level operators CP-aware, and incrementally building up to model-specific workflows. This design allows developers to port specific distributed modules into diverse model organizations without managing low-level synchronization logic or altering the model flow.",
+      "page": 4,
+      "index": 7,
+      "width": 902,
+      "height": 433
+    },
+    {
+      "url": "assets/figures/arxiv/2603.14806v1/fig-008.webp",
+      "caption": "Figure 9: Structure prediction of 5YZO homo 4-mer S9 peptidase mutant (S514A) from Deinococcus radiodurans R1. Yellow is the ground truth while blue is the predicted version from Earendil’s model. The prediction was generated in a single inference pass using Fold-CP across 64 NVIDIA H100 80GB GPUs.",
+      "page": 17,
+      "index": 8,
+      "width": 761,
+      "height": 581
+    },
+    {
+      "url": "assets/figures/arxiv/2603.14806v1/fig-009.webp",
+      "caption": "Figure 4: Inference consistency validation on Boltz-1 test set. Numerical equivalence between the DP baseline and Fold-CP implementation verified via a Two One-Sided Tests (TOST) procedure on a Wilcoxon signed-rank test with a margin of error (ϵ=0.01). Error bar estimated from standard error of mean (SEM) from 5 diffusion samples for the respective x- (DP, horizontal bar) and y-axis (CP, vertical bar).",
+      "page": 12,
+      "index": 9,
+      "width": 477,
+      "height": 467
+    },
+    {
+      "url": "assets/figures/arxiv/2603.14806v1/fig-010.webp",
+      "caption": "Figure 5: Training consistency validation. Validation lDDT trajectories for five DP baseline with random seeding and one CP = 2 × 2 configuration with a model trained on 256-token crop size. The Fold-CP validation lDDT curve largely mirrors the DP references, with variation stemming from stochastic nature of the model. The model used in this validation experiment is a truncated Boltz-1 architecture, hence it is not expected to match the published reference. See text for details.",
+      "page": 12,
+      "index": 10,
+      "width": 525,
+      "height": 523
+    },
+    {
+      "url": "assets/figures/arxiv/2603.14806v1/fig-011.webp",
+      "caption": "Figure 8: Structural comparison of the ELP123-ELP456 complex. (a) A side-by-side comparison of the complete complex. On the left is the yeast structure (PDB 8ASV [27]), and on the right is the Boltz-1 CP predicted structure of the human Elongator complex. Outlined sections represent XL-MS contact sites [28] that were either captured (contact sites 1 and 3, CS1+3) or missed (contact site 2, CS2) by the model. (b) A magnified view of the Boltz-1 CP predicted structure, overlaid on 8ASV, appears to recapitulate previously identified interface contact sites (1 and 3) [27] that were successfully mapped from yeast to human. The remaining contact site 2 resides in a region of low sequence and structural homology between the human (dashed rectangle) and yeast proteins, and likely represents an error in the predicted structure, as detailed in the text.",
+      "page": 16,
+      "index": 11,
+      "width": 950,
+      "height": 1117
+    }
+  ]
+}

@@ -1,0 +1,278 @@
+{
+  "version": 2,
+  "extractor": "pdffigures2",
+  "figures": [
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-001.webp",
+      "caption": "Figure 20: PL constant µ captures the flatness of the merit function landscape. We provide a schematic illustrating how a smaller PL constant µ results in flatter merit function landscapes.",
+      "page": 70,
+      "index": 1,
+      "width": 848,
+      "height": 252
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-002.webp",
+      "caption": "Figure 12: Evaluating an untrained GRU. Sublinear and linear timing regimes for parallelized algorithms. The above experiments were run on a 32 GB V100 with a batch size of 1. As in Figure 11, we use 20 seeds for timing, 3 seeds for memory, and the dashed black line indicates the memory capacity of the GPU (32 GB). We observe that in smaller regimes in D and T that the wall-clock time shows sublinear scaling indicative of the use of parallel algorithms. However, when the GPU becomes saturated, the benefits of parallelization are reduced and we begin to see linear scaling in wall-clock time with T .",
+      "page": 43,
+      "index": 2,
+      "width": 896,
+      "height": 829
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-003.webp",
+      "caption": "Figure 7: Newton’s method can globally diverge. A graphical depiction showing how Newton’s method for root-finding can globally diverge for a simple function like r(s) = s1/3.",
+      "page": 25,
+      "index": 3,
+      "width": 880,
+      "height": 385
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-004.webp",
+      "caption": "Figure 14: Graphical Depiction of Trust-Region Methods. We show both an undamped Gauss-Newton step (red) and a stabilized trust-region step (blue). The solid lines indicate the contours of the merit function L we want to minimize. The dashed lines indicate the contours of the quadratic surrogate that GaussNewton is minimizing on this iteration. The dotted lines indicate the trust region around s(i); trust-region methods restrict the update to this ball, resulting in this case in an update that reduces the objective. Figure adapted from Nocedal and Wright [179, Figure 4.1].",
+      "page": 53,
+      "index": 4,
+      "width": 552,
+      "height": 343
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-005.webp",
+      "caption": "Figure 3: Graphical diagram showing the equivalence (based on currying) between an SSM driven by inputs and an autonomous system with time-varying transition dynamics. We shade the inputs ut to indicate that they are known.",
+      "page": 15,
+      "index": 5,
+      "width": 665,
+      "height": 326
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-006.webp",
+      "caption": "Figure 29: Picard iterations struggle to parallelize RNNs. We evaluate GRUs with random parameter initialization for different sequence lengths T and hidden state sizes D. A: The nonlinear dynamics of a GRU, following Feng et al. [63], where xt is the hidden state, ut is the input, and the notation Linear[·, ·] indicates a linear readout from the concatenation of two vectors. B: A representative Jacobian matrix ∂ft/∂x from a GRU trajectory, which is not well approximated by the identity matrix. C: For each fixed-point method and a range of sequence lengths, T , and state sizes, D, we compute the median (over ten random seeds) number of fixed-point iterations to converge (top row) and the median wallclock time (bottom row). Picard iterations take nearly T iterations to converge, while the other fixed point methods yield order-of-magnitude speed-ups over sequential evaluation",
+      "page": 107,
+      "index": 6,
+      "width": 895,
+      "height": 443
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-007.webp",
+      "caption": "Figure 17: Experiment to show how to set the hyperparameters for (quasi)-ELK on the AR GRU pre-trained to generate a noisy sine wave (Figure 16 in the main text). Top row plots Newton steps; bottom row plots wall-clock time. Lower is better for all plots. (Left) median steps/time to convergence over λ over 15 sequences. Quartiles are shaded but are very small. DEER methods are independent of λ. (Center) Updated version of Figure 16 instead plotting MAD as a function of wall-clock time. (Right) Time to convergence is robust as a function of convergence threshold ϵ. Median and quartiles across 15 sequences are shown. DEER methods are nearly constant at the thresholds considered (very slight positive slope). Note we plot for increasing λ corresponding to a smaller trust region, and reducing ϵ corresponding to a tighter convergence threshold.",
+      "page": 62,
+      "index": 7,
+      "width": 866,
+      "height": 424
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-008.webp",
+      "caption": "Figure 26: Equivalence between a contractive nSSM and an O(logT) stack of linear statespace models. Contractivity implies that nonlinear dynamics can be decomposed into a hierarchy of O(logT) layers of linear SSMs, each of which can be evaluated in O(logT) time by a parallel scan.",
+      "page": 90,
+      "index": 8,
+      "width": 901,
+      "height": 470
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-009.webp",
+      "caption": "Figure 1: Parallel Newton methods. With a clever connection between Newton’s method and the parallel scan, we can use GPUs to parallelize and therefore accelerate dynamical systems.",
+      "page": 7,
+      "index": 9,
+      "width": 579,
+      "height": 369
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-010.webp",
+      "caption": "Table 4: Time to evaluate a length T = 10,000 trained AR GRU using sequential vs parallelized methods. We note the dynamax package [144] we used for the parallel Kalman filter implementation in ELK is not optimized for speed, and hence these run times could be further improved.",
+      "page": 61,
+      "index": 10,
+      "width": 609,
+      "height": 456
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-011.webp",
+      "caption": "Figure 25: In this plot, we provide additional information about the behavior of DEER when rolling out Langevin dynamics on a two-well potential. (Left) We observe that across 20 random seeds (including different Langevin dynamics trajectories), the LLE for intermediate DEER iterations becomes negative after the first iteration. Consequently, we observe that the merit function (Center) experiences a spike on the very first DEER iteration (following initialization, which was the only trajectory with positive LLE), before trending towards convergence. As the system spends most of its time in contracting regions, we observe (Right) that the number of DEER iterations needed for convergence scales sublinearly with the sequence length T . We plot the min-max range for 20 seeds, and observe that even out of 20 seeds, the maximum number of DEER iterations needed to converge on a sequence length of T = 10,000 is around 35.",
+      "page": 86,
+      "index": 11,
+      "width": 833,
+      "height": 267
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-012.webp",
+      "caption": "Figure 27: Comparing Picard and Jacobi iterations on a diagonal LDS. For the underlying dynamical system st+1 = αst, we plot the norm of the error e(i) for Jacobi and Picard iterations. We denote the empirical slope of ∥e(i)∥2 for Jacobi iterations by γJ.",
+      "page": 103,
+      "index": 12,
+      "width": 888,
+      "height": 332
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-013.webp",
+      "caption": "Table 6: Summary of fixed-point iteration schemes as linear dynamical systems. We list the methods by the order of their approximation. While higher order methods may converge in fewer iterations, each iteration may be more costly. For example, the prefix sum and parallel scan have O(logT) depth, while a single Jacobi iteration has constant depth. For all the methods, each iteration is an LDS, i.e. they can be written in the form of equation (20) where Ãt+1 is the transition matrix. By Proposition 3.1, these methods are guaranteed to converge in at most T iterations. \"Order\" refers to the highest number of derivatives taken: Newton and quasi-Newton methods use first derivatives, while Picard and Jacobi methods do not use derivatives of ft.",
+      "page": 93,
+      "index": 13,
+      "width": 893,
+      "height": 312
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-014.webp",
+      "caption": "Figure 19: Predictability enables parallelization. Predictable dynamics yield well-conditioned merit functions, enabling rapid convergence. Unpredictable dynamics produce flat or ill-conditioned merit landscapes, resulting in slow convergence or numerical failure.",
+      "page": 66,
+      "index": 14,
+      "width": 781,
+      "height": 670
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-015.webp",
+      "caption": "Figure 11: Evaluating an untrained GRU. Relative performance of sequential, DEER and quasi-DEER for evaluating a randomly initialized (and untrained) GRU on (Top Row) wall-clock time, averaged over 20 random seeds and (Bottom Row) memory, averaged over 3 random seeds. All experiments use a 16GB V100 SMX2",
+      "page": 42,
+      "index": 15,
+      "width": 854,
+      "height": 393
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-016.webp",
+      "caption": "Figure 28: A single Newton iteration solves the S5 group word problem, whereas the number of iterations required for the other methods increases with sequence length. We consider the task of evaluating the product of S5 group elements. A: The group word problem can be expressed as an LDS with input-dependent state-transition matrices. B: An example input-dependent transition matrix At",
+      "page": 106,
+      "index": 16,
+      "width": 891,
+      "height": 402
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-017.webp",
+      "caption": "Figure 9: The ungulates. This methods part of this thesis introduces scalable and stable variants of DEER. Broadly, we call these methods \"parallel Newton methods.\" More colloquially, we call these methods \"the ungulates,\" which are large hoofed mammals like deer and elk. The experiments in this part are based on the code available at: https://github.com/lindermanlab/elk",
+      "page": 35,
+      "index": 17,
+      "width": 776,
+      "height": 252
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-018.webp",
+      "caption": "Figure 5: Parallel Scan for Matrix Multiplication. We illustrate a divide-and-conquer approach to compute the product A4A3A2A1. Note that this divide-and-conquer approach naturally leads to O(logT) depth.",
+      "page": 18,
+      "index": 18,
+      "width": 693,
+      "height": 223
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-019.webp",
+      "caption": "Figure 6: Newton’s method for root-finding. Here we illustrate 3 iterations of Newton’s method for root-finding on the one-dimensional cubic function r(s) = (s − 0.4)3 + 0.45(s − 0.4). We observe that each iteration of Newton’s method involves linearizing the function to obtain r̂(i)(·) (shown in color) and then finding the zero of this linearization to obtain our next guess.",
+      "page": 23,
+      "index": 19,
+      "width": 789,
+      "height": 306
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-020.webp",
+      "caption": "Figure 16: ELK stabilizes parallel evaluation of an AR GRU. (Top Left) The mean absolute difference (MAD) evaluated on the outputs converges rapidly for all four methods on a sequence generated by an untrained AR GRU. (Top Right) The MAD for evaluating a trained AR GRU. Undamped DEER variants are unstable and converge slowly (using the reset heuristic). ELK stabilizes and accelerates convergence. (Bottom) The output after 1, 100, 1000, and 2000 Newton iterations. The black dotted line is the true trace. ELK and quasi-ELK converge rapidly, but DEER and quasi-DEER are unstable. The lines where DEER and quasiDEER are zero depict the zeroing heuristic.",
+      "page": 60,
+      "index": 20,
+      "width": 858,
+      "height": 493
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-021.webp",
+      "caption": "Table 5: Comparison of system and observer LLEs and number of DEER steps for T = 30,000 and Euler discretization step size ∆t= 0.01.",
+      "page": 87,
+      "index": 21,
+      "width": 783,
+      "height": 360
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-022.webp",
+      "caption": "Figure 32: What unexplored, verdant pastures await for the ungulate (parallel Newton) methods?",
+      "page": 114,
+      "index": 22,
+      "width": 627,
+      "height": 358
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-023.webp",
+      "caption": "Figure 22: Robust relationship in mean field RNN between variance parameter g and LLE of the system. For 20 seeds, we observe a robust and non-decreasing relationship between the scalar parameter g and the LLE of the resulting meanfield RNN. The plot above is made for 50 different values of g from 0.5 to 2.0 (linearly spaced). We estimate the LLE over a sequence length of T = 9999.",
+      "page": 82,
+      "index": 23,
+      "width": 451,
+      "height": 347
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-024.webp",
+      "caption": "Figure 31: Jacobi iterations struggle when the dynamics Jacobian is close to the identity. We evaluate Langevin dynamics for a potential ϕ. A: The nonlinear dynamics of Langevin dynamics for a potential ϕ and step size ϵ, where xt is the state and wt is Gaussian noise. B: The Jacobian for Langevin dynamics is wellapproximated by the identity matrix, especially for small step size ϵ= 1× 10−5. C: We evaluate Langevin dynamics for larger dimensions, plotting the median of 10 random seeds. Jacobi iteration consistently take T steps and are always slower than sequential, while the other fixed-point methods converge in fewer T steps and can be faster than sequential. The missing Newton iteration points indicate the GPU ran out of memory.",
+      "page": 109,
+      "index": 24,
+      "width": 807,
+      "height": 399
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-025.webp",
+      "caption": "Figure 13: Training a GRU with DEER. Comparison of DEER and quasi-DEER during GRU training for the C. elegans time-series classification task (Section 3.3.2). Each time series has length T = 17,984. We show the median, and 5-95% interval across a rolling window of 20 training steps. (Left) DEER and quasi-DEER have the similar validation accuracy trajectories, indicating similar training dynamics. The sequential trace shown is for 24 hours of training (compared to 11",
+      "page": 44,
+      "index": 25,
+      "width": 900,
+      "height": 196
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-026.webp",
+      "caption": "Figure 10: The accuracy of evaluating with parallelized methods (DEER and quasi-DEER) as opposed to sequential evaluation. The parallelized methods converge to the correct trace within numerical precision. The hidden state size is D= 4 and the sequence length is T = 10,000.",
+      "page": 41,
+      "index": 26,
+      "width": 856,
+      "height": 312
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-027.webp",
+      "caption": "Figure 23: Convergence rates and wallclock time for many optimizers. We supplement the mean-field RNN experiment by also considering quasi-Newton and gradient descent methods (top), and recording wallclock time, including for sequential evaluation (bottom)",
+      "page": 83,
+      "index": 27,
+      "width": 895,
+      "height": 332
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-028.webp",
+      "caption": "Table 2: Up-sweep for multiplying A1,A2, . . .A8.",
+      "page": 20,
+      "index": 28,
+      "width": 901,
+      "height": 213
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-029.webp",
+      "caption": "Figure 30: Understanding the convergence rates in Figure 29. In the setting of the GRU experiment for D= 8 and T = 1000, we plot relevant quantities for understanding the convergence rates of different methods over 10 random seeds. (Top left.) We plot the spectral norm of the approximate Jacobian for the quasi-Newton iterations we consider in this paper, i.e. diag[At(s ⋆ t−1)]. (Top right.) For each",
+      "page": 108,
+      "index": 29,
+      "width": 873,
+      "height": 636
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-030.webp",
+      "caption": "Figure 21: Threshold phenomenon in DEER convergence based on system predictability. In a family of RNNs, DEER has fast convergence for predictable systems and prohibitively slow convergence for chaotic systems. Left (Theory): We depict Theorem 5.3, illustrating how the conditioning of the optimization problem degrades as T and the LLE (λ) increase. Center (Experiment): We vary λ",
+      "page": 80,
+      "index": 30,
+      "width": 895,
+      "height": 278
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-031.webp",
+      "caption": "Table 1: Some illustrative examples of state space models (SSMs).",
+      "page": 16,
+      "index": 31,
+      "width": 902,
+      "height": 1040
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-032.webp",
+      "caption": "Figure 18: Evaluating the Lorenz96 system in parallel. (Top two rows): Same format as Figure 17. (Bottom row): Plot of Lorenz96 trajectory during optimization. DEER methods are noticeably more unstable than ELK methods.",
+      "page": 63,
+      "index": 32,
+      "width": 893,
+      "height": 723
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-033.webp",
+      "caption": "Figure 33: Illustration of Theorem 3.6 of Tang et al. [221]. In this illustration, j = 3. The portion shaded red must be zero for the proof by induction to work, showing that G cannot be an arbitrary matrix. The portion shaded blue can be nonzero, and the proof by induction will still hold.",
+      "page": 123,
+      "index": 33,
+      "width": 831,
+      "height": 580
+    },
+    {
+      "url": "assets/figures/arxiv/2603.16850v1/fig-034.webp",
+      "caption": "Figure 24: DEER converges quickly for Langevin dynamics in a two-well potential. (Left) An illustration of the two-well potential state space in D = 2. We superimpose a contour plot of the potential on a color scheme showing the spectral norm of the dynamics Jacobian (blue indicates stability, red instability). (Center) A trace plot for the y-coordinate. The LLE of the system is −0.0145. (Right) We observe that this system, which has negative LLE, enjoys sublinear scaling in the sequence length T in the number of DEER iterations needed to converge. We plot the median number of DEER steps to convergence over 20 seeds.",
+      "page": 84,
+      "index": 34,
+      "width": 852,
+      "height": 287
+    }
+  ]
+}
