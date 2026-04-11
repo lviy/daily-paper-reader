@@ -1,0 +1,38 @@
+{
+  "version": 2,
+  "extractor": "pdffigures2",
+  "figures": [
+    {
+      "url": "assets/figures/arxiv/2604.02560v1/fig-001.webp",
+      "caption": "Figure 3. Dependency predictor architecture. Hidden states H from the frozen backbone are projected via learned WQ,WK , then combined via scaled dot-product and sigmoid to predict the pairwise dependency matrix D̂.",
+      "page": 7,
+      "index": 1,
+      "width": 295,
+      "height": 440
+    },
+    {
+      "url": "assets/figures/arxiv/2604.02560v1/fig-002.webp",
+      "caption": "Figure 4. Empirical CDF of the slack RHSi − LHSi stratified by subset size |S|, evaluated on Tulu 3 SFT Mixture with Dream-7B. The |S| = 1 curve (vertical line at zero) is trivially satisfied. For |S| ≥ 2, positive slack indicates the sub-additivity bound holds.",
+      "page": 10,
+      "index": 2,
+      "width": 479,
+      "height": 320
+    },
+    {
+      "url": "assets/figures/arxiv/2604.02560v1/fig-003.webp",
+      "caption": "Table 1. Comparison of DEMASK and KLASS on Dream-7B. Each cell shows accuracy (%) with speedup in parentheses, relative to Entropy (1 tok). Bold: best average accuracy (Avg excludes GSM8K).",
+      "page": 8,
+      "index": 3,
+      "width": 829,
+      "height": 213
+    },
+    {
+      "url": "assets/figures/arxiv/2604.02560v1/fig-004.webp",
+      "caption": "Figure 2. Overview of DEMASK. (A) A lightweight dependency predictor attaches to the dLLM backbone and estimates pairwise dependencies D̂ from hidden states in a single forward pass. (B) Greedy subset selection identifies positions with bounded cumulative dependency for parallel unmasking. (C) The iterative decoding cycle: each step performs a forward pass, selects positions, and samples them in parallel until all tokens are unmasked.",
+      "page": 4,
+      "index": 4,
+      "width": 1010,
+      "height": 625
+    }
+  ]
+}
