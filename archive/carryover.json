@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-08T20:55:56.579644+00:00",
-  "updated_date": "20260608",
+  "generated_at": "2026-06-09T08:37:22.353333+00:00",
+  "updated_date": "20260511-20260609",
   "carryover_days": 9,
   "tag_states": {
     "SD LLM": {
@@ -15,6 +15,11 @@
     },
     "CPAR": {
       "updated_date": "20260411",
+      "carryover_days": 9,
+      "items": []
+    },
+    "rl-rollout": {
+      "updated_date": "20260511-20260609",
       "carryover_days": 9,
       "items": []
     }
