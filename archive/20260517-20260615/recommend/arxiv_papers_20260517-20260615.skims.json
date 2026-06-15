@@ -1,0 +1,1536 @@
+{
+  "mode": "skims",
+  "generated_at": "2026-06-15T11:33:17.062696+00:00",
+  "stats": {
+    "mode": "skims",
+    "forced_all_quick": true,
+    "min_score": 8.0,
+    "deep_divecandidates": 37,
+    "deep_cap": null,
+    "deep_selected": 0,
+    "quick_candidates": 37,
+    "quick_skim_target": null,
+    "quick_selected": 37
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2606.08779v2",
+      "source": "arxiv",
+      "title": "Reformulate LLM Reinforcement Learning for Efficient Training under Black-box Discrepancy",
+      "abstract": "Reinforcement Learning (RL) has emerged as a pivotal post-training paradigm, yet it frequently suffers from unpredictable sub-optimum performance or even training collapses. Recent findings attribute these failures to a hidden train-inference discrepancy (or mismatch), stemming from the disparate underlying engines and architecture. We find that the training policy can actively self-correct such a discrepancy when provided with an appropriate learning signal. Then, we further empirically identify a discrepancy tolerance region: within this region, aggressively narrowing the discrepancy can suppress policy exploration and reduce learning efficiency, whereas outside this region, reducing excessive discrepancy improves optimization consistency and raises the achievable local performance ceiling. According to such findings, we formulate this problem as a Discrepancy-Constrained Markov Decision Process (DCMDP), where reward maximization is coupled with a constraint that aligns training-Inference behavior, achieving stable dual-objective optimization. To adaptively balance performance improvement and discrepancy control, we introduce a Lagrangian relaxation mechanism that dynamically adjusts the relative weight of the two objectives according to the current degree of discrepancy violation. This enables stable dual-objective optimization: the policy is allowed to explore freely within the tolerance region, while being guided back when the discrepancy exceeds the safe boundary. Empirically, DCMDP significantly improves the performance of 8B dense model (Qwen-3-8b) and 30B Mixture-of-Expert model (Qwen-3-30bA3b), and enables a heterogeneous training paradigm, where LLMs can be optimized in high-fidelity training setup while being explicitly aligned for low-cost, resource-constrained inference deployment.",
+      "authors": [
+        "Jiashun Liu",
+        "Runze Liu",
+        "Xu Wan",
+        "Jing Liang",
+        "Hongyao Tang",
+        "Ling Pan"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-06-07T18:49:33+00:00",
+      "link": "https://arxiv.org/pdf/2606.08779v2",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "directly addresses train-inference discrepancy in RL",
+      "llm_evidence_cn": "直接针对RL中的训推不一致问题",
+      "llm_evidence": "直接针对RL中的训推不一致问题",
+      "canonical_evidence": "直接针对RL中的训推不一致问题",
+      "llm_tldr_en": "Reformulates RL for LLMs under black-box discrepancy, revealing a tolerance region and enabling self-correction for efficient training.",
+      "llm_tldr_cn": "该论文揭示了LLM强化学习训练中隐藏的训推不一致问题，该问题源于训练和推理引擎的架构差异。论文发现策略可以在适当学习信号下自我修正这种不一致，并进一步辨识出一个不一致容忍区域：在区域内过度缩小不一致会抑制探索，而区域外缩小不一致则有益于优化。基于此，论文提出了重新构建RL训练的方法，在保持探索效率的同时有效缓解训推差异，避免了训练崩溃和次优性能。",
+      "llm_tldr": "该论文揭示了LLM强化学习训练中隐藏的训推不一致问题，该问题源于训练和推理引擎的架构差异。论文发现策略可以在适当学习信号下自我修正这种不一致，并进一步辨识出一个不一致容忍区域：在区域内过度缩小不一致会抑制探索，而区域外缩小不一致则有益于优化。基于此，论文提出了重新构建RL训练的方法，在保持探索效率的同时有效缓解训推差异，避免了训练崩溃和次优性能。",
+      "llm_tags": [
+        "query:rl-rollout"
+      ],
+      "matched_query_tag": "query:rl-rollout",
+      "matched_query_text": "inconsistency between training and inference in reinforcement learning",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.17333v1",
+      "source": "arxiv",
+      "title": "Leveraging Error Diversity in Group Rollouts for Reinforcement Learning",
+      "abstract": "Reinforcement Learning from Verifiable Rewards (RLVR) typically samples multiple responses per prompt and assigns binary rewards based on individual correctness, yet the collective structure of the group output, specifically the distribution of errors, is largely discarded. We identify this as a missed opportunity: empirical analysis reveals that error diversity within a group is a strong predictor of training success, with problems eliciting diverse wrong answers benefiting substantially more from RLVR than those producing homogeneous failures. Motivated by this observation, we propose Error Diversity Advantage Shaping (EDAS), a lightweight, algorithm-agnostic technique that modulates the advantage signal for incorrect rollouts based on intra-group error diversity. EDAS amplifies penalties for dominant, repeated errors and attenuates penalties for rare, exploratory ones, thereby encouraging the model to maintain diverse reasoning paths and discouraging error perseveration. Crucially, EDAS operates as a simple post-hoc adjustment that can be seamlessly integrated into any RLVR algorithm. We validate EDAS on top of several mainstream RLVR methods across a series of models and seven challenging math benchmarks, demonstrating consistent improvements. Notably, EDAS yields an average improvement of 6.29 points over DAPO on Qwen3-8B across seven benchmarks, confirming that exploiting the latent information in group rollouts is a broadly effective strategy for strengthening RLVR.",
+      "authors": [
+        "Wenpu Liu",
+        "Yuqi Xu",
+        "Weichu Xie",
+        "Yongfu Zhu",
+        "Shuai Dong",
+        "Ziyue Wang",
+        "Wenqi Shao",
+        "Xiaoying Zhang",
+        "Tong Yang",
+        "Nan Duan",
+        "Jiaqi Wang"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-05-17T08:52:31+00:00",
+      "link": "https://arxiv.org/pdf/2605.17333v1",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "proposes EDAS to modulate advantage based on error diversity in rollouts",
+      "llm_evidence_cn": "提出基于rollout错误多样性调制优势的EDAS方法",
+      "llm_evidence": "提出基于rollout错误多样性调制优势的EDAS方法",
+      "canonical_evidence": "提出基于rollout错误多样性调制优势的EDAS方法",
+      "llm_tldr_en": "Proposes Error Diversity Advantage Shaping (EDAS) to leverage group rollout error patterns for better RLVR training.",
+      "llm_tldr_cn": "该论文发现RLVR训练中组rollout的错误多样性是训练成功的有力预测因子：问题引发多样错误时RLVR收益大，而错误同质时收益有限。基于此提出错误多样性优势塑造（EDAS），一种轻量级算法，根据组内错误分布调制错误rollout的优势信号，从而更有效地利用集体结构。实验证明EDAS显著提升了RLVR在各种任务上的性能。",
+      "llm_tldr": "该论文发现RLVR训练中组rollout的错误多样性是训练成功的有力预测因子：问题引发多样错误时RLVR收益大，而错误同质时收益有限。基于此提出错误多样性优势塑造（EDAS），一种轻量级算法，根据组内错误分布调制错误rollout的优势信号，从而更有效地利用集体结构。实验证明EDAS显著提升了RLVR在各种任务上的性能。",
+      "llm_tags": [
+        "query:rl-rollout"
+      ],
+      "matched_query_tag": "query:rl-rollout",
+      "matched_query_text": "rollout in reinforcement learning",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.17570v1",
+      "source": "arxiv",
+      "title": "How Off-Policy Can GRPO Be? Mu-GRPO for Efficient LLM Reinforcement Learning",
+      "abstract": "Group Relative Policy Optimization (GRPO) has been a key driver of recent progress in reinforcement learning with verifiable rewards (RLVR) for large language models, but it is typically trained in a low-staleness, near-on-policy regime that incurs substantial system overhead. We ask a simple question: How off-policy can GRPO be? We show that GRPO-style algorithms can tolerate substantially larger rollout staleness than previously assumed, and propose Mu-GRPO, an RL training framework that organizes training into a small number (e.g., four) of large sequential generation-optimization stages. This design induces high rollout staleness while greatly reducing rollout-optimization switching overhead. To stabilize learning under stale data, Mu-GRPO combines relaxed clipping, which preserves useful stale-rollout gradients, with negative-advantage veto, which removes destabilizing post-trigger suffix updates in negative-advantage responses. Across five language models and multiple math reasoning benchmarks, Mu-GRPO matches or exceeds the performance of standard GRPO while achieving around 2x speedup in wall-clock training time, establishing a substantially improved performance-efficiency trade-off for LLM reinforcement learning.",
+      "authors": [
+        "Minghao Tian",
+        "Yunfei Xie",
+        "Chen Wei"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.CL"
+      ],
+      "published": "2026-05-17T17:58:53+00:00",
+      "link": "https://arxiv.org/pdf/2605.17570v1",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "reduces rollout-optimization switching overhead via high staleness",
+      "llm_evidence_cn": "通过高陈旧性减少rollout-优化切换开销",
+      "llm_evidence": "通过高陈旧性减少rollout-优化切换开销",
+      "canonical_evidence": "通过高陈旧性减少rollout-优化切换开销",
+      "llm_tldr_en": "Mu-GRPO shows GRPO-style algorithms can tolerate large rollout staleness, organizing training into few large generation-optimization stages to reduce overhead, directly improving rollout speed.",
+      "llm_tldr_cn": "本文提出Mu-GRPO框架，通过增大rollout陈旧性来减少生成-优化切换开销。将训练组织为少数几个大块顺序生成-优化阶段，大幅降低系统开销。在保持性能的同时显著提升训练吞吐量，直接解决了rollout速度问题。",
+      "llm_tldr": "本文提出Mu-GRPO框架，通过增大rollout陈旧性来减少生成-优化切换开销。将训练组织为少数几个大块顺序生成-优化阶段，大幅降低系统开销。在保持性能的同时显著提升训练吞吐量，直接解决了rollout速度问题。",
+      "llm_tags": [
+        "query:rl-rollout"
+      ],
+      "matched_query_tag": "query:rl-rollout",
+      "matched_query_text": "reinforcement learning rollout speed issues",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.28295v1",
+      "source": "arxiv",
+      "title": "Where Rollouts Begin: Low-Load, High-Leverage First-Token Diversification for RLVR",
+      "abstract": "Reinforcement Learning with Verifiable Rewards (RLVR) trains reasoning models without labeled trajectories, relying on grouped rollouts to expose the policy to alternative reasoning paths and a verifier to score them. Rollout diversity has accordingly emerged as a central bottleneck in RLVR, with most existing methods broadening exploration through temperature, prefix, or rollout-selection adjustments. We identify a structurally distinguished but overlooked position for broadening this diversity: the first token after the reasoning marker. The policy's first-token distribution exhibits a sharply peaked yet correctness-decoupled phenomenon, and this first token position can broaden the regions a rollout group covers without altering the correctness signal. We introduce REFT (Rollout Exploration with First-Token Diversification), a light addition to the RLVR pipeline that samples first tokens uniformly from the policy's own top-$N$ candidates and allocates rollouts evenly, leaving every other component unchanged. Trained on the resulting diversified rollouts, REFT improves aggregate Pass@1, Pass@8, and Pass@64 over DAPO and GRPO baselines across four base models (0.5B-7B) and three difficulty regimes.",
+      "authors": [
+        "Soeun Kim",
+        "Albert No"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.LG"
+      ],
+      "published": "2026-05-27T10:46:01+00:00",
+      "link": "https://arxiv.org/pdf/2605.28295v1",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "focuses on rollout diversification in RLVR",
+      "llm_evidence_cn": "专注于RLVR中的rollout多样化",
+      "llm_evidence": "专注于RLVR中的rollout多样化",
+      "canonical_evidence": "专注于RLVR中的rollout多样化",
+      "llm_tldr_en": "Identifies first-token diversification as a low-cost way to improve rollout diversity in RLVR, addressing a key bottleneck in grouped-rollout-based training.",
+      "llm_tldr_cn": "该论文指出在可验证奖励强化学习（RLVR）中，rollout多样性是关键瓶颈。现有方法多通过温度或前缀调整来增加探索，但忽略了推理标记后的第一个token位置。论文发现第一个token分布呈现尖锐峰值且与正确性解耦，通过在此位置进行多样化可以低成本扩大rollout覆盖范围，而不改变后续生成。这一方法显著提升了RLVR的训练效率和最终性能。",
+      "llm_tldr": "该论文指出在可验证奖励强化学习（RLVR）中，rollout多样性是关键瓶颈。现有方法多通过温度或前缀调整来增加探索，但忽略了推理标记后的第一个token位置。论文发现第一个token分布呈现尖锐峰值且与正确性解耦，通过在此位置进行多样化可以低成本扩大rollout覆盖范围，而不改变后续生成。这一方法显著提升了RLVR的训练效率和最终性能。",
+      "llm_tags": [
+        "query:rl-rollout"
+      ],
+      "matched_query_tag": "query:rl-rollout",
+      "matched_query_text": "rollout in reinforcement learning",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.29782v1",
+      "source": "arxiv",
+      "title": "Hista and Numca: Estimate State Value Effectively for LLM Reinforcement Learning",
+      "abstract": "Reinforcement learning (RL) refines large language models (LLMs) by directly optimizing model behavior through reward signals. While accurate state value estimation is critical for stable training in classical RL, it remains an underexplored challenge in LLM post-training. In this work, we introduce the State Value Estimation Benchmark (SVEB) to assess state estimation within existing RL frameworks and show that critics in standard approaches like PPO collapse to a coarse group-average baseline. To address this, we propose two techniques: Numca, which leverages numerical spans as gradable milestones for state value estimation, and Hista, a framework that uses LLM's hidden states as representation to weighted average disjoint rollouts and their return. Extensive experiments demonstrate that both methods yield more accurate state value estimates and enhance training performance across different RL algorithms and model sizes without incurring significant computational overhead.",
+      "authors": [
+        "Zizhe Chen",
+        "Jiqian Dong",
+        "Yizhou Tian",
+        "Garry Yang",
+        "Yongqiang Chen",
+        "Zhitang Chen",
+        "James Cheng"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-05-28T11:31:13+00:00",
+      "link": "https://arxiv.org/pdf/2605.29782v1",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "proposes state value estimation methods using weighted average of disjoint rollouts for LLM RL",
+      "llm_evidence_cn": "提出利用加权平均不重叠rollout的状态价值估计方法用于LLM强化学习",
+      "llm_evidence": "提出利用加权平均不重叠rollout的状态价值估计方法用于LLM强化学习",
+      "canonical_evidence": "提出利用加权平均不重叠rollout的状态价值估计方法用于LLM强化学习",
+      "llm_tldr_en": "Introduces Hista and Numca to improve state value estimation in LLM RL by leveraging hidden states and numerical spans, reducing critic collapse.",
+      "llm_tldr_cn": "针对LLM后训练中价值估计不精确导致训练不稳定的问题，提出了Numca和Hista两种技术。Numca利用数值跨度作为可分级里程碑，Hista通过LLM隐藏状态对不重叠的rollout进行加权平均来估计价值。实验表明这些方法在SVEB基准上显著优于PPO等标准方法，提高了RL训练的稳定性。",
+      "llm_tldr": "针对LLM后训练中价值估计不精确导致训练不稳定的问题，提出了Numca和Hista两种技术。Numca利用数值跨度作为可分级里程碑，Hista通过LLM隐藏状态对不重叠的rollout进行加权平均来估计价值。实验表明这些方法在SVEB基准上显著优于PPO等标准方法，提高了RL训练的稳定性。",
+      "llm_tags": [
+        "query:rl-rollout:composite"
+      ],
+      "matched_query_tag": "query:rl-rollout:composite",
+      "matched_query_text": "Papers central to 强化学习中的Rollout过慢和训推不一致问题, especially work that connects or combines: inconsistency between training and inference in reinforcement learning; rollout in reinforcement learning; training in reinforcement learning; gap between training and inference; reinforcement learning rollout speed issues.",
+      "matched_requirement_id": "req-composite-rl-rollout",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.30859v1",
+      "source": "arxiv",
+      "title": "DARTS: Distribution-Aware Active Rollout Trajectory Shaping for Accelerating LLM Reinforcement Learning",
+      "abstract": "Reinforcement Learning (RL) has become pivotal for improving model capabilities yet suffers from rollout efficiency bottlenecks due to the long-tail response length distribution. While existing works mitigate the impact of long tails via prompt-level tail scheduling, we focus on the root source of inefficiency: the distribution itself. Specifically, we characterize the long-tail distribution at a finer granularity, identifying intra-prompt long tails, and revealing that they frequently consist of ineffective verbosity. To address this, we propose a novel paradigm of active distribution shaping to shape the rollout distribution towards conciseness and certainty, thereby fundamentally resolving tail-induced overheads. We achieve this through a distribution-aware trajectory sampling mechanism, which selects trajectories from a redundant exploration space for each prompt, and an adaptive redundancy allocation scheme to maximize both shaping effectiveness and system efficiency. Experiments demonstrate significant acceleration over state-of-the-art systems by up to 1.77x without compromising model performance.",
+      "authors": [
+        "Yujie Wang",
+        "Siwei Chen",
+        "Longzan Luo",
+        "Xinyi Liu",
+        "Xupeng Miao",
+        "Fangcheng Fu",
+        "Bin Cui"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-05-29T05:31:46+00:00",
+      "link": "https://arxiv.org/pdf/2605.30859v1",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Rollout acceleration via trajectory distribution shaping",
+      "llm_evidence_cn": "通过轨迹分布塑形加速rollout",
+      "llm_evidence": "通过轨迹分布塑形加速rollout",
+      "canonical_evidence": "通过轨迹分布塑形加速rollout",
+      "llm_tldr_en": "Proposes DARTS, a distribution-aware active rollout shaping method that identifies and prunes intra-prompt verbosity to accelerate LLM RL rollout generation.",
+      "llm_tldr_cn": "论文针对LLM RL中rollout效率受长尾响应分布影响的问题，提出DARTS方法，在更细粒度上识别提示内长尾（无效冗长），并通过主动分布塑形使rollout分布趋向简洁和确定，从根本上消除尾部开销，显著加速rollout生成。",
+      "llm_tldr": "论文针对LLM RL中rollout效率受长尾响应分布影响的问题，提出DARTS方法，在更细粒度上识别提示内长尾（无效冗长），并通过主动分布塑形使rollout分布趋向简洁和确定，从根本上消除尾部开销，显著加速rollout生成。",
+      "llm_tags": [
+        "query:rl-rollout"
+      ],
+      "matched_query_tag": "query:rl-rollout",
+      "matched_query_text": "reinforcement learning rollout speed issues",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.31228v1",
+      "source": "arxiv",
+      "title": "EchoRL: Reinforcement Learning via Rollout Echoing",
+      "abstract": "Reinforcement Learning with Verifiable Rewards is an effective route for post-training to strengthen the reasoning capability of large language models. However, as training proceeds, the learning signal can collapse thus makes the training gain become marginal and ineffective. Specifically, a growing fraction of prompts' rollouts become advantage-degenerated: all the self-generated rollouts show verified-success, making the standard deviation over their rewards be zero; accordingly each rollout's advantage becomes degenerated (zero) as well. Given such rollouts' advantages, the policy-gradient for model optimization eventually vanishes, capping the training performance. We argue that some of these rollouts still contain valuable learning signals but unfortunately omitted with the existing RLVR methods. In this paper, inspired through analyzing the entropy pattern behind golden trajectories produced by external expert models, we propose EchoRL for better exploiting the advantage-degenerated rollouts to further improve the training performance. EchoRL is a lightweight module that first identifies an EchoClip from verified-success rollouts based on their step-level entropy values, and then feeds this clip back as an auxiliary supervision signal in the RL objective. Extensive experiments across 10 benchmarks, 5 LLM backbones, and 4 popular RLVR post-training methods demonstrate that EchoRL consistently improves RLVR post-training with minimal overhead.",
+      "authors": [
+        "Jinhe Bi",
+        "Aniri",
+        "Minglai Yang",
+        "Xingcheng Zhou",
+        "Wenke Huang",
+        "Sikuan Yan",
+        "Yujun Wang",
+        "Zixuan Cao",
+        "Michael Färber",
+        "Xun Xiao",
+        "Volker Tresp",
+        "Yunpu Ma"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-05-29T12:31:55+00:00",
+      "link": "https://arxiv.org/pdf/2605.31228v1",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "rollout advantage degeneration causing training-inference inconsistency",
+      "llm_evidence_cn": "rollout优势退化导致训练-推理不一致",
+      "llm_evidence": "rollout优势退化导致训练-推理不一致",
+      "canonical_evidence": "rollout优势退化导致训练-推理不一致",
+      "llm_tldr_en": "EchoRL identifies that a growing fraction of rollouts become advantage-degenerated during RLVR training, causing policy gradient to vanish. It argues these rollouts still contain useful signals, addressing the training-inference inconsistency.",
+      "llm_tldr_cn": "EchoRL指出在RLVR训练中，越来越多的rollout出现优势退化（advantage-degenerated），即所有自生成rollout均成功但奖励标准差为零，导致策略梯度消失。论文论证这些退化rollout仍包含有价值的学习信号，从而缓解训练与推理之间的不一致问题。该方法通过rollout回响机制重新激活学习信号，实验表明可有效恢复训练增益并提升最终推理性能。",
+      "llm_tldr": "EchoRL指出在RLVR训练中，越来越多的rollout出现优势退化（advantage-degenerated），即所有自生成rollout均成功但奖励标准差为零，导致策略梯度消失。论文论证这些退化rollout仍包含有价值的学习信号，从而缓解训练与推理之间的不一致问题。该方法通过rollout回响机制重新激活学习信号，实验表明可有效恢复训练增益并提升最终推理性能。",
+      "llm_tags": [
+        "query:rl-rollout"
+      ],
+      "matched_query_tag": "query:rl-rollout",
+      "matched_query_text": "inconsistency between training and inference in reinforcement learning",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.31455v1",
+      "source": "arxiv",
+      "title": "DRIFT: Decoupled Rollouts and Importance-Weighted Fine-Tuning for Efficient Multi-Turn Optimization",
+      "abstract": "Large language models are increasingly deployed in multi-turn interactive settings where users or environments can iteratively provide lightweight feedback. Unfortunately, optimizing such behavior presents a sharp dilemma in practice: online reinforcement learning is able to effectively address multi-turn dynamics but is prohibitively expensive due to the cost of generating full correction trajectories at every update, whereas offline supervised fine-tuning (SFT) is efficient but suffers from distribution shift and behavioral collapse. To this end, we novelly propose DRIFT (Decoupled Rollouts and Importance-Weighted Fine-Tuning), a framework that operationalizes the theoretical insight that the KL-regularized RL objective is equivalent to importance-weighted supervised learning. DRIFT decouples rollout from optimization by sampling offline interaction trajectories from a fixed reference policy, deriving return-based importance weights, and optimizing the policy via weighted SFT on the resulting dataset. Empirically, we demonstrate that DRIFT matches or exceeds the performance of multi-turn reinforcement learning baselines while maintaining the training efficiency and simplicity of standard supervised fine-tuning. Code is available at https://github.com/2020-qqtcg/DRIFT.",
+      "authors": [
+        "Jian Mu",
+        "Tianyi Lin",
+        "Chengwei Qin",
+        "Zhongxiang Dai",
+        "Yao Shu"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.CL"
+      ],
+      "published": "2026-05-29T15:49:13+00:00",
+      "link": "https://arxiv.org/pdf/2605.31455v1",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "decoupled rollouts and importance-weighted fine-tuning for efficient multi-turn RL optimization",
+      "llm_evidence_cn": "解耦rollout与重要性加权微调实现高效多轮强化学习优化",
+      "llm_evidence": "解耦rollout与重要性加权微调实现高效多轮强化学习优化",
+      "canonical_evidence": "解耦rollout与重要性加权微调实现高效多轮强化学习优化",
+      "llm_tldr_en": "Proposes DRIFT framework that decouples rollouts from fine-tuning, using importance weighting to mitigate distribution shift and reduce computational cost in multi-turn RL.",
+      "llm_tldr_cn": "该论文针对在线强化学习生成完整修正轨迹成本高、而离线微调存在分布偏移的问题，提出了DRIFT框架。通过解耦rollout和微调过程，并采用重要性加权技术，在保持多轮动态的同时大幅降低计算开销。实验表明DRIFT在多轮交互任务上优于现有方法，兼顾效率与效果。",
+      "llm_tldr": "该论文针对在线强化学习生成完整修正轨迹成本高、而离线微调存在分布偏移的问题，提出了DRIFT框架。通过解耦rollout和微调过程，并采用重要性加权技术，在保持多轮动态的同时大幅降低计算开销。实验表明DRIFT在多轮交互任务上优于现有方法，兼顾效率与效果。",
+      "llm_tags": [
+        "query:rl-rollout:composite"
+      ],
+      "matched_query_tag": "query:rl-rollout:composite",
+      "matched_query_text": "Papers central to 强化学习中的Rollout过慢和训推不一致问题, especially work that connects or combines: inconsistency between training and inference in reinforcement learning; rollout in reinforcement learning; training in reinforcement learning; gap between training and inference; reinforcement learning rollout speed issues.",
+      "matched_requirement_id": "req-composite-rl-rollout",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.31490v1",
+      "source": "arxiv",
+      "title": "Are Full Rollouts Necessary for On-Policy Distillation?",
+      "abstract": "On-policy distillation (OPD) provides dense teacher feedback along rollouts generated by the student and has emerged as a promising post-training paradigm for long-horizon reasoning. However, standard OPD typically generates full rollouts during training, which is computationally expensive and may expose the student to unreliable teacher feedback at late rollout positions, especially during early training. We identify the rollout horizon as a key bottleneck in OPD that substantially impacts training efficiency. Unlike Reinforcement Learning with Verifiable Rewards (RLVR), OPD does not require a complete trajectory or a final answer reward to provide learning signals. This observation suggests that full rollouts may not always be necessary for effective OPD. Motivated by this insight, we propose two simple horizon-control strategies: Progressive OPD (POPD), which gradually expands the rollout horizon during training, and Truncated OPD (TOPD), which permanently performs distillation on reliable truncated rollouts. Experiments on mathematical reasoning show that POPD improves the training efficiency of OPD by up to 3$\\times$, while TOPD matches OPD performance using only 10\\% of the rollout horizon, leading to substantial wall-clock and memory reductions. These results demonstrate that controlling the rollout horizon offers a simple and practical path to more efficient OPD.",
+      "authors": [
+        "Yaocheng Zhang",
+        "Jiajun Chai",
+        "Songjun Tu",
+        "Yuqian Fu",
+        "Xiaohan Wang",
+        "Wei Lin",
+        "Guojun Yin",
+        "Qichao Zhang",
+        "Yuanheng Zhu",
+        "Dongbin Zhao"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-05-29T16:12:54+00:00",
+      "link": "https://arxiv.org/pdf/2605.31490v1",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "identifies rollout horizon as key bottleneck for training efficiency",
+      "llm_evidence_cn": "识别rollout长度是训练效率的关键瓶颈",
+      "llm_evidence": "识别rollout长度是训练效率的关键瓶颈",
+      "canonical_evidence": "识别rollout长度是训练效率的关键瓶颈",
+      "llm_tldr_en": "This paper questions whether full rollouts are necessary for on-policy distillation, showing that rollout horizon is a major bottleneck. It suggests partial rollouts can suffice, directly addressing rollout speed issues.",
+      "llm_tldr_cn": "本文质疑在线策略蒸馏（OPD）中是否必须使用完整rollout，指出rollout长度是影响训练效率的主要瓶颈。作者通过理论分析表明OPD不像RLVR那样需要完整轨迹，并提出两种简单的长度控制策略。实验证明在不牺牲性能的前提下，大幅减少rollout开销，加速训练过程。",
+      "llm_tldr": "本文质疑在线策略蒸馏（OPD）中是否必须使用完整rollout，指出rollout长度是影响训练效率的主要瓶颈。作者通过理论分析表明OPD不像RLVR那样需要完整轨迹，并提出两种简单的长度控制策略。实验证明在不牺牲性能的前提下，大幅减少rollout开销，加速训练过程。",
+      "llm_tags": [
+        "query:rl-rollout"
+      ],
+      "matched_query_tag": "query:rl-rollout",
+      "matched_query_text": "reinforcement learning rollout speed issues",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.31490v2",
+      "source": "arxiv",
+      "title": "Are Full Rollouts Necessary for On-Policy Distillation?",
+      "abstract": "On-policy distillation (OPD) provides dense teacher feedback along student-generated rollouts rather than fixed teacher traces and has emerged as a promising post-training paradigm. However, standard OPD typically generates full rollouts during training, which is computationally expensive and may expose the student to unreliable teacher feedback at late rollout positions, especially during early training. We identify the rollout horizon as a key bottleneck in OPD that substantially impacts training efficiency. Unlike Reinforcement Learning with Verifiable Rewards (RLVR), OPD does not require a final answer reward to provide learning signals. Therefore, full rollouts may not always be necessary for OPD. Motivated by this insight, we propose two simple horizon-control strategies: Progressive OPD (POPD), which gradually expands the rollout horizon during training, and Truncated OPD (TOPD), which permanently performs distillation on reliable truncated rollouts. Experiments on mathematical reasoning show that POPD improves the training efficiency of OPD by up to 3$\\times$, while TOPD matches OPD performance using only 10\\% of the rollout horizon, leading to substantial wall-clock and memory reductions. These results demonstrate that controlling the rollout horizon offers a simple and practical path to more efficient OPD.",
+      "authors": [
+        "Yaocheng Zhang",
+        "Jiajun Chai",
+        "Yuqian Fu",
+        "Songjun Tu",
+        "Xiaohan Wang",
+        "Wei Lin",
+        "Guojun Yin",
+        "Qichao Zhang",
+        "Yuanheng Zhu",
+        "Dongbin Zhao"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-05-29T16:12:54+00:00",
+      "link": "https://arxiv.org/pdf/2605.31490v2",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "identifies rollout horizon as key bottleneck for training efficiency",
+      "llm_evidence_cn": "识别rollout长度是训练效率的关键瓶颈",
+      "llm_evidence": "识别rollout长度是训练效率的关键瓶颈",
+      "canonical_evidence": "识别rollout长度是训练效率的关键瓶颈",
+      "llm_tldr_en": "This paper questions whether full rollouts are necessary for on-policy distillation, showing that rollout horizon is a major bottleneck. It suggests partial rollouts can suffice, directly addressing rollout speed issues.",
+      "llm_tldr_cn": "本文质疑在线策略蒸馏（OPD）中是否必须使用完整rollout，指出rollout长度是影响训练效率的主要瓶颈。作者通过理论分析表明OPD不像RLVR那样需要完整轨迹，并提出两种简单的长度控制策略。实验证明在不牺牲性能的前提下，大幅减少rollout开销，加速训练过程。",
+      "llm_tldr": "本文质疑在线策略蒸馏（OPD）中是否必须使用完整rollout，指出rollout长度是影响训练效率的主要瓶颈。作者通过理论分析表明OPD不像RLVR那样需要完整轨迹，并提出两种简单的长度控制策略。实验证明在不牺牲性能的前提下，大幅减少rollout开销，加速训练过程。",
+      "llm_tags": [
+        "query:rl-rollout"
+      ],
+      "matched_query_tag": "query:rl-rollout",
+      "matched_query_text": "reinforcement learning rollout speed issues",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.00395v1",
+      "source": "arxiv",
+      "title": "PR2: Predictive Routing Replay for MoE-Based LLM Reinforcement Learning",
+      "abstract": "Mixture of Experts (MoE) Large Language Models (LLMs) achieve strong performance at scale. However, reinforcement learning (RL) on MoE-based LLMs often suffers from training instability. A root cause is router drift, i.e., expert activations can change drastically across model updates and differ between disaggregated rollout and training phases, causing large rollout--training mismatch and unstable importance sampling weights in PPO-style RL algorithms. Routing replay mitigates this issue by freezing the replay route within each reasoning trajectory, but it ignores how the router evolves under off-policy updates and thus causes router staleness. To address this limitation, we propose Predictive Routing Replay (PR2), which augments each router with a lightweight evolution predictor that learns to anticipate short-horizon router evolution. During the rollout phase, we use the predictive routing distribution to apply top-$k$ routing, enabling gradients to reach experts that are likely to become active after updates. During the training phase, we replay the resulting predicted route to retain consistency for stable importance estimation. Theoretical analysis and experiments support that PR2 reduces routing-induced mismatch, improves RL stability, and yields stronger performance across various reasoning benchmarks.",
+      "authors": [
+        "Daize Dong",
+        "Junlin Chen",
+        "Haolong Jia",
+        "Jiawei Wu",
+        "Huanwei Di",
+        "Jiang Liu",
+        "Jialian Wu",
+        "Zhengzhong Liu",
+        "Zicheng Liu",
+        "Emad Barsoum",
+        "Dimitris N. Metaxas",
+        "Hongyi Wang"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-05-29T22:28:08+00:00",
+      "link": "https://arxiv.org/pdf/2606.00395v1",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "directly addresses rollout-training mismatch in MoE-based LLM RL, a key inconsistency",
+      "llm_evidence_cn": "直接解决基于MoE的LLM RL中的rollout-训练不匹配，核心训推不一致问题",
+      "llm_evidence": "直接解决基于MoE的LLM RL中的rollout-训练不匹配，核心训推不一致问题",
+      "canonical_evidence": "直接解决基于MoE的LLM RL中的rollout-训练不匹配，核心训推不一致问题",
+      "llm_tldr_en": "PR2 augments each router with a predictor to anticipate future expert activations, mitigating rollout-training mismatch and router staleness in MoE LLM RL.",
+      "llm_tldr_cn": "本文针对基于混合专家（MoE）的大型语言模型强化学习中训练不稳定问题，指出根本原因是路由器漂移导致解耦的rollout阶段与训练阶段专家激活不一致。提出预测性路由重放（PR2），为每个路由器配备预测器以预期未来专家激活，缓解rollout-训练不匹配和路由器陈旧性。",
+      "llm_tldr": "本文针对基于混合专家（MoE）的大型语言模型强化学习中训练不稳定问题，指出根本原因是路由器漂移导致解耦的rollout阶段与训练阶段专家激活不一致。提出预测性路由重放（PR2），为每个路由器配备预测器以预期未来专家激活，缓解rollout-训练不匹配和路由器陈旧性。",
+      "llm_tags": [
+        "query:rl-rollout"
+      ],
+      "matched_query_tag": "query:rl-rollout",
+      "matched_query_text": "inconsistency between training and inference in reinforcement learning",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.00395v2",
+      "source": "arxiv",
+      "title": "PR2: Predictive Routing Replay for MoE-Based LLM Reinforcement Learning",
+      "abstract": "Mixture of Experts (MoE) Large Language Models (LLMs) achieve strong performance at scale. However, reinforcement learning (RL) on MoE-based LLMs often suffers from training instability. A root cause is router drift, i.e., expert activations can change drastically across model updates and differ between disaggregated rollout and training phases, causing large rollout--training mismatch and unstable importance sampling weights in PPO-style RL algorithms. Routing replay mitigates this issue by freezing the replay route within each reasoning trajectory, but it ignores how the router evolves under off-policy updates and thus causes router staleness. To address this limitation, we propose Predictive Routing Replay (PR2), which augments each router with a lightweight evolution predictor that learns to anticipate short-horizon router evolution. During the rollout phase, we use the predictive routing distribution to apply top-$k$ routing, enabling gradients to reach experts that are likely to become active after updates. During the training phase, we replay the resulting predicted route to retain consistency for stable importance estimation. Theoretical analysis and experiments support that PR2 reduces routing-induced mismatch, improves RL stability, and yields stronger performance across various reasoning benchmarks.",
+      "authors": [
+        "Daize Dong",
+        "Junlin Chen",
+        "Haolong Jia",
+        "Jiang Liu",
+        "Jiawei Wu",
+        "Huanwei Di",
+        "Jialian Wu",
+        "Zhengzhong Liu",
+        "Zicheng Liu",
+        "Emad Barsoum",
+        "Dimitris N. Metaxas",
+        "Hongyi Wang"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-05-29T22:28:08+00:00",
+      "link": "https://arxiv.org/pdf/2606.00395v2",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Rollout-training mismatch in MoE-based LLM RL",
+      "llm_evidence_cn": "MoE大语言模型RL中的rollout-训练不匹配",
+      "llm_evidence": "MoE大语言模型RL中的rollout-训练不匹配",
+      "canonical_evidence": "MoE大语言模型RL中的rollout-训练不匹配",
+      "llm_tldr_en": "Proposes Predictive Routing Replay (PR2) to address rollout-training mismatch caused by router drift in MoE-based LLM RL, by augmenting each router with a lightweight predictor.",
+      "llm_tldr_cn": "论文针对MoE大语言模型强化学习中路由器漂移导致rollout与训练阶段路由不一致的问题，提出预测性路由重放（PR2），为每个路由器添加轻量级预测器，预测训练时的路由，从而减少rollout-训练不匹配，提升PPO风格算法的稳定性。",
+      "llm_tldr": "论文针对MoE大语言模型强化学习中路由器漂移导致rollout与训练阶段路由不一致的问题，提出预测性路由重放（PR2），为每个路由器添加轻量级预测器，预测训练时的路由，从而减少rollout-训练不匹配，提升PPO风格算法的稳定性。",
+      "llm_tags": [
+        "query:rl-rollout"
+      ],
+      "matched_query_tag": "query:rl-rollout",
+      "matched_query_text": "inconsistency between training and inference in reinforcement learning",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.02132v1",
+      "source": "arxiv",
+      "title": "Learning When Not to Act: Mitigating Tool Abuse in Agentic Reinforcement Learning",
+      "abstract": "Agentic reinforcement learning can induce tool abuse, where models overuse external tools even for queries solvable by internal reasoning. Existing approaches mitigate this issue with uniform tool-use penalties or hard limits, which reduce tool frequency but may also suppress useful tool-assisted exploration. We propose EAPO, an Efficient Agentic Policy Optimization framework that learns selective tool use. EAPO introduces tool-free trajectories into each rollout group, applies difficulty-aware reward shaping to penalize redundant tool calls mainly on easier queries, and uses confidence-aware token reweighting to improve policy learning. Across nine mathematical and knowledge-intensive reasoning benchmarks, EAPO consistently improves the accuracy efficiency trade-off on Qwen2.5-3B, Qwen2.5-7B, and Llama3.1-8B. Compared with GRPO, EAPO improves average performance by 10.45%, 7.27%, and 9.69%, while reducing average tool calls by 18.33%, 18.33%, and 24.59%, respectively. These results show that agents can learn when not to use tools without compromising tool-integrated reasoning.",
+      "authors": [
+        "Liuji Chen",
+        "Dianxing Tang",
+        "Xing Shi",
+        "Dingshuo Chen",
+        "Qiang Liu",
+        "Shu Wu",
+        "Liang Wang"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-06-01T11:58:55+00:00",
+      "link": "https://arxiv.org/pdf/2606.02132v1",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Agentic reinforcement learning framework EAPO",
+      "llm_evidence_cn": "智能体强化学习框架EAPO",
+      "llm_evidence": "智能体强化学习框架EAPO",
+      "canonical_evidence": "智能体强化学习框架EAPO",
+      "llm_tldr_en": "Proposes EAPO, an efficient agentic policy optimization framework that learns selective tool use by introducing tool-free trajectories and difficulty-aware reward shaping, improving accuracy across nine reasoning benchmarks.",
+      "llm_tldr_cn": "论文提出EAPO框架，针对智能体强化学习中模型过度依赖外部工具的问题，通过在rollout组中引入无工具轨迹、难度感知的奖励塑形以及置信度感知的token重加权，学习选择性地使用工具。在九个数理推理基准上，EAPO一致提升了准确率，表明该方法能有效缓解工具滥用并保留有用探索。",
+      "llm_tldr": "论文提出EAPO框架，针对智能体强化学习中模型过度依赖外部工具的问题，通过在rollout组中引入无工具轨迹、难度感知的奖励塑形以及置信度感知的token重加权，学习选择性地使用工具。在九个数理推理基准上，EAPO一致提升了准确率，表明该方法能有效缓解工具滥用并保留有用探索。",
+      "llm_tags": [
+        "query:ag-rl:composite"
+      ],
+      "matched_query_tag": "query:ag-rl:composite",
+      "matched_query_text": "Papers central to 寻找Agentic RL（智能体强化学习）相关的学术论文, especially work that connects or combines: Agentic Reinforcement Learning; Large Language Model based agents in reinforcement learning; Autonomous agents using reinforcement learning frameworks; Agentic workflows and reinforcement learning optimization; Multi-agent reinforcement learning for agentic systems; Self-evolving agents via reinforcement learning; State of the art in Agentic Reinforcement Learning; Frameworks for building agentic systems with RL.",
+      "matched_requirement_id": "req-composite-ag-rl",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.02132v2",
+      "source": "arxiv",
+      "title": "Learning When Not to Act: Mitigating Tool Abuse in Agentic Reinforcement Learning",
+      "abstract": "Agentic reinforcement learning can induce tool abuse, where models overuse external tools even for queries solvable by internal reasoning. Existing approaches mitigate this issue with uniform tool-use penalties or hard limits, which reduce tool frequency but may also suppress useful tool-assisted exploration. We propose EAPO, an Efficient Agentic Policy Optimization framework that learns selective tool use. EAPO introduces tool-free trajectories into each rollout group, applies difficulty-aware reward shaping to penalize redundant tool calls mainly on easier queries, and uses confidence-aware token reweighting to improve policy learning. Across nine mathematical and knowledge-intensive reasoning benchmarks, EAPO consistently improves the accuracy efficiency trade-off on Qwen2.5-3B, Qwen2.5-7B, and Llama3.1-8B. Compared with GRPO, EAPO improves average performance by 10.45%, 7.27%, and 9.69%, while reducing average tool calls by 18.33%, 18.33%, and 24.59%, respectively. These results show that agents can learn when not to use tools without compromising tool-integrated reasoning.",
+      "authors": [
+        "Liuji Chen",
+        "Dianxing Tang",
+        "Xing Shi",
+        "Dingshuo Chen",
+        "Qiang Liu",
+        "Shu Wu",
+        "Liang Wang"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-06-01T11:58:55+00:00",
+      "link": "https://arxiv.org/pdf/2606.02132v2",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Agentic reinforcement learning framework EAPO",
+      "llm_evidence_cn": "智能体强化学习框架EAPO",
+      "llm_evidence": "智能体强化学习框架EAPO",
+      "canonical_evidence": "智能体强化学习框架EAPO",
+      "llm_tldr_en": "Proposes EAPO, an efficient agentic policy optimization framework that learns selective tool use by introducing tool-free trajectories and difficulty-aware reward shaping, improving accuracy across nine reasoning benchmarks.",
+      "llm_tldr_cn": "论文提出EAPO框架，针对智能体强化学习中模型过度依赖外部工具的问题，通过在rollout组中引入无工具轨迹、难度感知的奖励塑形以及置信度感知的token重加权，学习选择性地使用工具。在九个数理推理基准上，EAPO一致提升了准确率，表明该方法能有效缓解工具滥用并保留有用探索。",
+      "llm_tldr": "论文提出EAPO框架，针对智能体强化学习中模型过度依赖外部工具的问题，通过在rollout组中引入无工具轨迹、难度感知的奖励塑形以及置信度感知的token重加权，学习选择性地使用工具。在九个数理推理基准上，EAPO一致提升了准确率，表明该方法能有效缓解工具滥用并保留有用探索。",
+      "llm_tags": [
+        "query:ag-rl:composite"
+      ],
+      "matched_query_tag": "query:ag-rl:composite",
+      "matched_query_text": "Papers central to 寻找Agentic RL（智能体强化学习）相关的学术论文, especially work that connects or combines: Agentic Reinforcement Learning; Large Language Model based agents in reinforcement learning; Autonomous agents using reinforcement learning frameworks; Agentic workflows and reinforcement learning optimization; Multi-agent reinforcement learning for agentic systems; Self-evolving agents via reinforcement learning; State of the art in Agentic Reinforcement Learning; Frameworks for building agentic systems with RL.",
+      "matched_requirement_id": "req-composite-ag-rl",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.03762v1",
+      "source": "arxiv",
+      "title": "Tool-Aware Optimization with Entropy Guidance for Efficient Agentic Reinforcement Learning",
+      "abstract": "Agentic reinforcement learning (RL) equips large language models (LLMs) with tool-use capabilities that substantially improve reasoning on complex tasks. However, integrating external tools often destabilizes training: over-reliance on tools can induce input distribution shift, while overly conservative tool use limits effective exploration. To address this issue, we propose a unified framework TAO-RL that couples tool-aware trajectory filtering with entropy-guided exploration for efficient policy optimization. Specifically, at the data level, TAO-RL filters rollout trajectories along two criteria: discarding those where all tool invocations fail to execute, and removing those where all rollouts are either correct or incorrect, as both cases yield degenerate advantage estimates that contribute no discriminative learning signal. This joint filtering retains data that are both tool-capable and informative, establishing a high-quality training distribution. At the algorithmic level, we introduce a tool-aware entropy-guided bonus that reshapes the advantage function at post-tool-call tokens, encouraging the policy to explore more diverse reasoning paths at critical decision points. These two components are mutually reinforcing: trajectory filtering establishes a clean and informative training foundation, while entropy-guided exploration drives stronger reasoning behaviors at critical tool-interaction junctures. Extensive experiments on 7 challenging reasoning benchmarks across 3 model scales demonstrate the superiority of TAO-RL over existing methods.",
+      "authors": [
+        "Hongye Cao",
+        "Nuo Yan",
+        "Haoyuan Deng",
+        "Ziwei Wang",
+        "Tianpei Yang",
+        "Jing Huo",
+        "Yuyao Zhang",
+        "Yang Gao"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-06-02T15:16:12+00:00",
+      "link": "https://arxiv.org/pdf/2606.03762v1",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "agentic RL with tool-use, addresses instability via trajectory filtering and entropy guidance",
+      "llm_evidence_cn": "智能体强化学习结合工具使用，通过轨迹过滤和熵引导解决训练不稳定",
+      "llm_evidence": "智能体强化学习结合工具使用，通过轨迹过滤和熵引导解决训练不稳定",
+      "canonical_evidence": "智能体强化学习结合工具使用，通过轨迹过滤和熵引导解决训练不稳定",
+      "llm_tldr_en": "Proposes TAO-RL for efficient agentic RL, filtering rollout trajectories and using entropy-guided exploration to stabilize training.",
+      "llm_tldr_cn": "智能体强化学习中工具集成导致训练不稳定。本文提出TAO-RL框架，在数据层面过滤无效或极端rollout轨迹，并在策略优化中采用熵引导探索防止过度保守或冒险。实验表明该方法显著提升了训练效率和最终性能，为构建可靠智能体系统提供了支撑。",
+      "llm_tldr": "智能体强化学习中工具集成导致训练不稳定。本文提出TAO-RL框架，在数据层面过滤无效或极端rollout轨迹，并在策略优化中采用熵引导探索防止过度保守或冒险。实验表明该方法显著提升了训练效率和最终性能，为构建可靠智能体系统提供了支撑。",
+      "llm_tags": [
+        "query:ag-rl:composite"
+      ],
+      "matched_query_tag": "query:ag-rl:composite",
+      "matched_query_text": "Papers central to 寻找Agentic RL（智能体强化学习）相关的学术论文, especially work that connects or combines: Agentic Reinforcement Learning; Large Language Model based agents in reinforcement learning; Autonomous agents using reinforcement learning frameworks; Agentic workflows and reinforcement learning optimization; Multi-agent reinforcement learning for agentic systems; Self-evolving agents via reinforcement learning; State of the art in Agentic Reinforcement Learning; Frameworks for building agentic systems with RL.",
+      "matched_requirement_id": "req-composite-ag-rl",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.05800v1",
+      "source": "arxiv",
+      "title": "SALT: When More Rollouts Don't Help in Group-Based Policy Optimization and How to Make Them Matter",
+      "abstract": "Reinforcement learning with verifiable rewards (RLVR) often adopts GRPO-style group-relative updates, sampling multiple rollouts per prompt to construct normalized learning signals. However, merely increasing the number of rollouts does not reliably strengthen learning: under GRPO-style group normalization, per-rollout policy-gradient features can concentrate into a low-rank, signed geometry, causing substantial cancellation during aggregation and weakening the effective update. We address this failure mode with SALT, a Subspace-Adaptive geometry pLug-in componenT that uses sample-wise gradient geometry to reweight the coefficients of group-relative updates. SALT estimates a dominant shared subspace from the mini-batch Gram geometry, decomposes group-relative coefficients into shared and residual channels, and adaptively amplifies the residual channel when signed cancellation is severe. Across diverse reasoning-oriented RLVR benchmarks and model scales, SALT improves effective update geometry and performance without modifying the reward model or the rollout sampling procedure",
+      "authors": [
+        "Powei Chang",
+        "Jinpeng Zhang",
+        "Chaoqun Sun",
+        "MiniWell Tsao",
+        "Lianrui Li",
+        "Jianxiang Xiang",
+        "Chenyu Wang",
+        "Yukang Gao",
+        "Dongying Kong"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-06-04T07:29:43+00:00",
+      "link": "https://arxiv.org/pdf/2606.05800v1",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "addresses when more rollouts fail to improve learning in RLVR",
+      "llm_evidence_cn": "处理RLVR中更多rollouts反而无益的问题",
+      "llm_evidence": "处理RLVR中更多rollouts反而无益的问题",
+      "canonical_evidence": "处理RLVR中更多rollouts反而无益的问题",
+      "llm_tldr_en": "Proposes SALT, a subspace-adaptive plugin to reweight group-relative updates, preventing gradient cancellation when rollouts increase.",
+      "llm_tldr_cn": "该论文发现基于组的策略优化中，增加rollout数量并不一定提升学习效果。原因是GRPO风格的归一化导致策略梯度特征聚集到低秩有符号几何空间，聚合时发生大量抵消。为此提出SALT组件，通过估计小批量Gram矩阵的主子空间，自适应地重加权组相对更新系数，避免梯度抵消。实验表明SALT在不同rollout数量下稳定提升学习效果，使更多rollout真正发挥作用。",
+      "llm_tldr": "该论文发现基于组的策略优化中，增加rollout数量并不一定提升学习效果。原因是GRPO风格的归一化导致策略梯度特征聚集到低秩有符号几何空间，聚合时发生大量抵消。为此提出SALT组件，通过估计小批量Gram矩阵的主子空间，自适应地重加权组相对更新系数，避免梯度抵消。实验表明SALT在不同rollout数量下稳定提升学习效果，使更多rollout真正发挥作用。",
+      "llm_tags": [
+        "query:rl-rollout"
+      ],
+      "matched_query_tag": "query:rl-rollout",
+      "matched_query_text": "rollout in reinforcement learning",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.08446v1",
+      "source": "arxiv",
+      "title": "Sparrow: Sparse Rollout for Stable and Efficient Long-context RL of Large Language Models",
+      "abstract": "Despite being powerful, reinforcement learning with verifiable rewards (RLVR) induces extremely long COT, making it computationally expensive. Since RLVR per-step cost is dominated by long-context rollout generation, sparse attention offers a promising way to accelerate dense rollout. However, sparse rollouts require a delicate stability-efficiency tradeoff: overly aggressive sparsity causes collapse, while overly lenient sparsity gives insufficient speedup. In this work, we study this tradeoff through sparse-to-dense actor-policy mismatch. We first observe that sparse rollout collapse is not driven by uniform degradation across tokens: most sparse tokens align perfectly with dense even under aggressive sparsity. Motivated by this, we hypothesize that sparse rollout training remains stable if the lower tail of per-token actor-policy mismatch stays above a critical threshold throughout the trajectory. We introduce a dynamic sparsity schedule that keeps this tail statistic constant during generation and validate our hypothesis. Across Qwen3 thinking-family models, keeping the tail mismatch statistic near a consistent threshold generally enables stable training. We then use a cost model to find the sparsity schedule for maximum speedup under this mismatch threshold, achieving 2.2x, 2.4x, and 2.0x rollout speedups when training Qwen3-1.7B, Qwen3-4B, and Qwen3-8B. Empirically, we show the thresholds generalize to a larger model (Qwen3-14B) and another RL domain (coding). Finally, our analysis naturally motivates DistillSparse: lightweight LoRA-based distillation on sparse rollout lets more aggressive sparsity reach the same sparse-to-dense mismatch threshold, yielding higher speedup.",
+      "authors": [
+        "Yang Zhou",
+        "Ranajoy Sadhukhan",
+        "Zhaofeng Sun",
+        "Zhuoming Chen",
+        "Souvik Kundu",
+        "Saket Dingliwal",
+        "Sai Muralidhar Jayanthi",
+        "Aram Galstyan",
+        "Haizhong Zheng",
+        "Beidi Chen"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-06-07T04:24:45+00:00",
+      "link": "https://arxiv.org/pdf/2606.08446v1",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Sparse rollout accelerates long-context RL rollout generation",
+      "llm_evidence_cn": "稀疏rollout加速长上下文RL的rollout生成",
+      "llm_evidence": "稀疏rollout加速长上下文RL的rollout生成",
+      "canonical_evidence": "稀疏rollout加速长上下文RL的rollout生成",
+      "llm_tldr_en": "Proposes Sparrow, a sparse rollout method that accelerates long-context RLVR by leveraging sparse attention while maintaining stability via analyzing sparse-to-dense actor-policy mismatch.",
+      "llm_tldr_cn": "论文针对RLVR中长上下文rollout成本过高的问题，提出Sparrow稀疏rollout方法。通过研究稀疏到密集策略不匹配，发现大多数稀疏token与密集对齐良好，据此设计稳定稀疏rollout策略，在加速的同时避免崩溃，显著提升了长上下文RL的训练效率。",
+      "llm_tldr": "论文针对RLVR中长上下文rollout成本过高的问题，提出Sparrow稀疏rollout方法。通过研究稀疏到密集策略不匹配，发现大多数稀疏token与密集对齐良好，据此设计稳定稀疏rollout策略，在加速的同时避免崩溃，显著提升了长上下文RL的训练效率。",
+      "llm_tags": [
+        "query:rl-rollout"
+      ],
+      "matched_query_tag": "query:rl-rollout",
+      "matched_query_text": "reinforcement learning rollout speed issues",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.08779v1",
+      "source": "arxiv",
+      "title": "Reformulate LLM Reinforcement Learning for Efficient Training under Black-box Discrepancy",
+      "abstract": "Reinforcement Learning (RL) has emerged as a pivotal post-training paradigm, yet it frequently suffers from unpredictable sub-optimum performance or even training collapses. Recent findings attribute these failures to a hidden train-inference discrepancy (or mismatch), stemming from the disparate underlying engines and architecture. We find that the training policy can actively self-correct such a discrepancy when provided with an appropriate learning signal. Then, we further empirically identify a discrepancy tolerance region: within this region, aggressively narrowing the discrepancy can suppress policy exploration and reduce learning efficiency, whereas outside this region, reducing excessive discrepancy improves optimization consistency and raises the achievable local performance ceiling. According to such findings, we formulate this problem as a Discrepancy-Constrained Markov Decision Process (DCMDP), where reward maximization is coupled with a constraint that aligns training-Inference behavior, achieving stable dual-objective optimization. To adaptively balance performance improvement and discrepancy control, we introduce a Lagrangian relaxation mechanism that dynamically adjusts the relative weight of the two objectives according to the current degree of discrepancy violation. This enables stable dual-objective optimization: the policy is allowed to explore freely within the tolerance region, while being guided back when the discrepancy exceeds the safe boundary. Empirically, DCMDP significantly improves the performance of 8B dense model (Qwen-3-8b) and 30B Mixture-of-Expert model (Qwen-3-30bA3b), and enables a heterogeneous training paradigm, where LLMs can be optimized in high-fidelity training setup while being explicitly aligned for low-cost, resource-constrained inference deployment.",
+      "authors": [
+        "Jiashun Liu",
+        "Runze Liu",
+        "Xu Wan",
+        "Jing Liang",
+        "Hongyao Tang",
+        "Ling Pan"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-06-07T18:49:33+00:00",
+      "link": "https://arxiv.org/pdf/2606.08779v1",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "explicitly addresses train-inference discrepancy in LLM RL",
+      "llm_evidence_cn": "明确处理LLM强化学习中的训练推理差异",
+      "llm_evidence": "明确处理LLM强化学习中的训练推理差异",
+      "canonical_evidence": "明确处理LLM强化学习中的训练推理差异",
+      "llm_tldr_en": "Reformulates LLM RL to handle black-box discrepancy between training and inference, identifying a tolerance region for optimal performance.",
+      "llm_tldr_cn": "发现LLM强化学习中的隐藏训练推理不匹配源于底层引擎和架构差异。提出合适的学习信号可使策略主动自我纠正，并经验性地识别出一个差异容忍区域：区域内过度缩小差异会抑制探索，区域外减少过度差异则改善优化。该发现为平衡探索与利用提供了指导。",
+      "llm_tldr": "发现LLM强化学习中的隐藏训练推理不匹配源于底层引擎和架构差异。提出合适的学习信号可使策略主动自我纠正，并经验性地识别出一个差异容忍区域：区域内过度缩小差异会抑制探索，区域外减少过度差异则改善优化。该发现为平衡探索与利用提供了指导。",
+      "llm_tags": [
+        "query:rl-rollout"
+      ],
+      "matched_query_tag": "query:rl-rollout",
+      "matched_query_text": "inconsistency between training and inference in reinforcement learning",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.08854v1",
+      "source": "arxiv",
+      "title": "sGPO: Trading Inference FLOPs for Training Efficiency in RLVR",
+      "abstract": "Standard Reinforcement Learning with Verifiable Rewards (RLVR) training allocates a fixed rollout budget to every query, without regard for what each query's difficulty means for the current policy. This leads to two symmetric failure modes: easy queries produce near-zero advantage because the policy already solves them, while unsolvable queries produce no signal because the policy never solves them. Both regimes waste training FLOPs without contributing to a learning gradient. We introduce sorted Group Policy Optimization (sGPO), a compute-efficient strategy that trades a small budget of inference FLOPs for a large reduction in wasted training FLOPs. The key insight is that cheap inference compute can serve as a single offline proxy for query difficulty. By generating a small batch of parallel samples per query under the initial policy, we obtain a model-aware empirical success rate. This motivates setting the training rollout group size to the inverse of this success rate, a practical rule that maximizes sample efficiency by extracting the most advantage per generated rollout. This single profiling pass simultaneously drives data filtering (removing trivial queries and sub-sampling unsolvable ones), adaptive group size allocation, and curriculum construction (scheduling queries from easy to hard). sGPO matches or exceeds baseline performance while reducing total training compute by a factor of three, with the upfront inference profiling cost included.",
+      "authors": [
+        "Shivchander Sudalairaj",
+        "Kai Xu",
+        "Akash Srivastava",
+        "Giorgio Giannone"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.CL",
+        "stat.ML"
+      ],
+      "published": "2026-06-07T21:47:31+00:00",
+      "link": "https://arxiv.org/pdf/2606.08854v1",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "trading inference FLOPs for training efficiency directly addresses training-inference gap",
+      "llm_evidence_cn": "用推理计算换取训练效率，直接针对训推差距",
+      "llm_evidence": "用推理计算换取训练效率，直接针对训推差距",
+      "canonical_evidence": "用推理计算换取训练效率，直接针对训推差距",
+      "llm_tldr_en": "sGPO trades a small amount of inference FLOPs for a large reduction in wasted training FLOPs by using cheap inference as a proxy for query difficulty, bridging the training-inference gap.",
+      "llm_tldr_cn": "本文提出sGPO，利用廉价推理计算作为查询难度的离线代理，在训练前筛选出难以产生学习信号的查询，从而节省大量浪费的训练FLOPs。该方法在固定总计算预算下显著提升RLVR训练效率，直接解决了训练与推理之间的不一致和rollout浪费问题。",
+      "llm_tldr": "本文提出sGPO，利用廉价推理计算作为查询难度的离线代理，在训练前筛选出难以产生学习信号的查询，从而节省大量浪费的训练FLOPs。该方法在固定总计算预算下显著提升RLVR训练效率，直接解决了训练与推理之间的不一致和rollout浪费问题。",
+      "llm_tags": [
+        "query:rl-rollout"
+      ],
+      "matched_query_tag": "query:rl-rollout",
+      "matched_query_text": "inconsistency between training and inference in reinforcement learning",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.10709v1",
+      "source": "arxiv",
+      "title": "Effective Reinforcement Learning for Agentic Search by Recycling Zero-Variance Queries During Training",
+      "abstract": "The use of GRPO-style algorithms has become the standard strategy for training LLM search agents under outcome-only rewards. With these algorithms, a query contributes to parameter updates only when its rollout group mixes successes and failures; all-correct (too-easy) and all-incorrect (too-hard) groups are zero-variance and waste rollout cost. Existing approaches treat zero-variance as a static property and either discard or pre-filter such groups. We hypothesize and empirically validate that queries flip between zero-variance and signal-bearing states as the policy evolves during training. Building on this intuition, we propose query recycling, which returns zero-variance groups to a mutable pool for future resampling, so that the effective training distribution co-evolves with the policy. With the proposed technique, a 1.7B parameter model trained on synthetic data can reach 66.0 average Pass@1 accross seven multi-hop QA benchmarks, matching or surpassing systems with up to 7B parameters trained on benchmark-derived supervision. Analysis of recycling patterns shows that recycled queries supply roughly three quarters of the effective batch by the end of training, with contributions split between recovery from policy improvement and policy drift.",
+      "authors": [
+        "João Coelho",
+        "João Magalhães",
+        "Bruno Martins",
+        "Chenyan Xiong"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.AI"
+      ],
+      "published": "2026-06-09T11:12:58+00:00",
+      "link": "https://arxiv.org/pdf/2606.10709v1",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Agentic search RL with query recycling",
+      "llm_evidence_cn": "智能体搜索强化学习中的零方差查询回收",
+      "llm_evidence": "智能体搜索强化学习中的零方差查询回收",
+      "canonical_evidence": "智能体搜索强化学习中的零方差查询回收",
+      "llm_tldr_en": "Proposes query recycling for agentic search RL, reusing zero-variance rollout groups that become informative as policy evolves, improving rollout efficiency.",
+      "llm_tldr_cn": "论文针对智能体搜索中GRPO算法的零方差查询问题，提出查询回收机制：将零方差组放入可变池中，在策略进化后重新采样，使其产生有用信号。该方法有效降低了浪费的rollout成本，提升了训练效率。",
+      "llm_tldr": "论文针对智能体搜索中GRPO算法的零方差查询问题，提出查询回收机制：将零方差组放入可变池中，在策略进化后重新采样，使其产生有用信号。该方法有效降低了浪费的rollout成本，提升了训练效率。",
+      "llm_tags": [
+        "query:ag-rl:composite"
+      ],
+      "matched_query_tag": "query:ag-rl:composite",
+      "matched_query_text": "Papers central to 寻找Agentic RL（智能体强化学习）相关的学术论文, especially work that connects or combines: Agentic Reinforcement Learning; Large Language Model based agents in reinforcement learning; Autonomous agents using reinforcement learning frameworks; Agentic workflows and reinforcement learning optimization; Multi-agent reinforcement learning for agentic systems; Self-evolving agents via reinforcement learning; State of the art in Agentic Reinforcement Learning; Frameworks for building agentic systems with RL.",
+      "matched_requirement_id": "req-composite-ag-rl",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.11982v1",
+      "source": "arxiv",
+      "title": "PAWS: Preference Learning with Advantage-Weighted Segments",
+      "abstract": "Preference-based reinforcement learning (PbRL) learns policies from human trajectory-level comparisons, avoiding explicit reward design and expert demonstrations. Existing methods typically train utility functions on trajectory or segment-level preferences while relying on per-step utility estimates during policy optimization. This training and inference mismatch induces a distribution shift that severely degrades temporal credit assignment and limits policy learning. We analyze this issue and propose PAWS, a segment-based preference learning method that performs policy updates directly using segment-level advantage functions. By aligning utility training with policy optimization, PAWS preserves trajectory-level preference information and avoids unreliable per-step learning signals. Experiments on simulated robotic manipulation and locomotion tasks demonstrate that PAWS consistently outperforms existing PbRL approaches, highlighting the importance of distribution-consistent preference learning.",
+      "authors": [
+        "Aleksandar Taranovic",
+        "Onur Celik",
+        "Niklas Freymuth",
+        "Ge Li",
+        "Serge Thilges",
+        "Huy Le",
+        "Tai Hoang",
+        "Rania Rayyes",
+        "Gerhard Neumann"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-06-10T12:00:17+00:00",
+      "link": "https://arxiv.org/pdf/2606.11982v1",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "explicitly addresses training-inference mismatch in preference-based RL",
+      "llm_evidence_cn": "明确处理基于偏好的强化学习中的训练推理不匹配",
+      "llm_evidence": "明确处理基于偏好的强化学习中的训练推理不匹配",
+      "canonical_evidence": "明确处理基于偏好的强化学习中的训练推理不匹配",
+      "llm_tldr_en": "PAWS aligns utility training with policy optimization using segment-level advantage functions, resolving training-inference mismatch in PbRL.",
+      "llm_tldr_cn": "针对基于偏好的强化学习中，逐步效用估计与段级偏好训练之间的不匹配导致信用分配退化的问题，提出PAWS方法。通过直接使用段级优势函数进行策略更新，使效用训练与策略优化对齐，避免了不可靠的逐步估计。实验证明PAWS显著改善了时间信用分配和策略学习。",
+      "llm_tldr": "针对基于偏好的强化学习中，逐步效用估计与段级偏好训练之间的不匹配导致信用分配退化的问题，提出PAWS方法。通过直接使用段级优势函数进行策略更新，使效用训练与策略优化对齐，避免了不可靠的逐步估计。实验证明PAWS显著改善了时间信用分配和策略学习。",
+      "llm_tags": [
+        "query:rl-rollout"
+      ],
+      "matched_query_tag": "query:rl-rollout",
+      "matched_query_text": "inconsistency between training and inference in reinforcement learning",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.14302v1",
+      "source": "arxiv",
+      "title": "Retrospective Progress-Aware Self-Refinement for LLM Agent Training",
+      "abstract": "LLM-based agents trained with reinforcement learning optimize step-wise action prediction but lack metacognitive awareness of task progress, inducing a gap that hinders long-horizon scaling. A pilot study reveals that online progress prompting hurts performance while retrospective demonstrations help, yet this capability cannot emerge from outcome-reward training alone. We present RePro, Retrospective Progress-Aware Training, a framework that trains agents to self-generate progress signals via a forward-then-reflect rollout paradigm: the agent executes actions online, then retrospectively reassesses its step-wise progress given the completed trajectory and known outcome. RePro initializes with a Retrospection Warmup that teaches reflection format from minimal external demonstrations, then further trains through RePro-PO with a composite reward that produces self-generated signals without continuous external supervision. Experiments on WebShop, ALFWorld, and Sokoban show that RePro enhances the Qwen family's performance, with up to $12\\%$ absolute success rate gains.",
+      "authors": [
+        "Xinbei Ma",
+        "Congmin Zheng",
+        "Jiyang Qiu",
+        "Jiale Hong",
+        "Yao Yao",
+        "Xiangmou Qu",
+        "Jiaxin Yin",
+        "Xingyu Lou",
+        "Jun Wang",
+        "Weiwen Liu",
+        "Weinan Zhang",
+        "Zhuosheng Zhang",
+        "Hai Zhao"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-06-12T09:38:47+00:00",
+      "link": "https://arxiv.org/pdf/2606.14302v1",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "addresses gap between training and inference via retrospective rollout",
+      "llm_evidence_cn": "通过回顾式rollout解决训练与推断之间的差距",
+      "llm_evidence": "通过回顾式rollout解决训练与推断之间的差距",
+      "canonical_evidence": "通过回顾式rollout解决训练与推断之间的差距",
+      "llm_tldr_en": "Proposes RePro, a framework that trains LLM agents to self-generate progress signals using a forward-then-reflect rollout paradigm, addressing the inconsistency between training and inference.",
+      "llm_tldr_cn": "LLM智能体在强化学习中缺乏任务进度元认知，导致训练与推断之间存在不一致。本文提出RePro框架，通过先执行后反思的rollout范式训练智能体自我生成进度信号。实验表明该方法能有效弥合差距，提升长期任务性能，揭示了反思式训练在跨时间尺度泛化中的关键作用。",
+      "llm_tldr": "LLM智能体在强化学习中缺乏任务进度元认知，导致训练与推断之间存在不一致。本文提出RePro框架，通过先执行后反思的rollout范式训练智能体自我生成进度信号。实验表明该方法能有效弥合差距，提升长期任务性能，揭示了反思式训练在跨时间尺度泛化中的关键作用。",
+      "llm_tags": [
+        "query:rl-rollout"
+      ],
+      "matched_query_tag": "query:rl-rollout",
+      "matched_query_text": "inconsistency between training and inference in reinforcement learning",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.20342v2",
+      "source": "arxiv",
+      "title": "ParaVT: Taming the Tool Prior Paradox for Parallel Tool Use in Agentic Video Reinforcement Learning",
+      "abstract": "Training large multimodal models (LMMs) via reinforcement learning (RL) to natively invoke video-processing tools (e.g., cropping) has become a promising route to long-video understanding. However, existing native-RL methods dispatch tool calls sequentially (i.e., one per turn): a single wrong crop propagates errors without peer correction, multi-turn tool calls corrupt context, and inference cost scales linearly with the number of turns. We introduce ParaVT, the first multi-agent end-to-end RL-trained framework for Parallel Video Tool calling, dispatching multiple time-window crops in a single turn for cleaner context and better fault tolerance. Yet applying standard RL to ParaVT reveals an obstacle we term the Tool Prior Paradox: the pretrained tool priors that enable tool exploration also destabilize cold-started structural format and expose the skip-tool reward shortcut under temperature sampling. A cross-model contrast on a weaker-prior LMM supports this claim: format stays stable but RL elicits zero tool calls, indicating that prior strength is the shared driver of both format collapse and tool exploration. We propose PARA-GRPO (Parseability-Anchored and Ratio-gAted GRPO), which augments standard RL with two complementary mechanisms: (i) a targeted format reward applied only at the structural-token positions most prone to collapse, and (ii) a per-prompt frame-budget randomization that creates training prompts where calling the tool yields a measurable reward signal over skipping it. Across six long-video understanding benchmarks, ParaVT improves over the Qwen3-VL baseline by +7.9% on average, with PARA-GRPO lifting training-time format compliance from 0.13 to 0.64. As tool capabilities become increasingly internalized in modern LMMs, RL must cooperate with the resulting priors, and ParaVT offers a general recipe for agentic RL. Code, data, and model weights are publicly available.",
+      "authors": [
+        "Zuhao Yang",
+        "Kaichen Zhang",
+        "Sudong Wang",
+        "Keming Wu",
+        "Zhongyu Yang",
+        "Bo Li",
+        "Xiaojuan Qi",
+        "Shijian Lu",
+        "Xingxuan Li",
+        "Lidong Bing"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-05-19T18:01:26+00:00",
+      "link": "https://arxiv.org/pdf/2605.20342v2",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "multi-agent RL for parallel tool use in agentic video",
+      "llm_evidence_cn": "多智能体强化学习用于智能体视频中的并行工具调用",
+      "llm_evidence": "多智能体强化学习用于智能体视频中的并行工具调用",
+      "canonical_evidence": "多智能体强化学习用于智能体视频中的并行工具调用",
+      "llm_tldr_en": "ParaVT is first multi-agent end-to-end RL-trained framework for parallel video tool calling, enabling multiple crops in one turn for cleaner context and fault tolerance.",
+      "llm_tldr_cn": "针对现有RL方法逐轮调用工具导致错误传播和上下文污染的问题，提出ParaVT框架，首次实现多智能体端到端强化学习训练下的并行视频工具调用。通过单轮调度多个时间窗口裁剪，获得更清晰的上下文和更好的容错性。实验证明其显著提升长期视频理解性能。",
+      "llm_tldr": "针对现有RL方法逐轮调用工具导致错误传播和上下文污染的问题，提出ParaVT框架，首次实现多智能体端到端强化学习训练下的并行视频工具调用。通过单轮调度多个时间窗口裁剪，获得更清晰的上下文和更好的容错性。实验证明其显著提升长期视频理解性能。",
+      "llm_tags": [
+        "query:ag-rl:composite"
+      ],
+      "matched_query_tag": "query:ag-rl:composite",
+      "matched_query_text": "Papers central to 寻找Agentic RL（智能体强化学习）相关的学术论文, especially work that connects or combines: Agentic Reinforcement Learning; Large Language Model based agents in reinforcement learning; Autonomous agents using reinforcement learning frameworks; Agentic workflows and reinforcement learning optimization; Multi-agent reinforcement learning for agentic systems; Self-evolving agents via reinforcement learning; State of the art in Agentic Reinforcement Learning; Frameworks for building agentic systems with RL.",
+      "matched_requirement_id": "req-composite-ag-rl",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.21654v1",
+      "source": "arxiv",
+      "title": "Value-Gradient Hypothesis of RL for LLMs",
+      "abstract": "Reinforcement learning substantially improves pretrained language models, but it remains understudied why critic-free methods such as PPO and GRPO work as well as they do, and when they should provide the largest gains. We develop a value-gradient perspective of critic-free RL for LLM post-training. First, under a differentiable rollout and additive-noise parameterization, we show that the actor update is value-gradient-like in expectation: the backward pass propagates costates whose conditional expectation equals the value gradient. Second, for discrete transformer policies, we show that autodifferentiation through attention produces empirical costates that approximate this value signal, with an error controlled by the sampling gap and policy entropy. These results motivate a decomposition of RL impact into value gradient signal and reachable reward headroom, yielding a criterion for when RL should be most effective along a pretraining trajectory.",
+      "authors": [
+        "Arip Asadulaev",
+        "Daniil Ognev",
+        "Karim Salta",
+        "Martin Takac"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-05-20T19:09:05+00:00",
+      "link": "https://arxiv.org/pdf/2605.21654v1",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "analyzes critic-free RL for LLMs using differentiable rollout and value-gradient perspective",
+      "llm_evidence_cn": "利用可微rollout和价值梯度视角分析LLM的无评论家强化学习",
+      "llm_evidence": "利用可微rollout和价值梯度视角分析LLM的无评论家强化学习",
+      "canonical_evidence": "利用可微rollout和价值梯度视角分析LLM的无评论家强化学习",
+      "llm_tldr_en": "Develops a value-gradient perspective for critic-free RL in LLMs, showing actor update approximates value gradient via differentiable rollout.",
+      "llm_tldr_cn": "针对无评论家强化学习方法（如PPO、GRPO）为何有效的问题，提出价值梯度假说。在可微rollout和加性噪声参数化下，证明actor更新在期望上等价于价值梯度。对于离散transformer策略，自注意力的自动微分产生近似价值信号的经验共态变量。该理论为理解无评论家RL提供了新视角。",
+      "llm_tldr": "针对无评论家强化学习方法（如PPO、GRPO）为何有效的问题，提出价值梯度假说。在可微rollout和加性噪声参数化下，证明actor更新在期望上等价于价值梯度。对于离散transformer策略，自注意力的自动微分产生近似价值信号的经验共态变量。该理论为理解无评论家RL提供了新视角。",
+      "llm_tags": [
+        "query:rl-rollout:composite"
+      ],
+      "matched_query_tag": "query:rl-rollout:composite",
+      "matched_query_text": "Papers central to 强化学习中的Rollout过慢和训推不一致问题, especially work that connects or combines: inconsistency between training and inference in reinforcement learning; rollout in reinforcement learning; training in reinforcement learning; gap between training and inference; reinforcement learning rollout speed issues.",
+      "matched_requirement_id": "req-composite-rl-rollout",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.24071v2",
+      "source": "arxiv",
+      "title": "Not All Transitions Matter: Evidence from PPO",
+      "abstract": "Training a reinforcement learning agent on-policy means collecting fresh experience at every update, and that experience comes with a hidden problem. Each state in a rollout is the direct output of the previous one, causally chained together by the agent's own actions. Because of this, consecutive transitions are never truly independent. They carry overlapping information, and the gradient signal the network receives ends up far more repetitive than the batch size suggests. The same directions get reinforced over and over, the value network struggles to keep up as the policy shifts, and training becomes quietly unstable in ways that reward curves alone rarely reveal.   This paper asks whether that redundancy can simply be removed. We show that randomly dropping a fixed fraction of transitions from the rollout, at the right stage so the reward signal stays intact, is enough to break the repetitive gradient structure and stabilize training. The change is minimal: one sampling step, no new components, no modification to the core algorithm, and it works with any PPO implementation. Across five environments of increasing difficulty, CartPole-v1, Acrobot-v1, LunarLander-v2, HalfCheetah-v5, and Hopper-v5, the method matches vanilla PPO on reward while producing more consistent training dynamics across KL divergence, policy entropy, and value estimates. Dropping 25% of transitions turns out to be the sweet spot: enough to disrupt the redundancy, not enough to thin the batch.",
+      "authors": [
+        "Ajhesh Basnet"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-05-22T12:04:40+00:00",
+      "link": "https://arxiv.org/pdf/2605.24071v2",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "removing redundant transitions reduces rollout footprint and training instability",
+      "llm_evidence_cn": "移除冗余转移减少rollout开销和训练不稳定",
+      "llm_evidence": "移除冗余转移减少rollout开销和训练不稳定",
+      "canonical_evidence": "移除冗余转移减少rollout开销和训练不稳定",
+      "llm_tldr_en": "This paper reveals that consecutive transitions in on-policy rollouts are causally dependent and carry redundant information, and proposes random dropping to improve efficiency and stability.",
+      "llm_tldr_cn": "本文揭示在线策略rollout中连续状态转移存在因果依赖和冗余信息，导致梯度重复和训练不稳定。提出随机丢弃固定比例转移的简单方法，在不影响性能的情况下大幅减少rollout数据量，提升训练效率与稳定性。",
+      "llm_tldr": "本文揭示在线策略rollout中连续状态转移存在因果依赖和冗余信息，导致梯度重复和训练不稳定。提出随机丢弃固定比例转移的简单方法，在不影响性能的情况下大幅减少rollout数据量，提升训练效率与稳定性。",
+      "llm_tags": [
+        "query:rl-rollout"
+      ],
+      "matched_query_tag": "query:rl-rollout",
+      "matched_query_text": "reinforcement learning rollout speed issues",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.26606v1",
+      "source": "arxiv",
+      "title": "Spend Your Rollouts Where It Counts: Rollout Allocation for Group-Based RL Post-Training",
+      "abstract": "Reinforcement learning (RL) is the dominant paradigm for post-training large language models. However, in the online, on-policy setting, rollout generation dominates the computational cost of training. Group-based policy optimization methods compute advantages from multiple rollouts per prompt, yet they indiscriminately allocate budget to prompts with collapsed reward distributions, wasting expensive rollouts on negligible learning signals. We demonstrate that group-based updates are most effective in regimes of high reward variance. Since the policy evolves throughout training, prompt informativeness must be estimated online rather than precomputed, but exhaustively evaluating every prompt is computationally prohibitive. We introduce Pilot-Commit, a budget-aware rollout allocation framework for group-based RL post-training. Pilot-Commit decouples prompt evaluation from exploitation: a pilot stage estimates per-prompt informativeness using a fraction of the budget, and the remaining rollouts are allocated to high-leverage prompts while low-signal prompts are skipped. Across multiple math reasoning benchmarks and model scales from 1.5B to 14B parameters, Pilot-Commit matches baseline accuracy with significantly lower sampling costs, reaching target accuracy up to $1.9\\times$ faster than GRPO and $4.0\\times$ faster than DAPO in cumulative rollouts.",
+      "authors": [
+        "Woojeong Kim",
+        "Ziyi Yang",
+        "Jing Nathan Yan",
+        "Jialu Liu"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-05-26T06:41:13+00:00",
+      "link": "https://arxiv.org/pdf/2605.26606v1",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "proposes adaptive rollout allocation to avoid wasting rollouts on low-variance prompts, directly improves rollout efficiency",
+      "llm_evidence_cn": "提出自适应rollout分配，避免在低方差提示上浪费，直接提升rollout效率",
+      "llm_evidence": "提出自适应rollout分配，避免在低方差提示上浪费，直接提升rollout效率",
+      "canonical_evidence": "提出自适应rollout分配，避免在低方差提示上浪费，直接提升rollout效率",
+      "llm_tldr_en": "Introduces online adaptive rollout allocation for group-based RL post-training, focusing budget on prompts with high reward variance to improve computational efficiency.",
+      "llm_tldr_cn": "本文针对基于群的强化学习后训练，提出在线自适应rollout分配方法。核心思想是群组更新在高奖励方差区域最有效，因此动态识别并优先分配rollout预算到高方差提示，避免在奖励分布坍缩的提示上浪费计算。",
+      "llm_tldr": "本文针对基于群的强化学习后训练，提出在线自适应rollout分配方法。核心思想是群组更新在高奖励方差区域最有效，因此动态识别并优先分配rollout预算到高方差提示，避免在奖励分布坍缩的提示上浪费计算。",
+      "llm_tags": [
+        "query:rl-rollout"
+      ],
+      "matched_query_tag": "query:rl-rollout",
+      "matched_query_text": "reinforcement learning rollout speed issues",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.27293v1",
+      "source": "arxiv",
+      "title": "BASIS: Batchwise Advantage Estimation from Single-Rollout Information Sharing for LLM Reasoning",
+      "abstract": "Reinforcement learning with verifiable rewards has become a standard recipe for improving the reasoning abilities of large language models. Existing algorithms face a tradeoff between computational efficiency and sample efficiency in value estimation and policy learning. We introduce BASIS, a critic-free post-training algorithm designed to address this tradeoff. At each online training step, BASIS samples only one rollout per prompt, but leverages rich information across prompts in the entire batch to improve value function estimation. Our experiments demonstrate that BASIS reduces MSE in value function estimation by 69% compared to REINFORCE++, a representative single-rollout baseline, and achieves lower MSE with one rollout than group mean estimators with 8 rollouts. This improvement in value estimation translates to better policy optimization: using substantially less training time, BASIS achieves performance close to multi-rollout GRPO-type baselines and often outperforms single-rollout REINFORCE-type baselines.",
+      "authors": [
+        "Shijin Gong",
+        "Erhan Xu",
+        "Kai Ye",
+        "Francesco Quinzan",
+        "Giulia Livieri",
+        "Chengchun Shi"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "stat.ML"
+      ],
+      "published": "2026-05-26T17:06:41+00:00",
+      "link": "https://arxiv.org/pdf/2605.27293v1",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "single-rollout per prompt with batchwise advantage estimation reduces rollout cost, addressing speed",
+      "llm_evidence_cn": "每个提示只采样一个rollout并通过批量优势估计减少rollout开销，解决速度问题",
+      "llm_evidence": "每个提示只采样一个rollout并通过批量优势估计减少rollout开销，解决速度问题",
+      "canonical_evidence": "每个提示只采样一个rollout并通过批量优势估计减少rollout开销，解决速度问题",
+      "llm_tldr_en": "BASIS uses single rollout per prompt but leverages batch information to estimate value functions, reducing MSE by 69% vs REINFORCE++, improving rollout efficiency.",
+      "llm_tldr_cn": "本文提出BASIS算法，一种无需评论家的后训练方法，每个提示仅采样一次rollout，但利用整个批次的跨提示信息改进价值函数估计。实验表明，相比REINFORCE++基线，价值函数估计均方误差降低69%，且仅需一个rollout即可达到更好性能。",
+      "llm_tldr": "本文提出BASIS算法，一种无需评论家的后训练方法，每个提示仅采样一次rollout，但利用整个批次的跨提示信息改进价值函数估计。实验表明，相比REINFORCE++基线，价值函数估计均方误差降低69%，且仅需一个rollout即可达到更好性能。",
+      "llm_tags": [
+        "query:rl-rollout"
+      ],
+      "matched_query_tag": "query:rl-rollout",
+      "matched_query_text": "reinforcement learning rollout speed issues",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.28631v1",
+      "source": "arxiv",
+      "title": "Single-Rollout Hidden-State Dynamics for Training-Free RLVR Data Selection",
+      "abstract": "Reinforcement learning with verifiable rewards (RLVR) can yield large reasoning gains from very few training instances, yet its strong sensitivity to which instances are used makes data selection a central bottleneck. Most existing selection pipelines rely on training-time optimization signals and/or require access to verifiable rewards or ground-truth answers over large candidate pools, which is costly and often infeasible in specialized domains. We study RLVR data selection in a setting where selection must be performed before any RL training and without labels or reward evaluation on the full pool. We propose SHIFT, a one-shot, training-free selector based solely on inference-time hidden-state dynamics. For each candidate instance, SHIFT runs a single deterministic reasoning rollout and computes a reasoning-induced representation shift (RIRS) as the start-to-end hidden-state delta. SHIFT uses the RIRS magnitude as a lightweight proxy for instance utility and enforces coverage via a quality-weighted farthest-first CoreSet procedure in an RIRS-augmented feature space, producing compact subsets that scale to large unlabeled pools. Across mathematical reasoning and medical QA benchmarks under ultra-low budgets, SHIFT consistently outperforms training-free diversity and difficulty/uncertainty baselines, improving both in-domain accuracy and transfer to harder evaluation settings. Ablations show that RIRS-based coverage and quality-weighting contribute complementary gains, and analyses indicate that RIRS is not explained by simple input/output length statistics. Code is available at github.com/JianghaoWu/SHIFT.",
+      "authors": [
+        "Jianghao Wu",
+        "Jianfei Cai",
+        "Weiqiang Wang",
+        "Jin Ye",
+        "Daniel F. Schmidt",
+        "Yasmeen George"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-05-27T15:38:09+00:00",
+      "link": "https://arxiv.org/pdf/2605.28631v1",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Single-rollout hidden-state dynamics for RLVR data selection",
+      "llm_evidence_cn": "利用单次rollout隐藏状态动力学选择RLVR数据",
+      "llm_evidence": "利用单次rollout隐藏状态动力学选择RLVR数据",
+      "canonical_evidence": "利用单次rollout隐藏状态动力学选择RLVR数据",
+      "llm_tldr_en": "Proposes SHIFT, a training-free selector for RLVR data using inference-time hidden-state dynamics from a single rollout, eliminating need for labels or rewards on candidate pool.",
+      "llm_tldr_cn": "论文提出SHIFT方法，针对RLVR数据选择瓶颈，在无需训练或完整池标注的条件下，仅通过单次rollout的推理时隐藏状态动力学来评估候选实例质量。SHIFT是一种一次性、免训练的选择器，有效降低了数据选择成本，特别适用于标注稀缺的专业领域。",
+      "llm_tldr": "论文提出SHIFT方法，针对RLVR数据选择瓶颈，在无需训练或完整池标注的条件下，仅通过单次rollout的推理时隐藏状态动力学来评估候选实例质量。SHIFT是一种一次性、免训练的选择器，有效降低了数据选择成本，特别适用于标注稀缺的专业领域。",
+      "llm_tags": [
+        "query:rl-rollout"
+      ],
+      "matched_query_tag": "query:rl-rollout",
+      "matched_query_text": "rollout in reinforcement learning",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2605.30855v2",
+      "source": "arxiv",
+      "title": "Robust Dreamer: Deviation-Aware Latent Gaussian Memory for Action-Controlled AR Video Generation",
+      "abstract": "Frame-wise action-controlled image-to-video generation is a promising paradigm for interactive world simulation, where each control signal should elicit an immediate visual response. However, maintaining visual fidelity and 3D consistency over long autoregressive rollouts remains challenging. Existing 3D-aware methods often suffer from catastrophic drift due to two impediments: information loss from \\textit{Latent--RGB Cycling}, where generated latents are repeatedly decoded to RGB and re-encoded for future conditioning, and the training--inference gap induced by the \\textit{error-free hypothesis}, where clean training memory fails to match prediction-corrupted inference memory. To address these challenges, we present \\textbf{Robust Dreamer}, a memory-augmented framework built around how to design 3D memory and how to use it robustly. First, we introduce \\textbf{Latent Gaussian Memory}, which anchors diffusion latents inherited from the generation process to Gaussian primitives and recalls them via latent-space Gaussian splatting. This provides dense, geometry-aware, view-aligned conditioning while avoiding accumulated degradation from repeated VAE conversion. Second, we propose \\textbf{Deviation Learning with Dynamic Deviation Archive}, which synthesizes rollout-induced latent deviations through a one-step approximation, stores them by autoregressive stage and denoising timestamp, and injects them into historical memory during training. This exposes the generator to realistic corrupted memory states and teaches internal correction before inference. Experiments on ScanNet, DL3DV, and OmniWorldGame demonstrate state-of-the-art long-horizon performance.",
+      "authors": [
+        "Hanlin Chen",
+        "Jiaxin Wei",
+        "Xibin Song",
+        "Yifu Wang",
+        "Steve Wang",
+        "Hongdong Li",
+        "Pan Ji",
+        "Gim Hee Lee"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-05-29T05:21:33+00:00",
+      "link": "https://arxiv.org/pdf/2605.30855v2",
+      "tags": [
+        "keyword:rl-rollout"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "addresses training-inference gap in autoregressive rollouts",
+      "llm_evidence_cn": "解决自回归rollout中的训练-推理不一致",
+      "llm_evidence": "解决自回归rollout中的训练-推理不一致",
+      "canonical_evidence": "解决自回归rollout中的训练-推理不一致",
+      "llm_tldr_en": "Proposes deviation-aware latent Gaussian memory to mitigate training-inference gap and latent-RGB cycling in action-controlled AR video generation.",
+      "llm_tldr_cn": "该论文针对动作控制自回归视频生成中长时间rollout导致的信息丢失与训练-推理不一致问题，提出了偏差感知潜在高斯记忆方法。通过显式建模记忆偏差并引入高斯噪声，在推理时保持与训练分布的一致性。实验表明该方法能有效减少漂移，提升视频生成的视觉保真度和3D一致性。",
+      "llm_tldr": "该论文针对动作控制自回归视频生成中长时间rollout导致的信息丢失与训练-推理不一致问题，提出了偏差感知潜在高斯记忆方法。通过显式建模记忆偏差并引入高斯噪声，在推理时保持与训练分布的一致性。实验表明该方法能有效减少漂移，提升视频生成的视觉保真度和3D一致性。",
+      "llm_tags": [
+        "query:rl-rollout"
+      ],
+      "matched_query_tag": "query:rl-rollout",
+      "matched_query_text": "inconsistency between training and inference in reinforcement learning",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.02388v1",
+      "source": "arxiv",
+      "title": "Policy and World Modeling Co-Training for Language Agents",
+      "abstract": "Reinforcement learning (RL) improves large language model (LLM) agents by teaching them which actions lead to high rewards, but provides little supervision on what those actions do to the environment. World modeling (WM) can fill this gap, yet existing approaches often require separate simulators, extra training stages, or additional inference-time computation. We observe that on-policy RL rollouts already contain the needed signal: each transition pairs an action with its resulting next observation. Based on this observation, we propose PaW, a Policy and World modeling co-training framework that adds auxiliary WM supervision to the same policy during RL, without changing the inference paradigm. To make auxiliary WM supervision informative and stable, PaW introduces three components: action-entropy-based WM data selection, noise-tolerant WM loss, and reward-adaptive loss balancing. Experiments on three agentic task benchmarks show consistent improvements over strong RL baselines across models and RL algorithms. These results suggest that standard RL rollouts are a practical source of WM supervision for language-agent training.",
+      "authors": [
+        "Ning Lu",
+        "Baijiong Lin",
+        "Shengcai Liu",
+        "Jiahao Wu",
+        "Haoze Lv",
+        "Yanbin Wei",
+        "Lingting Zhu",
+        "Shengju Qian",
+        "Xin Wang",
+        "Ying-Cong Chen",
+        "Qi Wang",
+        "Ke Tang"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-06-01T15:35:40+00:00",
+      "link": "https://arxiv.org/pdf/2606.02388v1",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "co-trains policy and world model using on-policy rollouts for LLM agents",
+      "llm_evidence_cn": "利用在线策略rollouts联合训练LLM智能体的策略与世界模型",
+      "llm_evidence": "利用在线策略rollouts联合训练LLM智能体的策略与世界模型",
+      "canonical_evidence": "利用在线策略rollouts联合训练LLM智能体的策略与世界模型",
+      "llm_tldr_en": "Proposes PaW, a co-training framework that adds world model supervision from on-policy RL rollouts to improve LLM agents without extra inference cost.",
+      "llm_tldr_cn": "该论文针对强化学习训练LLM智能体时缺乏环境模型监督的问题，提出了策略与世界模型联合训练框架PaW。核心观察是on-policy RL rollouts已经包含了动作与下一观测的配对信号，因此可以直接从中提取世界模型监督。PaW在RL训练过程中增加辅助的世界模型预测损失，不改变推理范式，且通过设计使监督信号稳定有效。实验结果表明，PaW提升了智能体的样本效率和任务性能，尤其是在需要环境理解的任务中。",
+      "llm_tldr": "该论文针对强化学习训练LLM智能体时缺乏环境模型监督的问题，提出了策略与世界模型联合训练框架PaW。核心观察是on-policy RL rollouts已经包含了动作与下一观测的配对信号，因此可以直接从中提取世界模型监督。PaW在RL训练过程中增加辅助的世界模型预测损失，不改变推理范式，且通过设计使监督信号稳定有效。实验结果表明，PaW提升了智能体的样本效率和任务性能，尤其是在需要环境理解的任务中。",
+      "llm_tags": [
+        "query:ag-rl:composite"
+      ],
+      "matched_query_tag": "query:ag-rl:composite",
+      "matched_query_text": "Papers central to 寻找Agentic RL（智能体强化学习）相关的学术论文, especially work that connects or combines: Agentic Reinforcement Learning; Large Language Model based agents in reinforcement learning; Autonomous agents using reinforcement learning frameworks; Agentic workflows and reinforcement learning optimization; Multi-agent reinforcement learning for agentic systems; Self-evolving agents via reinforcement learning; State of the art in Agentic Reinforcement Learning; Frameworks for building agentic systems with RL.",
+      "matched_requirement_id": "req-composite-ag-rl",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.03077v1",
+      "source": "arxiv",
+      "title": "Libra: Efficient Resource Management for Agentic RL Post-Training",
+      "abstract": "Reinforcement learning (RL) has become a standard post-training paradigm for large language models (LLMs), extending beyond preference alignment to complex reasoning and multi-turn agentic behaviors. In agentic RL, the rollout stage generates trajectories while invoking tools, producing long-tailed and non-stationary workloads that challenge conventional resource-management assumptions. Three fundamental challenges arise. First, due to the long-tail distribution, a small fraction of trajectories dominates rollout makespan. Second, rollout and training exhibit strong asymmetry in compute patterns, memory demands, and sensitivity to sequence length. Third, as the RL policy evolves, the trajectory-length distribution drifts over time, rendering any static resource split progressively suboptimal.   We present Libra, which introduces two core mechanisms. The first is a periodic global resource planner that jointly optimizes GPU allocation across rollout and training clusters. It leverages an elastic hybrid pool to enable lightweight, non-blocking worker reallocation between stages. The second is a causality-driven multi-level feedback queue (C-MLFQ) scheduler, which routes requests to heterogeneous rollout buckets based on causal signals derived from tool-return outcomes, rather than relying on fragile length predictions. Evaluated on 48 A800 GPUs, Libra achieves up to 3.0$\\times$ higher throughput and converges up to 2.5$\\times$ faster in reward compared to the baselines.",
+      "authors": [
+        "Kaiwen Chen",
+        "Xin Tan",
+        "Jingzong Li",
+        "Hong Xu"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.DC"
+      ],
+      "published": "2026-06-02T03:09:13+00:00",
+      "link": "https://arxiv.org/pdf/2606.03077v1",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "resource management for agentic RL rollout stage, addressing long-tail and asymmetry",
+      "llm_evidence_cn": "智能体强化学习rollout阶段的资源管理，解决长尾和不对称问题",
+      "llm_evidence": "智能体强化学习rollout阶段的资源管理，解决长尾和不对称问题",
+      "canonical_evidence": "智能体强化学习rollout阶段的资源管理，解决长尾和不对称问题",
+      "llm_tldr_en": "Identifies resource management challenges in agentic RL rollout (long-tail, asymmetry, drift) and proposes Libra system for efficient resource allocation.",
+      "llm_tldr_cn": "智能体强化学习后训练中rollout阶段产生长尾和不平稳负载，资源管理面临挑战。本文提出Libra系统，针对rollout长尾分布、计算模式不对称及轨迹长度漂移问题，设计动态资源调度策略。实验表明Libra显著降低了训练延迟和资源浪费，支持更大规模智能体训练。",
+      "llm_tldr": "智能体强化学习后训练中rollout阶段产生长尾和不平稳负载，资源管理面临挑战。本文提出Libra系统，针对rollout长尾分布、计算模式不对称及轨迹长度漂移问题，设计动态资源调度策略。实验表明Libra显著降低了训练延迟和资源浪费，支持更大规模智能体训练。",
+      "llm_tags": [
+        "query:ag-rl:composite"
+      ],
+      "matched_query_tag": "query:ag-rl:composite",
+      "matched_query_text": "Papers central to 寻找Agentic RL（智能体强化学习）相关的学术论文, especially work that connects or combines: Agentic Reinforcement Learning; Large Language Model based agents in reinforcement learning; Autonomous agents using reinforcement learning frameworks; Agentic workflows and reinforcement learning optimization; Multi-agent reinforcement learning for agentic systems; Self-evolving agents via reinforcement learning; State of the art in Agentic Reinforcement Learning; Frameworks for building agentic systems with RL.",
+      "matched_requirement_id": "req-composite-ag-rl",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.04560v1",
+      "source": "arxiv",
+      "title": "Rollout-Level Advantage-Prioritized Experience Replay for GRPO",
+      "abstract": "Reinforcement learning from verifiable rewards with GRPO is a standard approach for post-training reasoning LLMs. It remains sample inefficient. Each rollout is used for a single gradient update and then discarded. Naive replay is not well suited in this setting because LLM policies drift quickly per gradient step. Stored rollouts therefore become stale and can destabilize training. We propose a rollout-level replay buffer for GRPO that stores and samples individual rollouts rather than whole groups. The buffer bounds staleness through age eviction. Any rollout older than tau_max training steps is removed. The buffer also preserves on-policy data via fresh-anchored composition. Each batch keeps its fresh on-policy rollouts and then concatenates replay rollouts drawn separately from the buffer. We prioritize replay by per-rollout advantage magnitude and recycle individual rollouts whose advantages are large. Across three Qwen3-Base scales on five math benchmarks, our method outperforms GRPO and naive replay baselines. Gains are positive at every scale and grow with model size. The largest gain is +4.35 pp on the five-benchmark average at 4B. Under an AES metric that jointly measures accuracy and token efficiency, the efficiency margin over GRPO is again largest at 4B, at +0.579.",
+      "authors": [
+        "Gyeongtae Yoo",
+        "Sanghyeok Park",
+        "Soohyuk Jang",
+        "Ik-hwan Kim",
+        "Sungroh Yoon"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-06-03T07:47:47+00:00",
+      "link": "https://arxiv.org/pdf/2606.04560v1",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "rollout-level replay buffer to improve sample efficiency and speed",
+      "llm_evidence_cn": "rollout级别经验回放提升样本效率和速度",
+      "llm_evidence": "rollout级别经验回放提升样本效率和速度",
+      "canonical_evidence": "rollout级别经验回放提升样本效率和速度",
+      "llm_tldr_en": "Rollout-level advantage-prioritized experience replay for GRPO stores individual rollouts with age eviction, improving sample efficiency and training stability.",
+      "llm_tldr_cn": "针对GRPO中每个rollout仅使用一次即丢弃造成的样本低效问题，提出rollout级别的经验回放缓冲。通过存储并采样单个rollout，结合年龄逐出策略限制过时数据，并采用新鲜锚定组合保证策略一致性。该方法在不显著增加计算负担下大幅提升样本效率，加速训练收敛。",
+      "llm_tldr": "针对GRPO中每个rollout仅使用一次即丢弃造成的样本低效问题，提出rollout级别的经验回放缓冲。通过存储并采样单个rollout，结合年龄逐出策略限制过时数据，并采用新鲜锚定组合保证策略一致性。该方法在不显著增加计算负担下大幅提升样本效率，加速训练收敛。",
+      "llm_tags": [
+        "query:rl-rollout"
+      ],
+      "matched_query_tag": "query:rl-rollout",
+      "matched_query_text": "reinforcement learning rollout speed issues",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.04560v2",
+      "source": "arxiv",
+      "title": "Rollout-Level Advantage-Prioritized Experience Replay for GRPO",
+      "abstract": "Reinforcement learning from verifiable rewards with GRPO is a standard approach for post-training reasoning LLMs. It remains sample inefficient. Each rollout is used for a single gradient update and then discarded. Naive replay is not well suited in this setting because LLM policies drift quickly per gradient step. Stored rollouts therefore become stale and can destabilize training. We propose a rollout-level replay buffer for GRPO that stores and samples individual rollouts rather than whole groups. The buffer bounds staleness through age eviction. Any rollout older than tau_max training steps is removed. The buffer also preserves on-policy data via fresh-anchored composition. Each batch keeps its fresh on-policy rollouts and then concatenates replay rollouts drawn separately from the buffer. We prioritize replay by per-rollout advantage magnitude and recycle individual rollouts whose advantages are large. Across three Qwen3-Base scales on five math benchmarks, our method outperforms GRPO and naive replay baselines. Gains are positive at every scale and grow with model size. The largest gain is +4.35 pp on the five-benchmark average at 4B. Under an AES metric that jointly measures accuracy and token efficiency, the efficiency margin over GRPO is again largest at 4B, at +0.579.",
+      "authors": [
+        "Gyeongtae Yoo",
+        "Sanghyeok Park",
+        "Soohyuk Jang",
+        "Ik-hwan Kim",
+        "Sungroh Yoon"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-06-03T07:47:47+00:00",
+      "link": "https://arxiv.org/pdf/2606.04560v2",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "rollout-level experience replay for GRPO, improving sample efficiency",
+      "llm_evidence_cn": "rollout级经验回放提升GRPO样本效率",
+      "llm_evidence": "rollout级经验回放提升GRPO样本效率",
+      "canonical_evidence": "rollout级经验回放提升GRPO样本效率",
+      "llm_tldr_en": "Proposes a rollout-level replay buffer for GRPO that stores and samples individual rollouts, bounding staleness and improving sample efficiency.",
+      "llm_tldr_cn": "GRPO中每个rollout仅用一次后被丢弃，样本效率低。本文提出rollout级经验回放缓冲区，存储单个rollout并通过年龄淘汰控制陈旧度。采用新鲜锚定组合方式保持近期数据分布，实验证明显著提升样本效率和训练稳定性。为LLM后训练提供了实用的经验回放方案。",
+      "llm_tldr": "GRPO中每个rollout仅用一次后被丢弃，样本效率低。本文提出rollout级经验回放缓冲区，存储单个rollout并通过年龄淘汰控制陈旧度。采用新鲜锚定组合方式保持近期数据分布，实验证明显著提升样本效率和训练稳定性。为LLM后训练提供了实用的经验回放方案。",
+      "llm_tags": [
+        "query:rl-rollout"
+      ],
+      "matched_query_tag": "query:rl-rollout",
+      "matched_query_text": "rollout in reinforcement learning",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.05606v1",
+      "source": "arxiv",
+      "title": "Cross-Epoch Adaptive Rollout Optimization for RL Post-Training",
+      "abstract": "LLM post-training often relies on reinforcement learning methods that sample multiple rollouts per prompt, yet most existing approaches use a fixed rollout budget for every prompt, despite large differences in the training signal different prompts provide. In this paper, we study adaptive rollout allocation under a fixed global budget and formulate the problem as online resource allocation with prompt-level diminishing returns. Our method, CERO, maintains a Beta posterior over each prompt's success probability and uses the posterior expected Bernoulli variance as a Bayesian estimate of the value of additional rollouts. We use this estimate to construct a concave, saturating utility over cumulative allocations, yielding an objective in which decisions across prompts and epochs are coupled by the global budget. Since the resulting objective is temporally nonseparable, we derive a Fenchel-dual reformulation and update both prompt-level and budget-level dual variables via projected online gradient descent. Under fixed prompt utilities, we prove an $O(\\sqrt{K})$ regret bound against the offline allocation benchmark. Experiments on mathematical-reasoning problems show that CERO consistently outperforms GRPO across multiple open-weight LLMs and benchmarks, demonstrating that adaptive rollout budgeting can improve sample efficiency.",
+      "authors": [
+        "Yiming Zong",
+        "Yige Wang",
+        "Jiashuo Jiang"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "math.OC"
+      ],
+      "published": "2026-06-04T02:27:51+00:00",
+      "link": "https://arxiv.org/pdf/2606.05606v1",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "adaptive rollout allocation to improve training efficiency",
+      "llm_evidence_cn": "自适应rollout分配以提高训练效率",
+      "llm_evidence": "自适应rollout分配以提高训练效率",
+      "canonical_evidence": "自适应rollout分配以提高训练效率",
+      "llm_tldr_en": "CERO proposes adaptive rollout allocation across prompts under a fixed total budget, using Bayesian posterior variance to estimate the value of additional rollouts, reducing wasted computation.",
+      "llm_tldr_cn": "本文提出跨轮次自适应rollout分配方法CERO，针对每轮prompt不同学习价值，在固定总预算下动态分配rollout次数。利用Beta后验分布估计每个prompt成功概率的不确定性，通过贝叶斯方差指导分配。实验表明该方法能更高效利用计算资源，在相同预算下提升最终性能。",
+      "llm_tldr": "本文提出跨轮次自适应rollout分配方法CERO，针对每轮prompt不同学习价值，在固定总预算下动态分配rollout次数。利用Beta后验分布估计每个prompt成功概率的不确定性，通过贝叶斯方差指导分配。实验表明该方法能更高效利用计算资源，在相同预算下提升最终性能。",
+      "llm_tags": [
+        "query:rl-rollout"
+      ],
+      "matched_query_tag": "query:rl-rollout",
+      "matched_query_text": "reinforcement learning rollout speed issues",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.07000v1",
+      "source": "arxiv",
+      "title": "Teaching the Way, Not the Answer: Privileged Tutoring Distillation for Multimodal Policy Optimization",
+      "abstract": "Recent post-training methods, particularly Reinforcement Learning with Verifiable Rewards (RLVR), have significantly enhanced the reasoning ability of Large Vision-Language Models (LVLMs). However, the sparse nature of verifiable rewards provides little token-level supervision for failed rollouts, often leading to inefficient exploration in complex multimodal reasoning tasks. Although policy distillation can offer dense guidance, external teacher based methods introduce substantial computational overhead, while answer conditioned tuning methods may expose answer-level information and induce shortcut-like generation behavior. To address these limitations, we propose PTD-PO, a Privileged Tutoring Distillation Policy Optimization framework for RLVR that provides dense guidance without exposing the answer to the student policy. Specifically, PTD-PO constructs structured privileged hints from spatial attention guidance and intermediate textual reasoning steps, and uses them through in-context learning to produce step-wise token-distribution supervision. The student is still optimized under the original answer-free context, and its failed rollouts are aligned with the hint-augmented reference model at the token-distribution level. To further stabilize distillation under the distribution shift between guided and unguided contexts, we introduce a Top-K Jensen-Shannon divergence objective that focuses alignment on informative token probabilities while reducing memory overhead. Experiments on LVLMs ranging from 2B to 8B parameters show that PTD-PO consistently outperforms RLVR and distillation baselines, mitigates entropy collapse, and improves complex multimodal reasoning performance.",
+      "authors": [
+        "Shizhe Xiang",
+        "Ke An",
+        "Wenlong Yu",
+        "Yue Liu",
+        "Jian Luan",
+        "Pei Fu",
+        "Qilong Wang"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-06-05T07:43:22+00:00",
+      "link": "https://arxiv.org/pdf/2606.07000v1",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "addresses inefficient exploration from sparse rewards in RL for LVLMs, related to rollouts",
+      "llm_evidence_cn": "针对LVLM强化学习中稀疏奖励导致rollout探索低效的问题",
+      "llm_evidence": "针对LVLM强化学习中稀疏奖励导致rollout探索低效的问题",
+      "canonical_evidence": "针对LVLM强化学习中稀疏奖励导致rollout探索低效的问题",
+      "llm_tldr_en": "Proposes privileged tutoring distillation to provide dense guidance without exposing answer, improving rollout exploration in multimodal RL.",
+      "llm_tldr_cn": "针对大型视觉语言模型后训练中可验证奖励稀疏导致rollout探索低效的问题，提出特权辅导蒸馏策略优化方法。通过引入导师模型提供密集的token级监督，同时避免答案泄露和捷径行为。实验表明该方法显著提升复杂多模态推理任务的性能，探索效率高于现有RLVR方法。",
+      "llm_tldr": "针对大型视觉语言模型后训练中可验证奖励稀疏导致rollout探索低效的问题，提出特权辅导蒸馏策略优化方法。通过引入导师模型提供密集的token级监督，同时避免答案泄露和捷径行为。实验表明该方法显著提升复杂多模态推理任务的性能，探索效率高于现有RLVR方法。",
+      "llm_tags": [
+        "query:rl-rollout:composite"
+      ],
+      "matched_query_tag": "query:rl-rollout:composite",
+      "matched_query_text": "Papers central to 强化学习中的Rollout过慢和训推不一致问题, especially work that connects or combines: inconsistency between training and inference in reinforcement learning; rollout in reinforcement learning; training in reinforcement learning; gap between training and inference; reinforcement learning rollout speed issues.",
+      "matched_requirement_id": "req-composite-rl-rollout",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.08755v1",
+      "source": "arxiv",
+      "title": "Co-Evolving Skill Generation and Policy Optimization",
+      "abstract": "Skill-augmented reinforcement learning improves language agents by storing reusable procedural knowledge acquired from past experience. Existing methods typically use strong language models to analyze trajectories, generate skills, and update a retrievable skill bank during online training. However, they rarely assess whether a newly generated skill is useful before it is stored and reused. We find that this assumption is unreliable: even skills generated by proprietary frontier LLMs exhibit highly mixed utility, with many providing little benefit or even degrading performance. Once such skills enter the bank, their effects are difficult to identify, because subsequent rollout feedback is delayed and usually reflects the combined effect of multiple retrieved skills rather than the marginal contribution of any individual skill. We propose an online reinforcement learning framework for pre-storage skill validation. The framework estimates whether a candidate skill contributes useful information beyond the skills already retrieved for the current task. It uses the standard rollout budget to form two matched groups under the same task and retrieval context: base rollouts conditioned on the currently retrieved skills, and skill-augmented rollouts conditioned on the same skills plus one candidate skill induced from the base trajectories. The reward gap between these two groups estimates the candidate skill's context-dependent marginal utility, enabling the framework to promote useful skills while filtering ineffective or harmful ones without additional rollout overhead. The framework further uses this marginal-utility signal to train the policy itself as a skill generator, reducing reliance on repeated calls to proprietary models. The learned skill-generation likelihood serves as a context-dependent score for retrieval-time reranking and outdated-skill pruning as the policy evolves.",
+      "authors": [
+        "Zhiwei Zhang",
+        "Yudi Lin",
+        "Nikki Lijing Kuang",
+        "Linlin Wu",
+        "Xiaomin Li",
+        "Songtao Liu",
+        "Fenglong Ma"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-06-07T17:55:55+00:00",
+      "link": "https://arxiv.org/pdf/2606.08755v1",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "skill-augmented RL for language agents with rollout feedback issues",
+      "llm_evidence_cn": "面向语言智能体的技能增强强化学习，涉及rollout反馈问题",
+      "llm_evidence": "面向语言智能体的技能增强强化学习，涉及rollout反馈问题",
+      "canonical_evidence": "面向语言智能体的技能增强强化学习，涉及rollout反馈问题",
+      "llm_tldr_en": "Finds that generated skills for language agents have mixed utility and proposes co-evolution of skill generation and policy optimization to evaluate skills before storage.",
+      "llm_tldr_cn": "该论文发现现有技能增强强化学习方法在生成技能后不评估其有效性，导致无用甚至有害技能被存储。提出技能生成与策略优化的协同演化框架，在在线训练过程中实时评估新技能的有用性。实验表明该方法能显著提升语言智能体的任务性能，避免技能污染。",
+      "llm_tldr": "该论文发现现有技能增强强化学习方法在生成技能后不评估其有效性，导致无用甚至有害技能被存储。提出技能生成与策略优化的协同演化框架，在在线训练过程中实时评估新技能的有用性。实验表明该方法能显著提升语言智能体的任务性能，避免技能污染。",
+      "llm_tags": [
+        "query:ag-rl:composite"
+      ],
+      "matched_query_tag": "query:ag-rl:composite",
+      "matched_query_text": "Papers central to 寻找Agentic RL（智能体强化学习）相关的学术论文, especially work that connects or combines: Agentic Reinforcement Learning; Large Language Model based agents in reinforcement learning; Autonomous agents using reinforcement learning frameworks; Agentic workflows and reinforcement learning optimization; Multi-agent reinforcement learning for agentic systems; Self-evolving agents via reinforcement learning; State of the art in Agentic Reinforcement Learning; Frameworks for building agentic systems with RL.",
+      "matched_requirement_id": "req-composite-ag-rl",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2606.11119v1",
+      "source": "arxiv",
+      "title": "TRACE: A Unified Rollout Budget Allocation Framework for Efficient Agentic Reinforcement Learning",
+      "abstract": "Reinforcement learning with verifiable rewards (RLVR) is a promising approach for enhancing reasoning and agentic behavior in large language models. However, rollout-intensive policy optimization is often limited by insufficient reward contrast, arising when overly simple or complex prompts generate low-variance feedback and when outcome-only rewards assign the same terminal assessment to every decision in a multi-turn rollout. Past efforts have focused on allocating available rollout resources to promising prompts, yet they only leverage sample informativeness at the prompt level and neglect variation in prefix-level informativeness across turns within the same rollout. This work targets multi-turn agentic RL by modeling each ReAct-style thought-action-observation turn as a semantically distinct node, allowing budget allocation to extend from prompt roots to turn-level prefixes with further continuations, which naturally forms tree-structured rollouts. We introduce Tree Rollout Allocation for Contrastive Exploration (TRACE), a unified rollout allocation framework that enhances reward contrast within a fixed sampling budget. Technically, TRACE allocates rollout budget to both prompt roots and intermediate prefixes that are most likely to yield mixed terminal rewards. A shared generalizable predictor estimates conditional success probability at these anchors from prefix histories to guide this allocation. The resulting adaptive tree structure enriches outcome-only feedback and amplifies the policy-update signal. Empirically, TRACE achieves competitive performance and efficiency gains on typical agentic benchmarks, e.g., improving Qwen3-14B Multi-Hop QA average accuracy by 2.8 points over competitive baselines at equal sampling cost.",
+      "authors": [
+        "Heming Zou",
+        "Qi Wang",
+        "Yun Qu",
+        "Yuhang Jiang",
+        "Lizhou Cai",
+        "Yixiu Mao",
+        "Ru Peng",
+        "Xin Xu",
+        "Weijie Liu",
+        "Kai Yang",
+        "Saiyong Yang",
+        "Xiangyang Ji"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-06-09T17:16:03+00:00",
+      "link": "https://arxiv.org/pdf/2606.11119v1",
+      "tags": [
+        "keyword:rl-rollout",
+        "query:rl-rollout"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "rollout budget allocation for efficient agentic RL",
+      "llm_evidence_cn": "面向高效智能体强化学习的rollout预算分配",
+      "llm_evidence": "面向高效智能体强化学习的rollout预算分配",
+      "canonical_evidence": "面向高效智能体强化学习的rollout预算分配",
+      "llm_tldr_en": "TRACE models multi-turn agentic RL by allocating rollout budget at prefix-level across turns, addressing insufficient reward contrast in rollout-intensive policy optimization.",
+      "llm_tldr_cn": "针对智能体强化学习中rollout密集但奖励对比度不足的问题，提出统一rollout预算分配框架TRACE。不同于以往仅考虑提示级别信息量，TRACE建模多轮智能体任务中同一rollout内不同前缀的信息量差异，动态分配预算。实验证明该方法在保证性能的同时显著减少总rollout数量。",
+      "llm_tldr": "针对智能体强化学习中rollout密集但奖励对比度不足的问题，提出统一rollout预算分配框架TRACE。不同于以往仅考虑提示级别信息量，TRACE建模多轮智能体任务中同一rollout内不同前缀的信息量差异，动态分配预算。实验证明该方法在保证性能的同时显著减少总rollout数量。",
+      "llm_tags": [
+        "query:ag-rl:composite"
+      ],
+      "matched_query_tag": "query:ag-rl:composite",
+      "matched_query_text": "Papers central to 寻找Agentic RL（智能体强化学习）相关的学术论文, especially work that connects or combines: Agentic Reinforcement Learning; Large Language Model based agents in reinforcement learning; Autonomous agents using reinforcement learning frameworks; Agentic workflows and reinforcement learning optimization; Multi-agent reinforcement learning for agentic systems; Self-evolving agents via reinforcement learning; State of the art in Agentic Reinforcement Learning; Frameworks for building agentic systems with RL.",
+      "matched_requirement_id": "req-composite-ag-rl",
+      "selection_source": "fresh_fetch"
+    }
+  ]
+}
